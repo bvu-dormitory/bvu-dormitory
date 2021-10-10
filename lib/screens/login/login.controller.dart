@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/repositories/user.repository.dart';
 
-class AuthController extends BaseController {
-  AuthController({required BuildContext context}) : super(context: context);
+class LoginController extends BaseController {
+  LoginController({required BuildContext context}) : super(context: context);
 
   // native firebase auth params
   FirebaseAuth authInstance = FirebaseAuth.instance;

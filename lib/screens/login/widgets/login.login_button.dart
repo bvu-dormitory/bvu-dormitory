@@ -19,7 +19,7 @@ class _LoginButtonState extends State<LoginButton>
   // animation
   late AnimationController animationController;
   late Animation animation;
-  late AuthController controller;
+  late LoginController controller;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _LoginButtonState extends State<LoginButton>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    controller = Provider.of<AuthController>(context, listen: true);
+    controller = Provider.of<LoginController>(context, listen: true);
   }
 
   @override

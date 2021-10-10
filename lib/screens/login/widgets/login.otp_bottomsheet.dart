@@ -35,7 +35,7 @@ class _LoginOTPBottomSheetState extends State<LoginOTPBottomSheet>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthController>(
+    return Consumer<LoginController>(
       builder: (context, controller, child) => AnimatedPositioned(
         bottom: controller.isOtpCodeSent ? 0 : -400,
         duration: const Duration(milliseconds: 750),

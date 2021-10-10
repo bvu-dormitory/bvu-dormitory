@@ -36,15 +36,15 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ChangeNotifierProvider<AuthController>(
-        create: (context) => AuthController(context: context),
+      body: ChangeNotifierProvider<LoginController>(
+        create: (_) => LoginController(context: context),
         child: _body(),
       ),
     );
   }
 
   _body() {
-    return Consumer<AuthController>(
+    return Consumer<LoginController>(
       builder: (context, value, child) => GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Stack(
@@ -59,29 +59,24 @@ class _LoginScreenState extends State<LoginScreen> {
               // Gradient overlay
               decoration: _gradientOverlay(),
               child: SafeArea(
-                child: Consumer<AuthController>(
-                  builder: (context, controller, child) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const LoginTitle(),
-                        Stack(
-                          children: [
-                            LoginPhoneField(),
-                            Positioned(
-                              child: LoginButton(),
-                              top: 0,
-                              right: 0,
-                              // top: 2,
-                              // right: 2.5,
-                            ),
-                          ],
-                        )
-                      ],
-                    );
-                  },
-                ),
-              ),
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const LoginTitle(),
+                  Stack(
+                    children: [
+                      LoginPhoneField(),
+                      Positioned(
+                        child: LoginButton(),
+                        top: 0,
+                        right: 0,
+                        // top: 2,
+                        // right: 2.5,
+                      ),
+                    ],
+                  )
+                ],
+              )),
             ),
 
             LoginOTPBottomSheet(),

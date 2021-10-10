@@ -15,7 +15,7 @@ class _LoginPhoneFieldState extends State<LoginPhoneField>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthController>(
+    return Consumer<LoginController>(
       builder: (context, controller, child) => TextField(
         controller: controller.phoneInputController,
         enabled: !controller.loginInProcess,
