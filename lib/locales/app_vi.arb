@@ -1,0 +1,38 @@
+{
+    "appName": "Kí túc xá BVU",
+
+    "app_dialog_title_error": "Lỗi",
+    "app_dialog_action_ok": "Ok",
+    "app_dialog_action_cancel": "Hủy",
+    "app_dialog_action_submit": "Xác nhận",
+
+
+
+    "login_title" : "Kí túc xá BVU",
+    "login_phone_field_hint": "Nhập số điện thoại",
+    "login_button_title": "Đăng nhập",
+
+    "login_error_phone_invalid_format": "Vui lòng nhập đúng định dạng số điện thoại",
+    "login_error_too_many_requests": "Bạn đã thực hiện đăng nhập quá nhiều lần, vui lòng thử lại sau một khoảng thời gian",
+    "login_error_network_error": "Lỗi kết nối, vui lòng thử lại",
+    "login_error_web_context_canceled": "Xác minh catpcha chưa hoàn tất, vui lòng thao tác lại",
+    "login_error_web_context_already_presented": "Xác minh catpcha đã diễn ra trước đó, vui lòng thao tác lại chậm hơn",
+    "login_error_captcha_error": "Lỗi xác minh catpcha, vui lòng thao tác lại",
+
+    "login_error_invalid_otp": "Mã OTP vừa nhập không đúng, vui lòng kiểm tra lại nội dung tin nhắn hoặc Hủy để thử lại",
+    "login_error_otp_timeout": "Phiên đăng nhập đã hết hạn, vui lòng thao tác lại",
+    "login_error_user_not_exists": "Số điện thoại này chưa được đăng kí trong hệ thống, vui lòng liên hệ quản trị viên để được cấp quyền truy cập",
+
+    "login_otp_bottom_sheet_submit_button": "Tiếp tục",
+    "login_otp_bottom_sheet_cancel_button": "Hủy",
+    "login_otp_bottom_sheet_title": "Xác minh số điện thoại",
+    "login_otp_bottom_sheet_guide_title": "Một tin nhắn chứa mã số (6 chữ số) vừa được gửi tới số điện thoại {phoneNumber}. Để đảm bảo bạn là chủ sở hữu, vui lòng kiểm tra tin nhắn và nhập mã vào ô dưới đây.",
+    "@login_otp_bottom_sheet_guide_title": {
+        "placeholders": {
+            "phoneNumber": {
+                "type": "String",
+                "example": "0333326585"
+            }
+        }
+    }
+}
