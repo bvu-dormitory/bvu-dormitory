@@ -113,9 +113,9 @@ class LoginController extends BaseController {
 
           // web context still presented but user requests new sesion
           case 'web-context-already-presented':
-            showErrorDialog(
-                appLocalizations?.login_error_web_context_already_presented ??
-                    "login_error_web_context_already_presented");
+            // showErrorDialog(
+            //     appLocalizations?.login_error_web_context_already_presented ??
+            //         "login_error_web_context_already_presented");
             break;
 
           default:
@@ -158,12 +158,13 @@ class LoginController extends BaseController {
         log('signing in success...');
         print(userCredential);
 
-        // if the logged-in user with given phone number is not in DB => delete the account
+        // if logged-in user with given phone number is not in the FireStore DB => delete the account
         if (!(await UserRepository.isUserWithPhoneNumerExists(
             userCredential.user))) {
           userCredential.user?.delete().then((value) {
             showErrorDialog(appLocalizations?.login_error_user_not_exists ??
                 "login_error_user_not_exists");
+            log('user deleted...');
           }).catchError((onError) {
             log('cannot delete the user...');
             print(onError);
@@ -177,12 +178,17 @@ class LoginController extends BaseController {
     ).catchError(
       (error) {
         print('error verifying otp...');
-        // print(error.message);
+        print(error);
 
         switch (error.code) {
           case 'invalid-verification-code':
             showErrorDialog(appLocalizations?.login_error_invalid_otp ??
                 "login_error_invalid_otp");
+            break;
+
+          case 'user-disabled':
+            showErrorDialog(appLocalizations?.login_error_account_disabled ??
+                "login_error_account_disabled");
             break;
 
           case 'session-expired':

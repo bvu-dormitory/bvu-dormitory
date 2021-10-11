@@ -14,28 +14,8 @@ class LoginButton extends StatefulWidget {
   _LoginButtonState createState() => _LoginButtonState();
 }
 
-class _LoginButtonState extends State<LoginButton>
-    with SingleTickerProviderStateMixin {
-  // animation
-  late AnimationController animationController;
-  late Animation animation;
+class _LoginButtonState extends State<LoginButton> {
   late LoginController controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 750),
-    );
-
-    animation = Tween<double>(begin: 20.0, end: 15.0).animate(
-      CurvedAnimation(parent: animationController, curve: Curves.easeInOut),
-    )..addStatusListener((status) {
-        print(status);
-      });
-  }
 
   @override
   void didChangeDependencies() {
@@ -46,32 +26,29 @@ class _LoginButtonState extends State<LoginButton>
   @override
   Widget build(BuildContext context) {
     log('rebuild login button...');
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (context, child) => CupertinoButton(
-        child: controller.loginInProcess
-            ? const CupertinoActivityIndicator(
-                radius: 10,
-              )
-            : Text(
-                AppLocalizations.of(context)?.login_button_title ??
-                    "login_button_title",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.blue.shade800,
-                  fontWeight: FontWeight.bold,
-                )),
-        padding: EdgeInsets.symmetric(
-          horizontal: animation.value,
-          vertical: controller.loginInProcess ? 15 : 15,
-        ),
-        color: Colors.yellowAccent.shade700,
-        // disabledColor: Colors.yellowAccent.shade700,
-        alignment: Alignment.centerRight,
-        borderRadius: BorderRadius.circular(50),
-        onPressed:
-            controller.loginButtonEnabled == false ? null : handleLoginClick,
+    return CupertinoButton(
+      child: controller.loginInProcess
+          ? const CupertinoActivityIndicator(
+              radius: 10,
+            )
+          : Text(
+              AppLocalizations.of(context)?.login_button_title ??
+                  "login_button_title",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.blue.shade800,
+                fontWeight: FontWeight.bold,
+              )),
+      padding: EdgeInsets.symmetric(
+        horizontal: controller.loginInProcess ? 15 : 20,
+        vertical: controller.loginInProcess ? 15 : 15,
       ),
+      color: Colors.yellowAccent.shade700,
+      // disabledColor: Colors.yellowAccent.shade700,
+      alignment: Alignment.centerRight,
+      borderRadius: BorderRadius.circular(50),
+      onPressed:
+          controller.loginButtonEnabled == false ? null : handleLoginClick,
     );
   }
 
@@ -83,21 +60,18 @@ class _LoginButtonState extends State<LoginButton>
       return;
     }
 
-    // disable the Login button and start animating
     controller.beforeVerifyPhoneNumber();
-    animationController.forward();
-
-    animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        Future.delayed(const Duration(milliseconds: 1000), () {
-          controller.verifyPhoneNumber().then((value) {
-            animationController.reverse();
-            animationController.removeStatusListener((status) => {});
-          }).catchError((onError) {
-            print('error from button...');
-          });
-        });
-      }
+    Future.delayed(const Duration(seconds: 0), () {
+      controller
+          .verifyPhoneNumber()
+          .then(
+            (value) {},
+          )
+          .catchError(
+        (onError) {
+          print('error from button...');
+        },
+      );
     });
   } // handleLoginClick
 }

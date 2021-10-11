@@ -59,7 +59,7 @@ class BVUDormitoryApp extends StatelessWidget {
       child: FutureBuilder<bool>(
         future: AuthRepository.isAuthenticated(),
         builder: (context, snapshot) {
-          print('app auth:');
+          log('app auth:');
           print(snapshot.data);
 
           return MaterialApp(

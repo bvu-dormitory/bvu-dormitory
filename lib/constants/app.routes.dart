@@ -3,8 +3,8 @@ import 'package:bvu_dormitory/screens/home/home.screen.dart';
 import 'package:flutter/widgets.dart';
 
 class AppRoute {
-  String _name;
-  Widget _screen;
+  final String _name;
+  final Widget _screen;
 
   String get name => _name;
   Widget get screen => _screen;
@@ -13,11 +13,12 @@ class AppRoute {
 }
 
 class AppRoutes {
-  static AppRoute get home => AppRoute('home', HomeScreen());
-  static AppRoute get login => AppRoute('login', LoginScreen());
+  static AppRoute get home => AppRoute('/home', HomeScreen());
+  static AppRoute get login => AppRoute('/login', LoginScreen());
 
   static Map<String, Widget Function(BuildContext)> collect() => {
         // '/': (_) => const LoginScreen(),
         '/home': (_) => HomeScreen(),
+        '/login': (_) => LoginScreen(),
       };
 }

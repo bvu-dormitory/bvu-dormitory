@@ -21,6 +21,7 @@
 
     "login_error_invalid_otp": "Mã OTP vừa nhập không đúng, vui lòng kiểm tra lại nội dung tin nhắn hoặc Hủy để thử lại",
     "login_error_otp_timeout": "Phiên đăng nhập đã hết hạn, vui lòng thao tác lại",
+    "login_error_account_disabled": "Số điện thoại này đã bị chặn trong hệ thống, vui lòng liên hệ quản trị viên để được xử lí",
     "login_error_user_not_exists": "Số điện thoại này chưa được đăng kí trong hệ thống, vui lòng liên hệ quản trị viên để được cấp quyền truy cập",
 
     "login_otp_bottom_sheet_submit_button": "Tiếp tục",

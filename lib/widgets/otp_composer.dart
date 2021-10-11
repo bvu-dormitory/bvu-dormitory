@@ -8,8 +8,10 @@ import 'package:rxdart/rxdart.dart';
 
 class OTPComposer extends StatefulWidget {
   Function(bool isValid, String? value) onChange;
+  bool disabled;
 
-  OTPComposer({Key? key, required this.onChange}) : super(key: key);
+  OTPComposer({Key? key, required this.onChange, required this.disabled})
+      : super(key: key);
 
   @override
   _OTPComposerState createState() => _OTPComposerState();
@@ -67,6 +69,7 @@ class _OTPComposerState extends State<OTPComposer> {
       width: 40,
       height: 40,
       child: TextField(
+        enabled: !widget.disabled,
         autofocus: fieldIndex == 0,
         maxLength: 1,
         focusNode: focusNodes[fieldIndex],
@@ -100,7 +103,8 @@ class _OTPComposerState extends State<OTPComposer> {
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp("[0-9]")),
         ],
-        style: const TextStyle(
+        style: TextStyle(
+          color: widget.disabled ? Colors.grey : Colors.black,
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ),
