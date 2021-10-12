@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:bvu_dormitory/constants/app.routes.dart';
+import 'package:bvu_dormitory/app/app.logger.dart';
+import 'package:bvu_dormitory/app/constants/app.routes.dart';
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,12 +79,12 @@ class LoginController extends BaseController {
         _loginButtonEnabled = true;
         notifyListeners();
 
-        log('verificationCompleted');
+        logger.i('verificationCompleted');
         return;
       },
       verificationFailed: (error) {
-        print('error authenticating phone..');
-        print(error);
+        logger.e('error authenticating phone..');
+        logger.e(error);
 
         switch (error.code) {
           // user has tried to login so many times in a short period of time
@@ -130,7 +131,7 @@ class LoginController extends BaseController {
       },
       codeSent: (verificationId, forceResendingToken) {
         this.verificationId = verificationId;
-        print('code sent...');
+        logger.i('code sent...');
 
         _isOtpCodeSent = true;
         notifyListeners();
@@ -152,22 +153,25 @@ class LoginController extends BaseController {
     );
 
     // Sign the user in (or link) with the credential
-    log('signingin...');
+    logger.i('signingin...');
     authInstance.signInWithCredential(credential).then(
       (userCredential) async {
-        log('signing in success...');
-        print(userCredential);
+        logger.i('signing in success...');
+        logger.i(userCredential);
 
         // if logged-in user with given phone number is not in the FireStore DB => delete the account
-        if (!(await UserRepository.isUserWithPhoneNumerExists(
-            userCredential.user))) {
-          userCredential.user?.delete().then((value) {
-            showErrorDialog(appLocalizations?.login_error_user_not_exists ??
-                "login_error_user_not_exists");
-            log('user deleted...');
-          }).catchError((onError) {
-            log('cannot delete the user...');
-            print(onError);
+        if (!await UserRepository.isUserWithPhoneNumerExists(
+            userCredential.user)) {
+          userCredential.user?.delete().then(
+            (value) {
+              showErrorDialog(appLocalizations?.login_error_user_not_exists ??
+                  "login_error_user_not_exists");
+
+              logger.i('user deleted...');
+            },
+          ).catchError((onError) {
+            logger.e('cannot delete the user...');
+            logger.e(onError);
           });
         }
         // the user is exists
@@ -177,8 +181,8 @@ class LoginController extends BaseController {
       },
     ).catchError(
       (error) {
-        print('error verifying otp...');
-        print(error);
+        logger.e('error verifying otp...');
+        logger.e(error);
 
         switch (error.code) {
           case 'invalid-verification-code':

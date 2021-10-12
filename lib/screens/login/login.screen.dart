@@ -45,7 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _body() {
     return Consumer<LoginController>(
-      builder: (context, value, child) => GestureDetector(
+      builder: (context, controller, child) => GestureDetector(
+        // hide soft keyboard on tap background
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Stack(
           children: [

@@ -5,8 +5,11 @@ class AppColor {
   static get primarySwatchDark => AppColor.backgroundColorDark;
 
   static get backgroundColor => Colors.white;
-  static get backgroundColorDark => Colors.grey[900];
+  static get backgroundColorDark => Colors.grey;
 
-  static get textColor => Colors.grey[850];
+  static get secondaryBackgroundColor => Colors.white.withOpacity(0.5);
+  static get secondaryBackgroundColorDark => Colors.grey.withOpacity(0.5);
+
+  static get textColor => Colors.grey;
   static get textColorDark => Colors.white;
 }

@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 
 class BaseProvider extends ChangeNotifier {}
 
-enum AppThemeMode {
-  light,
-  dark,
-  system,
-}
-
 class AppProvider extends BaseProvider {
-  late AppThemeMode _appThemeMode;
+  late ThemeMode _appThemeMode = ThemeMode.system;
   get appThemeMode => _appThemeMode;
 
-  void changeTheme(AppThemeMode mode) {
+  void changeTheme(ThemeMode mode) {
     _appThemeMode = mode;
     notifyListeners();
   }

@@ -1,3 +1,3 @@
-arb-dir: lib/locales
+arb-dir: lib/app/locales
 template-arb-file: app_vi.arb
 output-localization-file: app_localizations.dart

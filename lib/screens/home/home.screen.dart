@@ -1,8 +1,10 @@
-import 'package:bvu_dormitory/screens/home/tabs/rooms.screen.dart';
+import 'package:bvu_dormitory/app/app.provider.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -12,6 +14,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late AppProvider appProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    appProvider = Provider.of<AppProvider>(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -27,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
       //         ));
       //       }),
       // ),
-      navigationBar: const CupertinoNavigationBar(
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: Colors.black,
         padding: EdgeInsetsDirectional.all(10),
         leading: Text(
           'Trang chủ',
@@ -56,6 +67,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   .listen((event) {
                 print(event.docs.first.data());
               });
+            },
+          ),
+          CupertinoButton(
+            child: Text('Toggle theme'),
+            onPressed: () {
+              // Provider.of(context).
+              appProvider.changeTheme(ThemeMode.dark);
             },
           ),
         ],
