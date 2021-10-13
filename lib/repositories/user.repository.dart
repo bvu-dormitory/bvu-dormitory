@@ -7,18 +7,8 @@ class UserRepository {
   static final FirebaseFirestore _instance = FirebaseFirestore.instance;
 
   static Future<bool> isUserWithPhoneNumerExists(User? authUser) async {
-    var managerSnapshots = await _instance
-        .collection('users/managers/data')
-        .where('phoneNumber', isEqualTo: authUser?.phoneNumber ?? "")
-        .get();
-
-    var studentSnapshots = await _instance
-        .collection('users/students/data')
-        .where('phoneNumber', isEqualTo: authUser?.phoneNumber ?? "")
-        .get();
-
-    return Future(
-        () => managerSnapshots.size == 1 || studentSnapshots.size == 1);
+    var users = await _instance.collection('users').doc(authUser?.uid).get();
+    return users.exists;
   }
 
   static getByPhoneNumber(String phoneNumber) async {

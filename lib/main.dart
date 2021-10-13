@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 void main() async {
   await prepare();
 
-  runApp(const BVUDormitoryApp());
+  runApp(const Application());
 }
 
 /// Prepair things before running the App.

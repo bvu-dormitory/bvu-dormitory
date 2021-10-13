@@ -1,4 +1,4 @@
-import 'package:bvu_dormitory/screens/login/login.controller.dart';
+import 'package:bvu_dormitory/screens/shared/login/login.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

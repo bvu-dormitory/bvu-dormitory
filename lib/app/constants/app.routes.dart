@@ -1,5 +1,5 @@
-import 'package:bvu_dormitory/screens/login/login.screen.dart';
-import 'package:bvu_dormitory/screens/home/home.screen.dart';
+import 'package:bvu_dormitory/screens/shared/home/home.screen.dart';
+import 'package:bvu_dormitory/screens/shared/login/login.screen.dart';
 import 'package:flutter/widgets.dart';
 
 class AppRoute {

@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BuildingRepository {
   static final FirebaseFirestore _instance = FirebaseFirestore.instance;
 
-  static Stream<Building> fetchById({required String id}) {
+  static Stream<Building> listenById({required String id}) {
     return _instance
         .collection('building')
         .doc(id)

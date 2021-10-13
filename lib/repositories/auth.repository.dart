@@ -10,8 +10,17 @@ class AuthRepository {
     return Future(() => theUser != null);
   }
 
+  static Future<bool> signOut() async {
+    try {
+      await instance.signOut();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   /// getting current user info
-  static Future<User?> currentUser() async {
+  static Future<User?> getFireStoreUser() async {
     var theUser = await instance.userChanges().first;
     return theUser;
   }

@@ -35,5 +35,12 @@
                 "example": "0333326585"
             }
         }
-    }
+    },
+
+
+    "home_screen_navbar_item_newsfeed": "Bảng tin",
+    "home_screen_navbar_item_chat": "Tin nhắn",
+    "home_screen_navbar_item_room": "Phòng",
+    "home_screen_navbar_item_profile": "Cá nhân",
+    "home_screen_navbar_item_notifications": "Thông báo"
 }
