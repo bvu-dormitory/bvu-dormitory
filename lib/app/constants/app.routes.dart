@@ -5,21 +5,30 @@ import 'package:bvu_dormitory/screens/shared/login/login.screen.dart';
 import 'package:flutter/widgets.dart';
 
 class AppRoute {
-  final String _name;
-  final Widget _screen;
+  late final String _name;
+  late final Widget _screen;
 
   String get name => _name;
   Widget get screen => _screen;
 
-  AppRoute(this._name, this._screen);
+  AppRoute({required String name, required screen}) {
+    _name = name;
+    _screen = screen;
+  }
 }
 
 class AppRoutes {
-  static AppRoute get notFound => AppRoute('404', const NotFoundScreen());
-  static AppRoute get forBidden => AppRoute('403', const ForBiddenScreen());
+  static AppRoute get notFound => AppRoute(
+        name: '/404',
+        screen: const NotFoundScreen(),
+      );
+  static AppRoute get forBidden => AppRoute(
+        name: '/403',
+        screen: const ForBiddenScreen(),
+      );
 
-  static AppRoute get home => AppRoute('home', HomeScreen());
-  static AppRoute get login => AppRoute('login', LoginScreen());
+  static AppRoute get home => AppRoute(name: '/home', screen: HomeScreen());
+  static AppRoute get login => AppRoute(name: '/login', screen: LoginScreen());
 
   static List<AppRoute> get _list => [
         notFound,
@@ -29,8 +38,7 @@ class AppRoutes {
       ];
 
   // mapping the above "_list" so this can be assigned to MaterialApp.routes config
-  static Map<String, Widget Function(BuildContext)> get collection =>
-      Map.fromIterable(
+  static Map<String, Widget Function(BuildContext)> get go => Map.fromEntries(
         _list.map((e) => MapEntry(e.name, (BuildContext context) => e.screen)),
       );
 

@@ -27,9 +27,9 @@ class AuthRepository {
   }
 
   /// getting current user info
-  static Future<User?> getFireStoreUser() async {
-    var theUser = await instance.userChanges().first;
-    return theUser;
+  static Future<UserRole?> getCurrentUserRole() async {
+    var theUser = await UserRepository.getCurrentFireStoreUser();
+    return theUser?.role;
   }
 
   /// updating FCM device token to use later

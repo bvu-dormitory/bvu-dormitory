@@ -1,38 +1,33 @@
+import 'package:bvu_dormitory/base/base.firestore.model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
-enum UserRoles {
-  SuperAdmin,
-  Admin,
-  Student,
+enum UserRole {
+  admin,
+  student,
 }
 
-class UserRole {
+class AppUser extends FireStoreModel {
   String name;
-
-  UserRole({required this.name});
-}
-
-class AppUser {
-  String name;
-  String phoneNumber;
+  UserRole role;
   String? photoURL;
-  UserRole? role;
 
   AppUser({
     required this.name,
-    required this.phoneNumber,
+    required this.role,
     this.photoURL,
-    this.role,
   });
 
-  factory AppUser.fromFireStore(QueryDocumentSnapshot snapshot) {
+  factory AppUser.fromFireStoreDocument(DocumentSnapshot snapshot) {
     Map data = snapshot.data() as Map<String, dynamic>;
     return AppUser(
       name: data['name'],
-      phoneNumber: data['phoneNumber'],
+      role: UserRole.values.firstWhere(
+        (element) => describeEnum(element) == data['role'],
+        orElse: () => UserRole.student,
+      ),
       photoURL: data['photoURL'],
-      role: data['role'],
     );
   }
 }
@@ -42,6 +37,10 @@ class Student extends AppUser {
   String? relativePhoneNumber;
   String? citizenIdentityNumber;
 
-  Student({required String name, required String phoneNumber})
-      : super(name: name, phoneNumber: phoneNumber);
+  Student({
+    required String name,
+  }) : super(
+          name: name,
+          role: UserRole.student,
+        );
 }

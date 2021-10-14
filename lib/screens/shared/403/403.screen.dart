@@ -9,17 +9,20 @@ class ForBiddenScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+          child: Container(
+        padding: const EdgeInsets.all(10),
         child: Center(
           child: Text(
             AppLocalizations.of(context)?.for_bidden_title ??
                 "for_bidden_title",
+            textAlign: TextAlign.center,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
           ),
         ),
-      ),
+      )),
     );
   }
 }

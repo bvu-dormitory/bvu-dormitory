@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,12 +48,12 @@ prepareData() async {
 initFirebase() async {
   await Firebase.initializeApp();
 
-  AppNotifications.getDeviceToken();
+  // AppNotifications.getDeviceToken();
 
-  logger.i(' Firebase init done');
+  log('Firebase init done');
 }
 
 initSharedPreferences() async {
   await AppRepository.initSharedPreferences();
-  logger.i('SharedPreferences init done');
+  log('SharedPreferences init done');
 }

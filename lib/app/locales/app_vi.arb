@@ -12,7 +12,7 @@
 
     
     "not_found_title": "Trang không tồn tại",
-    "for_bidden_title": "Trang không tồn tại",
+    "for_bidden_title": "Không có đủ quyền hạn để xem trang này",
 
 
 
@@ -25,7 +25,7 @@
     "login_error_network_error": "Lỗi kết nối, vui lòng thử lại hoặc kiểm tra kết nối mạng",
     "login_error_web_context_canceled": "Xác minh catpcha chưa hoàn tất, vui lòng thao tác lại",
     "login_error_web_context_already_presented": "Xác minh catpcha đã diễn ra trước đó, vui lòng thao tác lại chậm hơn",
-    "login_error_captcha_error": "Lỗi xác minh catpcha, vui lòng thao tác lại",
+    "login_error_captcha_error": "Không tải được mã captcha, vui lòng thao tác lại",
 
     "login_error_invalid_otp": "Mã OTP vừa nhập không đúng, vui lòng kiểm tra lại nội dung tin nhắn hoặc Hủy để thử lại",
     "login_error_otp_timeout": "Phiên đăng nhập đã hết hạn, vui lòng thao tác lại",
@@ -50,5 +50,7 @@
     "home_screen_navbar_item_chat": "Tin nhắn",
     "home_screen_navbar_item_room": "Phòng",
     "home_screen_navbar_item_profile": "Cá nhân",
-    "home_screen_navbar_item_notifications": "Thông báo"
+    "home_screen_navbar_item_notifications": "Thông báo",
+    "home_screen_navbar_item_stats": "Báo cáo",
+    "home_screen_navbar_item_manage": "Quản lí"
 }

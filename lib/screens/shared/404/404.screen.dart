@@ -9,12 +9,17 @@ class NotFoundScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Text(
-            AppLocalizations.of(context)?.not_found_title ?? "not_found_title",
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          child: Center(
+            child: Text(
+              AppLocalizations.of(context)?.not_found_title ??
+                  "not_found_title",
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
           ),
         ),

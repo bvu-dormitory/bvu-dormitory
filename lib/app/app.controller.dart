@@ -13,6 +13,8 @@ class AppController extends BaseController {
     checkConnectivity();
   }
 
+  // get currentLocale => appLocalizations.;
+
   void checkConnectivity() async {
     if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
       showConnectionErrorDialog();

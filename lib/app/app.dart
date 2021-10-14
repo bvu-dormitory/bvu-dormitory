@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/app/app.notifications.dart';
 import 'package:bvu_dormitory/services/repositories/auth.repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -57,16 +59,19 @@ class _ApplicationState extends State<Application> {
             builder: (context, snapshot) {
               return MaterialApp(
                 // ROUTING
-                routes: AppRoutes.collection,
+                routes: AppRoutes.go, // ignore if using onGenerateRoute
                 home: (snapshot.hasData) ? HomeScreen() : LoginScreen(),
-                onGenerateRoute: (settings) {
-                  logger.i('onGenerateRoute...');
-                  logger.i(FirebaseAuth.instance.currentUser);
-
-                  return MaterialPageRoute(
-                      builder: (context) =>
-                          AppRoutes.getByName(settings.name ?? "").screen);
-                },
+                // onGenerateRoute: (settings) {
+                //   log('onGenerateRoute...');
+                //   return AuthRepository.instance.currentUser != null
+                //       ? MaterialPageRoute(
+                //           builder: (context) => AppRoutes.login.screen,
+                //         )
+                //       : MaterialPageRoute(
+                //           builder: (context) =>
+                //               AppRoutes.getByName(settings.name ?? "").screen,
+                //         );
+                // },
                 onUnknownRoute: (settings) {
                   logger.w('route not found, redirect to the 404 screen');
                   return MaterialPageRoute(
