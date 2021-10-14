@@ -1,58 +1,85 @@
-import 'package:bvu_dormitory/app/constants/app.themes.dart';
-import 'package:bvu_dormitory/screens/shared/home/home.screen.dart';
-import 'package:bvu_dormitory/screens/shared/login/login.screen.dart';
+import 'package:bvu_dormitory/app/app.notifications.dart';
+import 'package:bvu_dormitory/services/repositories/auth.repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'app.provider.dart';
-import '../repositories/auth.repository.dart';
+import 'package:bvu_dormitory/app/constants/app.themes.dart';
+import 'package:bvu_dormitory/screens/shared/home/home.screen.dart';
+import 'package:bvu_dormitory/screens/shared/login/login.screen.dart';
+
+import 'app.logger.dart';
+import 'app.controller.dart';
 import 'constants/app.routes.dart';
 
 // This widget is the root of your application.
-class Application extends StatelessWidget {
+class Application extends StatefulWidget {
   const Application({Key? key}) : super(key: key);
+
+  @override
+  _ApplicationState createState() => _ApplicationState();
+}
+
+class _ApplicationState extends State<Application> {
+  @override
+  void initState() {
+    super.initState();
+
+    // allow receiving FCM messages if the app is in forground (visible to user)
+    FirebaseMessaging.onMessage.listen((event) {
+      logger.w('FCM foreground message coming');
+      logger.i(event);
+    });
+
+    // allow receiving FCM messages if the app is still alive (not terminated)
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      logger.w('FCM background message coming');
+      logger.i(event);
+    });
+  }
 
   @override
   Widget build(BuildContext _) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppProvider>(
-          create: (_) => AppProvider(),
+        ChangeNotifierProvider<AppController>(
+          create: (_) => AppController(context: _),
+          lazy: false,
         ),
-        // ChangeNotifierProvider<HomeController>(
-        //   create: (context) => HomeController(
-        //     context: context,
-        //   ),
-        // ),
       ],
-      child: Consumer<AppProvider>(
+      child: Consumer<AppController>(
         builder: (context, appProvider, child) {
-          return FutureBuilder<bool>(
-            future: AuthRepository.isAuthenticated(),
+          return FutureBuilder(
+            // stream: AuthRepository.instance.userChanges(),
+            future: AuthRepository.instance.userChanges().first,
             builder: (context, snapshot) {
-              log('app auth:');
-              print(snapshot.data);
-              print(FirebaseAuth.instance.currentUser);
-
               return MaterialApp(
-                routes: AppRoutes.collect(),
-                home: (snapshot.hasData && snapshot.data == true)
-                    ? HomeScreen()
-                    : LoginScreen(),
+                // ROUTING
+                routes: AppRoutes.collection,
+                home: (snapshot.hasData) ? HomeScreen() : LoginScreen(),
                 onGenerateRoute: (settings) {
-                  log('checking user...');
-                  print(FirebaseAuth.instance.currentUser);
+                  logger.i('onGenerateRoute...');
+                  logger.i(FirebaseAuth.instance.currentUser);
+
+                  return MaterialPageRoute(
+                      builder: (context) =>
+                          AppRoutes.getByName(settings.name ?? "").screen);
+                },
+                onUnknownRoute: (settings) {
+                  logger.w('route not found, redirect to the 404 screen');
+                  return MaterialPageRoute(
+                    builder: (context) => AppRoutes.notFound.screen,
+                  );
                 },
                 onGenerateTitle: (context) {
-                  return AppLocalizations.of(context)?.appName ?? "app_name";
+                  return AppLocalizations.of(context)?.app_name ?? "app_name";
                 },
+                // LOCALIZING
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
+                // THEMING
                 themeMode: appProvider.appThemeMode,
                 theme: AppThemes.light,
                 darkTheme: AppThemes.dark,

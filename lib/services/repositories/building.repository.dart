@@ -14,6 +14,12 @@ class BuildingRepository {
         .map((event) => Building.fromFireStore(event));
   }
 
+  static add(Building building) async {
+    try {
+      await _instance.collection('buildings').add(building.json);
+    } catch (Q) {}
+  }
+
   static update(DocumentReference ref, Building updatedData) {
     _instance.runTransaction((transaction) async {
       DocumentSnapshot freshSnapshot = await transaction.get(ref);

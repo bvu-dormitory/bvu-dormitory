@@ -1,12 +1,12 @@
-import 'dart:developer';
-
-import 'package:bvu_dormitory/app/app.dart';
-import 'package:bvu_dormitory/app/app.logger.dart';
-import 'package:bvu_dormitory/app/app.repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:bvu_dormitory/app/app.dart';
+import 'package:bvu_dormitory/app/app.logger.dart';
+import 'package:bvu_dormitory/app/app.notifications.dart';
+import 'package:bvu_dormitory/app/app.repository.dart';
 
 /// Don't implement codes here - prefer seperating into functions then invoking
 /// Keep this file as simple as possible
@@ -45,6 +45,9 @@ prepareData() async {
 
 initFirebase() async {
   await Firebase.initializeApp();
+
+  AppNotifications.getDeviceToken();
+
   logger.i(' Firebase init done');
 }
 

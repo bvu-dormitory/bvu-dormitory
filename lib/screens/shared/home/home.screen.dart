@@ -1,4 +1,4 @@
-import 'package:bvu_dormitory/repositories/auth.repository.dart';
+import 'package:bvu_dormitory/services/repositories/auth.repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,8 +9,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('abc');
-    print(FirebaseAuth.instance.currentUser);
     return StreamBuilder(
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, snapshot) {
@@ -18,6 +16,9 @@ class HomeScreen extends StatelessWidget {
           body: SafeArea(
             child: Text(snapshot.data.toString()),
           ),
+          floatingActionButton: FloatingActionButton(onPressed: () {
+            AuthRepository.signOut();
+          }),
         );
       },
     );

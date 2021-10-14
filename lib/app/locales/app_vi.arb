@@ -1,10 +1,18 @@
 {
-    "appName": "Kí túc xá BVU",
+    "app_name": "Kí túc xá BVU",
 
     "app_dialog_title_error": "Lỗi",
     "app_dialog_action_ok": "Ok",
     "app_dialog_action_cancel": "Hủy",
     "app_dialog_action_submit": "Xác nhận",
+
+
+    "app_connectivity_none": "Không có kết nối mạng, vui lòng kiểm tra lại trước khi tiếp tục thao tác",
+
+
+    
+    "not_found_title": "Trang không tồn tại",
+    "for_bidden_title": "Trang không tồn tại",
 
 
 
@@ -14,7 +22,7 @@
 
     "login_error_phone_invalid_format": "Vui lòng nhập đúng định dạng số điện thoại",
     "login_error_too_many_requests": "Bạn đã thực hiện đăng nhập quá nhiều lần, vui lòng thử lại sau một khoảng thời gian",
-    "login_error_network_error": "Lỗi kết nối, vui lòng thử lại",
+    "login_error_network_error": "Lỗi kết nối, vui lòng thử lại hoặc kiểm tra kết nối mạng",
     "login_error_web_context_canceled": "Xác minh catpcha chưa hoàn tất, vui lòng thao tác lại",
     "login_error_web_context_already_presented": "Xác minh catpcha đã diễn ra trước đó, vui lòng thao tác lại chậm hơn",
     "login_error_captcha_error": "Lỗi xác minh catpcha, vui lòng thao tác lại",

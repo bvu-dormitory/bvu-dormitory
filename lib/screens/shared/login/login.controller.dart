@@ -3,19 +3,18 @@ import 'dart:developer';
 
 import 'package:bvu_dormitory/app/app.logger.dart';
 import 'package:bvu_dormitory/app/constants/app.routes.dart';
-import 'package:bvu_dormitory/repositories/auth.repository.dart';
+import 'package:bvu_dormitory/services/repositories/auth.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bvu_dormitory/base/base.controller.dart';
-import 'package:bvu_dormitory/repositories/user.repository.dart';
+import 'package:bvu_dormitory/services/repositories/user.repository.dart';
 
 class LoginController extends BaseController {
   LoginController({required BuildContext context}) : super(context: context);
 
   // native firebase auth params
-  FirebaseAuth authInstance = FirebaseAuth.instance;
   Duration otpTimeout = const Duration(seconds: 30);
   String? verificationId;
   String? otpCode;
@@ -152,11 +151,13 @@ class LoginController extends BaseController {
       smsCode: otpCode!,
     );
 
-    // Sign the user in (or link) with the credential
-    logger.i('signingin...');
-    authInstance.signInWithCredential(credential).then(
+    _signIn(credential);
+  }
+
+  void _signIn(PhoneAuthCredential credential) {
+    AuthRepository.instance.signInWithCredential(credential).then(
       (userCredential) async {
-        logger.i('signing in success...');
+        logger.i('signin success...');
         logger.i(userCredential);
 
         // if logged-in user with given phone number is not in the FireStore DB => delete the account
@@ -167,7 +168,7 @@ class LoginController extends BaseController {
               showErrorDialog(appLocalizations?.login_error_user_not_exists ??
                   "login_error_user_not_exists");
 
-              logger.i('user deleted...');
+              logger.w('user deleted...');
             },
           ).catchError((onError) {
             logger.e('cannot delete the user...');
@@ -176,6 +177,9 @@ class LoginController extends BaseController {
         }
         // the user is exists
         else {
+          logger.w('on user exists');
+          logger.i(AuthRepository.instance.currentUser);
+          await AuthRepository.updateUserFCMToken();
           Navigator.pushNamed(context, AppRoutes.home.name);
         }
       },
