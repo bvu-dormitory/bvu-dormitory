@@ -27,4 +27,11 @@ class UserRepository {
       return null;
     }
   }
+
+  static Stream<AppUser?> getCurrentFireStoreUserStream() {
+    return _instance
+        .doc(AuthRepository.instance.currentUser?.phoneNumber)
+        .snapshots()
+        .map((user) => AppUser.fromFireStoreDocument(user));
+  }
 }

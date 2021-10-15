@@ -23,9 +23,13 @@ class _AdminHomeBottomNavbarState extends State<AdminHomeBottomNavbar> {
     return Scaffold(
       body: PageView.builder(
         controller: controller.pageController,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: controller.getNavItemScreens.length,
         itemBuilder: (context, index) {
           return controller.getNavItemScreens[index];
+        },
+        onPageChanged: (index) {
+          // controller.currentNavBarIndex = index;
         },
       ),
       bottomNavigationBar: BottomNavigationBar(

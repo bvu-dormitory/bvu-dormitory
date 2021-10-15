@@ -21,14 +21,16 @@ class HomeBottomNavItem {
 
 class AdminHomeController extends BaseController {
   AdminHomeController({required BuildContext context})
-      : super(context: context);
+      : super(context: context) {
+    notifyListeners();
+  }
 
   int _currentNavBarIndex = 0;
   int get currentNavBarIndex => _currentNavBarIndex;
   set currentNavBarIndex(int index) {
     _currentNavBarIndex = index;
     _pageController.animateToPage(index,
-        duration: Duration(milliseconds: 150), curve: Curves.ease);
+        duration: const Duration(milliseconds: 150), curve: Curves.ease);
     notifyListeners();
   }
 
@@ -36,14 +38,18 @@ class AdminHomeController extends BaseController {
   PageController get pageController => _pageController;
 
   List<Widget> getNavItemScreens = [
+    AdminManageScreen(),
     NewsFeedScreen(),
     MessagesScreen(),
-    ManageScreen(),
-    ReportsScreen(),
+    // AdminReportsScreen(),
     ProfileScreen(),
   ];
 
   List<HomeBottomNavItem> get navItemDataList => [
+        HomeBottomNavItem(
+          title: appLocalizations?.home_screen_navbar_item_manage ?? "Quản lí",
+          icon: const Icon(CupertinoIcons.home),
+        ),
         HomeBottomNavItem(
           title:
               appLocalizations?.home_screen_navbar_item_newsfeed ?? "Bảng tin",
@@ -55,15 +61,11 @@ class AdminHomeController extends BaseController {
           icon: const Icon(CupertinoIcons.chat_bubble),
           activeIcon: const Icon(CupertinoIcons.chat_bubble_fill),
         ),
-        HomeBottomNavItem(
-          title: appLocalizations?.home_screen_navbar_item_manage ?? "Quản lí",
-          icon: const Icon(CupertinoIcons.home),
-        ),
-        HomeBottomNavItem(
-          title: appLocalizations?.home_screen_navbar_item_stats ?? "Báo cáo",
-          icon: const Icon(CupertinoIcons.chart_pie),
-          activeIcon: const Icon(CupertinoIcons.chart_pie_fill),
-        ),
+        // HomeBottomNavItem(
+        //   title: appLocalizations?.home_screen_navbar_item_stats ?? "Báo cáo",
+        //   icon: const Icon(CupertinoIcons.chart_pie),
+        //   activeIcon: const Icon(CupertinoIcons.chart_pie_fill),
+        // ),
         HomeBottomNavItem(
           title: appLocalizations?.home_screen_navbar_item_profile ?? "Cá nhân",
           icon: const Icon(CupertinoIcons.profile_circled),

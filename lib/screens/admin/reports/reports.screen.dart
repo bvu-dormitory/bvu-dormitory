@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ReportsScreen extends StatefulWidget {
-  ReportsScreen({Key? key}) : super(key: key);
+class AdminReportsScreen extends StatefulWidget {
+  AdminReportsScreen({Key? key}) : super(key: key);
 
   @override
-  _ReportsScreenState createState() => _ReportsScreenState();
+  _AdminReportsScreenState createState() => _AdminReportsScreenState();
 }
 
-class _ReportsScreenState extends State<ReportsScreen>
+class _AdminReportsScreenState extends State<AdminReportsScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
