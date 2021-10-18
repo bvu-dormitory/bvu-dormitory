@@ -4,7 +4,7 @@ class AppColor {
   static get primarySwatch => Colors.blue;
   static get primarySwatchDark => AppColor.backgroundColorDark;
 
-  static get backgroundColor => Colors.white;
+  static get backgroundColor => Colors.lightBlue.withOpacity(0.05);
   static get backgroundColorDark => Colors.grey;
 
   static get secondaryBackgroundColor => Colors.white.withOpacity(0.5);

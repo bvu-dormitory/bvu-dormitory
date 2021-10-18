@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:bvu_dormitory/app/app.dart';
-import 'package:bvu_dormitory/app/app.logger.dart';
-import 'package:bvu_dormitory/app/app.notifications.dart';
 import 'package:bvu_dormitory/app/app.repository.dart';
 
 /// Don't implement codes here - prefer seperating into functions then invoking

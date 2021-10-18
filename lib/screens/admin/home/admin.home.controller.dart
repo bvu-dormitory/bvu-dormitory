@@ -41,7 +41,6 @@ class AdminHomeController extends BaseController {
     AdminManageScreen(),
     NewsFeedScreen(),
     MessagesScreen(),
-    // AdminReportsScreen(),
     ProfileScreen(),
   ];
 
@@ -61,11 +60,6 @@ class AdminHomeController extends BaseController {
           icon: const Icon(CupertinoIcons.chat_bubble),
           activeIcon: const Icon(CupertinoIcons.chat_bubble_fill),
         ),
-        // HomeBottomNavItem(
-        //   title: appLocalizations?.home_screen_navbar_item_stats ?? "Báo cáo",
-        //   icon: const Icon(CupertinoIcons.chart_pie),
-        //   activeIcon: const Icon(CupertinoIcons.chart_pie_fill),
-        // ),
         HomeBottomNavItem(
           title: appLocalizations?.home_screen_navbar_item_profile ?? "Cá nhân",
           icon: const Icon(CupertinoIcons.profile_circled),

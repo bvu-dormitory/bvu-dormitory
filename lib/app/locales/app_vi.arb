@@ -2,9 +2,27 @@
     "app_name": "Kí túc xá BVU",
 
     "app_dialog_title_error": "Lỗi",
+    "app_dialog_title_update": "Cập nhật thông tin",
+    "app_dialog_title_delete": "Xóa thông tin",
+    "app_dialog_title_info": "Thông tin",
+
     "app_dialog_action_ok": "Ok",
     "app_dialog_action_cancel": "Hủy",
     "app_dialog_action_submit": "Xác nhận",
+    "app_dialog_action_update": "Lưu",
+
+    "app_action_delete": "Xóa",
+    "app_action_edit": "Chỉnh sửa",
+
+    
+    "app_toast_deleted": "Đã xóa {name}",
+    "@app_toast_deleted": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
 
 
     "app_connectivity_none": "Không có kết nối mạng, vui lòng kiểm tra lại trước khi tiếp tục thao tác",
@@ -46,11 +64,27 @@
     },
 
 
+
     "home_screen_navbar_item_newsfeed": "Bảng tin",
     "home_screen_navbar_item_chat": "Tin nhắn",
     "home_screen_navbar_item_room": "Phòng",
     "home_screen_navbar_item_profile": "Cá nhân",
     "home_screen_navbar_item_notifications": "Thông báo",
     "home_screen_navbar_item_stats": "Báo cáo",
-    "home_screen_navbar_item_manage": "Quản lí"
+    "home_screen_navbar_item_manage": "Quản lí",
+
+
+    "admin_manage_title": "Quản lí",
+    "admin_manage_rooms_title": "Các Khu",
+    "admin_manage_rooms_guide": "Không thể thay đổi những thông tin về Khu trong ứng dụng, vui lòng liên hệ quản trị viên.",
+    "admin_manage_rooms_building": "Khu",
+    "admin_manage_rooms_descriptions": "Mô tả",
+    "admin_manage_rooms_confirm_delete_building": "Các thông tin liên quan như Phòng, Hóa đơn sẽ bị xóa theo. \n\nVẫn xác nhận xóa thông tin \"Khu {name}\" ?",
+    "@admin_manage_rooms_confirm_delete_building": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    }
 }

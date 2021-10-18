@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+enum DialogConfirmType { Update, Submit }
+
 abstract class BaseController extends ChangeNotifier {
   AppLocalizations? get appLocalizations => AppLocalizations.of(context);
 
@@ -25,6 +27,51 @@ abstract class BaseController extends ChangeNotifier {
           ],
         );
       },
+    );
+  }
+
+  showConfirmDialog({
+    required String title,
+    required Widget? body,
+    required DialogConfirmType confirmType,
+    required void Function() onSubmit,
+  }) {
+    String getConfirmationTitle(DialogConfirmType type) {
+      switch (type) {
+        case DialogConfirmType.Submit:
+          return appLocalizations?.app_dialog_action_submit ??
+              "app_dialog_action_submit";
+
+        case DialogConfirmType.Update:
+          return appLocalizations?.app_dialog_action_update ??
+              "app_dialog_action_update";
+
+        default:
+          return "localle_name_undefined";
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: Text(title),
+        content: body,
+        actions: [
+          CupertinoDialogAction(
+            child: Text(
+              appLocalizations?.app_dialog_action_cancel ??
+                  "app_dialog_action_cancel",
+              style: const TextStyle(color: Colors.red),
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          CupertinoDialogAction(
+            child: Text(getConfirmationTitle(confirmType)),
+            onPressed: onSubmit,
+          ),
+        ],
+      ),
+      barrierDismissible: false,
     );
   }
 }

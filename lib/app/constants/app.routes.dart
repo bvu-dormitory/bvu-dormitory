@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/screens/admin/manage/rooms/rooms.screen.dart';
 import 'package:bvu_dormitory/screens/shared/403/403.screen.dart';
 import 'package:bvu_dormitory/screens/shared/404/404.screen.dart';
 import 'package:bvu_dormitory/screens/shared/home/home.screen.dart';
@@ -30,11 +31,17 @@ class AppRoutes {
   static AppRoute get home => AppRoute(name: '/home', screen: HomeScreen());
   static AppRoute get login => AppRoute(name: '/login', screen: LoginScreen());
 
+  static AppRoute get adminRooms => AppRoute(
+        name: '/admin-rooms',
+        screen: AdminRoomsScreen(),
+      );
+
   static List<AppRoute> get _list => [
         notFound,
         forBidden,
         home,
         login,
+        adminRooms,
       ];
 
   // mapping the above "_list" so this can be assigned to MaterialApp.routes config

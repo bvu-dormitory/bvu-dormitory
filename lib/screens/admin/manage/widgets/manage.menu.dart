@@ -24,10 +24,10 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
     return Container(
       // color: Colors.red,
       child: GridView.count(
-        padding: EdgeInsets.only(top: 15),
+        padding: const EdgeInsets.only(top: 15),
         crossAxisCount: 3,
         shrinkWrap: true,
-        childAspectRatio: MediaQuery.of(context).size.width / 400,
+        childAspectRatio: MediaQuery.of(context).size.width / 420,
         children: List.generate(
           controller.menuItems.length,
           (index) => _menuItem(controller.menuItems[index]),
@@ -37,39 +37,50 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
   }
 
   _menuItem(ManageIconItem item) {
-    return CupertinoButton(
-      onPressed: () {
-        Navigator.pushNamed(context, item.routeName);
-      },
-      child: Container(
-          padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            // color: Colors.grey.withOpacity(0.25),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Image.asset(
-                  item.iconPath,
-                  height: 40,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      offset: Offset(2, 5),
-                      blurRadius: 10,
-                    ),
-                  ],
-                ),
+    return Container(
+      margin: const EdgeInsets.all(10),
+      child: CupertinoButton(
+        // color: Colors.blue.withOpacity(0.5),
+        onPressed: () {
+          Navigator.pushNamed(context, item.routeName);
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: Image.asset(
+                item.iconPath,
+                height: 40,
               ),
-              Text(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    offset: const Offset(2, 5),
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            // Text(
+            //   item.title,
+            //   // 'Abc',
+            //   style: TextStyle(
+            //     color: Colors.black.withOpacity(0.75),
+            //     fontSize: 14,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+            Hero(
+              tag: item.routeName,
+              child: Text(
                 item.title,
                 // 'Abc',
                 style: TextStyle(
@@ -78,8 +89,10 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

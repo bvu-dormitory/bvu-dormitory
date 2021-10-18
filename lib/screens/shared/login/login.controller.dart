@@ -180,7 +180,7 @@ class LoginController extends BaseController {
           logger.w('on user exists');
           logger.i(AuthRepository.instance.currentUser);
           await AuthRepository.updateUserFCMToken();
-          Navigator.pushNamed(context, AppRoutes.home.name);
+          Navigator.pushReplacementNamed(context, AppRoutes.home.name);
         }
       },
     ).catchError(
