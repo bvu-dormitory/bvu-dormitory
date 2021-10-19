@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:bvu_dormitory/app/app.logger.dart';
-import 'package:bvu_dormitory/app/constants/app.routes.dart';
-import 'package:bvu_dormitory/services/repositories/auth.repository.dart';
+import 'package:bvu_dormitory/repositories/auth.repository.dart';
+import 'package:bvu_dormitory/repositories/user.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bvu_dormitory/base/base.controller.dart';
-import 'package:bvu_dormitory/services/repositories/user.repository.dart';
+import 'package:bvu_dormitory/app/app.logger.dart';
+import 'package:bvu_dormitory/app/constants/app.routes.dart';
 
 class LoginController extends BaseController {
   LoginController({required BuildContext context}) : super(context: context);

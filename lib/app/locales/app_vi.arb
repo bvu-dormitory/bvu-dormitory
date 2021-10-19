@@ -74,17 +74,41 @@
     "home_screen_navbar_item_manage": "Quản lí",
 
 
+
+    "admin_manage_building": "Khu",
+    "admin_manage_floor": "Tầng",
+    "admin_manage_room": "Phòng",
+
     "admin_manage_title": "Quản lí",
-    "admin_manage_rooms_title": "Các Khu",
-    "admin_manage_rooms_guide": "Không thể thay đổi những thông tin về Khu trong ứng dụng, vui lòng liên hệ quản trị viên.",
-    "admin_manage_rooms_building": "Khu",
-    "admin_manage_rooms_descriptions": "Mô tả",
-    "admin_manage_rooms_confirm_delete_building": "Các thông tin liên quan như Phòng, Hóa đơn sẽ bị xóa theo. \n\nVẫn xác nhận xóa thông tin \"Khu {name}\" ?",
-    "@admin_manage_rooms_confirm_delete_building": {
+    "admin_manage_service": "Dịch vụ",
+    "admin_manage_contact": "Liên lạc",
+    "admin_manage_item": "Tài sản",
+    "admin_manage_student": "Sinh viên",
+    "admin_manage_invoice": "Hóa đơn",
+    "admin_manage_repair": "Yêu cầu sửa chữa",
+
+
+    "admin_manage_buildings_title": "Các Khu",
+    "admin_manage_buildings_confirm_delete_building": "Các thông tin liên quan như Phòng, Hóa đơn sẽ bị xóa theo. \n\nVẫn xác nhận xóa thông tin \"Khu {name}\" ?",
+    "@admin_manage_buildings_confirm_delete_building": {
         "placeholders": {
             "name": {
                 "type": "String"
             }
         }
-    }
+    },
+
+
+    "admin_manage_rooms_title": "Các Phòng",
+    "admin_manage_rooms_detail_images": "Hình ảnh",
+    "admin_manage_rooms_detail_info": "Thông tin",
+
+    "admin_manage_rooms_detail_contact_chat": "Nhắn tin tới phòng",
+    "admin_manage_rooms_detail_contact_phone": "Số điện thoại",
+
+    "admin_manage_rooms_detail_invoice_add": "Thêm Hóa đơn",
+    "admin_manage_rooms_detail_invoice_list": "Danh sách Hóa đơn",
+
+    "admin_manage_rooms_detail_repair_list": "Đang yêu cầu",
+    "admin_manage_rooms_detail_repair_history": "Đã xử lí"
 }

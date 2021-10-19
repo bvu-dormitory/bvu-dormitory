@@ -2,19 +2,24 @@ import 'dart:developer';
 
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/building.dart';
-import 'package:bvu_dormitory/services/repositories/building.repository.dart';
+import 'package:bvu_dormitory/models/floor.dart';
+import 'package:bvu_dormitory/repositories/building.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class AdminRoomsController extends BaseController {
+class AdminBuildingsController extends BaseController {
   BuildingRepository get _buildingRepository => BuildingRepository();
 
-  AdminRoomsController({required BuildContext context})
+  AdminBuildingsController({required BuildContext context})
       : super(context: context);
 
   Stream<List<Building>> syncBuildings() {
     return _buildingRepository.syncAll();
+  }
+
+  Stream<List<Floor>> getFloors(String buildingId) {
+    return _buildingRepository.syncAllFloors(buildingId);
   }
 
   // void deleteBuilding(Building item) {

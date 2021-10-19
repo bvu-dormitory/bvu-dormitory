@@ -21,10 +21,10 @@ prepare() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await prepareData();
-  await prepareAprerance();
+  await prepareApprerance();
 }
 
-prepareAprerance() async {
+prepareApprerance() async {
   // transparent Status Bar on Android for all screens
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:bvu_dormitory/app/app.logger.dart';
 import 'package:bvu_dormitory/models/user.dart';
-import 'package:bvu_dormitory/services/repositories/auth.repository.dart';
+import 'package:bvu_dormitory/repositories/auth.repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

@@ -1,4 +1,4 @@
-import 'package:bvu_dormitory/screens/admin/manage/rooms/rooms.screen.dart';
+import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.screen.dart';
 import 'package:bvu_dormitory/screens/shared/403/403.screen.dart';
 import 'package:bvu_dormitory/screens/shared/404/404.screen.dart';
 import 'package:bvu_dormitory/screens/shared/home/home.screen.dart';
@@ -33,7 +33,7 @@ class AppRoutes {
 
   static AppRoute get adminRooms => AppRoute(
         name: '/admin-rooms',
-        screen: AdminRoomsScreen(),
+        screen: AdminBuildingsScreen(),
       );
 
   static List<AppRoute> get _list => [

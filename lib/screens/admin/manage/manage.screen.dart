@@ -1,15 +1,14 @@
-import 'package:bvu_dormitory/app/constants/app.colors.dart';
-import 'package:bvu_dormitory/models/user.dart';
-import 'package:bvu_dormitory/screens/admin/manage/manage.controller.dart';
-import 'package:bvu_dormitory/screens/admin/manage/widgets/manage.charts.dart';
-import 'package:bvu_dormitory/screens/admin/manage/widgets/manage.menu.dart';
-import 'package:bvu_dormitory/screens/admin/manage/widgets/manage.search.dart';
-import 'package:bvu_dormitory/services/repositories/user.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
+import 'package:bvu_dormitory/models/user.dart';
+import 'package:bvu_dormitory/screens/admin/manage/manage.controller.dart';
+import 'package:bvu_dormitory/screens/admin/manage/widgets/manage.menu.dart';
+import 'package:bvu_dormitory/repositories/user.repository.dart';
 
 class AdminManageScreen extends StatefulWidget {
   AdminManageScreen({Key? key}) : super(key: key);

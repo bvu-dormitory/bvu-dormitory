@@ -1,11 +1,24 @@
+import 'package:bvu_dormitory/base/base.firestore.model.dart';
 import 'package:bvu_dormitory/models/room.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Floor {
-  final int? id;
-  final List<Room> rooms;
+class Floor extends FireStoreModel {
+  final int order;
 
   Floor({
-    required this.id,
-    required this.rooms,
-  });
+    String? id,
+    required this.order,
+  }) : super(id: id);
+
+  static List<Floor> fromFireStoreStream(
+      QuerySnapshot<Map<String, dynamic>> event) {
+    return event.docs
+        .map(
+          (e) => Floor(
+            id: e.id,
+            order: e['order'],
+          ),
+        )
+        .toList();
+  }
 }
