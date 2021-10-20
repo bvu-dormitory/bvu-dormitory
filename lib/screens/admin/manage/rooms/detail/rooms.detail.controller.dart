@@ -9,10 +9,11 @@ import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/repositories/building.repository.dart';
+import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/images/rooms.detail.images.screen.dart';
 
 class AdminRoomMenuItem {
   String title;
-  Icon icon;
+  IconData icon;
   Function? onPressed;
 
   AdminRoomMenuItem({required this.title, required this.icon, this.onPressed});
@@ -42,12 +43,12 @@ class AdminRoomsDetailController extends BaseController {
         AdminRoomMenuItem(
           title: appLocalizations?.admin_manage_rooms_detail_contact_chat ??
               "admin_manage_rooms_detail_contact_chat",
-          icon: const Icon(CupertinoIcons.bubble_left_bubble_right),
+          icon: CupertinoIcons.bubble_left_bubble_right,
         ),
         AdminRoomMenuItem(
           title: appLocalizations?.admin_manage_rooms_detail_contact_phone ??
               "admin_manage_rooms_detail_contact_phone",
-          icon: const Icon(CupertinoIcons.phone),
+          icon: CupertinoIcons.phone,
           onPressed: () {
             showCupertinoModalBottomSheet(
               context: context,
@@ -61,23 +62,35 @@ class AdminRoomsDetailController extends BaseController {
 
   List<AdminRoomMenuItem> get infoMenuItems => [
         AdminRoomMenuItem(
-          title: appLocalizations?.admin_manage_rooms_detail_images ??
-              "admin_manage_rooms_detail_images",
-          icon: const Icon(CupertinoIcons.photo),
-        ),
+            title: appLocalizations?.admin_manage_rooms_detail_images ??
+                "admin_manage_rooms_detail_images",
+            icon: CupertinoIcons.photo,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AdminRoomsDetailImagesScreen(
+                    building: building,
+                    floor: floor,
+                    room: room,
+                    previousPageTitle:
+                        "${appLocalizations?.admin_manage_room ?? "admin_manage_room"} ${room.name}",
+                  ),
+                ),
+              );
+            }),
         AdminRoomMenuItem(
           title:
               appLocalizations?.admin_manage_service ?? "admin_manage_service",
-          icon: const Icon(CupertinoIcons.drop),
+          icon: CupertinoIcons.drop,
         ),
         AdminRoomMenuItem(
           title: appLocalizations?.admin_manage_item ?? "admin_manage_item",
-          icon: const Icon(CupertinoIcons.lightbulb),
+          icon: CupertinoIcons.lightbulb,
         ),
         AdminRoomMenuItem(
           title:
               appLocalizations?.admin_manage_student ?? "admin_manage_student",
-          icon: const Icon(CupertinoIcons.person_2),
+          icon: CupertinoIcons.person_2,
         ),
       ];
 
@@ -85,12 +98,12 @@ class AdminRoomsDetailController extends BaseController {
         AdminRoomMenuItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_add ??
               "admin_manage_rooms_detail_invoice_add",
-          icon: const Icon(CupertinoIcons.add),
+          icon: CupertinoIcons.add,
         ),
         AdminRoomMenuItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_list ??
               "admin_manage_rooms_detail_invoice_list",
-          icon: const Icon(CupertinoIcons.square_stack_3d_up),
+          icon: CupertinoIcons.square_stack_3d_up,
         ),
       ];
 
@@ -98,12 +111,12 @@ class AdminRoomsDetailController extends BaseController {
         AdminRoomMenuItem(
           title: appLocalizations?.admin_manage_rooms_detail_repair_list ??
               "admin_manage_rooms_detail_repair_list",
-          icon: const Icon(CupertinoIcons.question),
+          icon: CupertinoIcons.question,
         ),
         AdminRoomMenuItem(
           title: appLocalizations?.admin_manage_rooms_detail_repair_history ??
               "admin_manage_rooms_detail_repair_history",
-          icon: const Icon(CupertinoIcons.checkmark_alt),
+          icon: CupertinoIcons.checkmark_alt,
         ),
       ];
 }

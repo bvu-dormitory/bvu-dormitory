@@ -2,14 +2,16 @@ import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/rooms.detail.con
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AdminRoomsDetailItems extends StatefulWidget {
-  const AdminRoomsDetailItems({Key? key}) : super(key: key);
+class AdminRoomsDetailItemsScreen extends StatefulWidget {
+  const AdminRoomsDetailItemsScreen({Key? key}) : super(key: key);
 
   @override
-  _AdminRoomsDetailItemsState createState() => _AdminRoomsDetailItemsState();
+  _AdminRoomsDetailItemsScreenState createState() =>
+      _AdminRoomsDetailItemsScreenState();
 }
 
-class _AdminRoomsDetailItemsState extends State<AdminRoomsDetailItems> {
+class _AdminRoomsDetailItemsScreenState
+    extends State<AdminRoomsDetailItemsScreen> {
   late AdminRoomsDetailController controller;
 
   @override

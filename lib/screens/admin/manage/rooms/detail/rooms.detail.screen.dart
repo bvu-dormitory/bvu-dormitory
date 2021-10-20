@@ -52,10 +52,11 @@ class AdminRoomsDetailScreen extends StatelessWidget {
       transitionBetweenRoutes: true,
       previousPageTitle: _previousPageTitle(context),
       middle: Text(_middleString(context)),
-      trailing: CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.ellipsis_circle),
-          onPressed: () {}),
+      // trailing: CupertinoButton(
+      //   padding: EdgeInsets.zero,
+      //   child: const Icon(CupertinoIcons.ellipsis_circle),
+      //   onPressed: () {},
+      // ),
     );
   }
 

@@ -2,15 +2,16 @@ import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/rooms.detail.con
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AdminRoomsDetailStudents extends StatefulWidget {
-  const AdminRoomsDetailStudents({Key? key}) : super(key: key);
+class AdminRoomsDetailInvoicesScreen extends StatefulWidget {
+  const AdminRoomsDetailInvoicesScreen({Key? key}) : super(key: key);
 
   @override
-  _AdminRoomsDetailStudentsState createState() =>
-      _AdminRoomsDetailStudentsState();
+  _AdminRoomsDetailInvoicesScreenState createState() =>
+      _AdminRoomsDetailInvoicesScreenState();
 }
 
-class _AdminRoomsDetailStudentsState extends State<AdminRoomsDetailStudents> {
+class _AdminRoomsDetailInvoicesScreenState
+    extends State<AdminRoomsDetailInvoicesScreen> {
   late AdminRoomsDetailController controller;
 
   @override
@@ -22,13 +23,22 @@ class _AdminRoomsDetailStudentsState extends State<AdminRoomsDetailStudents> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          controller.appLocalizations?.admin_manage_student ??
-              "admin_manage_student",
+          controller.appLocalizations?.admin_manage_invoice ??
+              "admin_manage_invoice",
           style: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 15,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          height: 200,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(4),
           ),
         ),
         const SizedBox(

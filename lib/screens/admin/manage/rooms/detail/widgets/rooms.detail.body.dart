@@ -59,9 +59,10 @@ class _AdminRoomsDetailBodyState extends State<AdminRoomsDetailBody> {
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
+            color: Colors.black.withOpacity(0.5),
             fontWeight: FontWeight.w600,
-            fontSize: 16,
+            fontSize: 15,
           ),
         ),
         const SizedBox(height: 10),
@@ -69,9 +70,7 @@ class _AdminRoomsDetailBodyState extends State<AdminRoomsDetailBody> {
           children: List.generate(
             items.length,
             (index) => _menuItem(
-              title: items[index].title,
-              icon: items[index].icon,
-              onPressed: items[index].onPressed,
+              icon: items[index],
               isFirst: index == 0,
               isLast: index == items.length - 1,
             ),
@@ -82,16 +81,14 @@ class _AdminRoomsDetailBodyState extends State<AdminRoomsDetailBody> {
   }
 
   _menuItem({
-    required String title,
-    required Icon icon,
-    Function? onPressed,
+    required AdminRoomMenuItem icon,
     bool isFirst = false,
     bool isLast = false,
   }) {
     return CupertinoButton(
       onPressed: () {
-        if (onPressed != null) {
-          onPressed();
+        if (icon.onPressed != null) {
+          icon.onPressed!();
         }
       },
       padding: const EdgeInsets.all(0),
@@ -110,15 +107,16 @@ class _AdminRoomsDetailBodyState extends State<AdminRoomsDetailBody> {
           ),
         ),
         child: ListTile(
-          leading: icon,
+          leading: Icon(icon.icon, size: 20),
           minLeadingWidth: 10,
           trailing: const Icon(CupertinoIcons.right_chevron, size: 16),
           title: Text(
-            title,
+            icon.title,
             textAlign: TextAlign.left,
             style: TextStyle(
               color: Colors.black.withOpacity(0.75),
               fontWeight: FontWeight.w400,
+              fontSize: 15,
               // fontSize: 20,
             ),
           ),
