@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPhoneField extends StatefulWidget {
-  LoginPhoneField({Key? key}) : super(key: key);
+  const LoginPhoneField({Key? key}) : super(key: key);
 
   @override
   _LoginPhoneFieldState createState() => _LoginPhoneFieldState();

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bvu_dormitory/base/base.firestore.model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

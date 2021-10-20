@@ -1,17 +1,16 @@
-import 'package:bvu_dormitory/app/app.dialog.dart';
-import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.controller.dart';
-import 'package:bvu_dormitory/screens/admin/manage/buildings/widgets/buildings.body.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 
+import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
+import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.controller.dart';
+import 'package:bvu_dormitory/screens/admin/manage/buildings/widgets/buildings.body.dart';
 
 class AdminBuildingsScreen extends StatelessWidget {
-  AdminBuildingsScreen({Key? key}) : super(key: key);
+  const AdminBuildingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

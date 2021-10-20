@@ -1,17 +1,18 @@
 import 'dart:ffi';
 
-class Item {
-  final String? id;
+import 'package:bvu_dormitory/base/base.firestore.model.dart';
+
+class Item extends FireStoreModel {
   final String name;
   final Float price;
-  final DateTime purchase_date;
+  final DateTime purchaseDate;
   final bool inUse;
 
   Item({
-    this.id,
+    String? id,
     required this.name,
     required this.price,
-    required this.purchase_date,
+    required this.purchaseDate,
     required this.inUse,
-  });
+  }) : super(id: id);
 }

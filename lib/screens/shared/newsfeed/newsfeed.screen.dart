@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NewsFeedScreen extends StatefulWidget {
-  NewsFeedScreen({Key? key}) : super(key: key);
+  const NewsFeedScreen({Key? key}) : super(key: key);
 
   @override
   _NewsFeedScreenState createState() => _NewsFeedScreenState();
@@ -14,7 +14,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SafeArea(
         child: Center(
           child: Text('NewsFeed'),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AdminManageSearchBox extends StatefulWidget {
-  AdminManageSearchBox({Key? key}) : super(key: key);
+  const AdminManageSearchBox({Key? key}) : super(key: key);
 
   @override
   _AdminManageSearchBoxState createState() => _AdminManageSearchBoxState();
@@ -10,7 +10,7 @@ class AdminManageSearchBox extends StatefulWidget {
 class _AdminManageSearchBoxState extends State<AdminManageSearchBox> {
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return const TextField(
       decoration: InputDecoration(
         hintText: 'Tìm kiếm',
       ),

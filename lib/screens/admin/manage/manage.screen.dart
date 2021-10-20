@@ -11,7 +11,7 @@ import 'package:bvu_dormitory/screens/admin/manage/widgets/manage.menu.dart';
 import 'package:bvu_dormitory/repositories/user.repository.dart';
 
 class AdminManageScreen extends StatefulWidget {
-  AdminManageScreen({Key? key}) : super(key: key);
+  const AdminManageScreen({Key? key}) : super(key: key);
 
   @override
   _AdminManageScreenState createState() => _AdminManageScreenState();
@@ -40,7 +40,7 @@ class _AdminManageScreenState extends State<AdminManageScreen>
                 builder: (context, snapshot) => Text(
                   "Xin chào, ${snapshot.data?.name}",
                   textAlign: TextAlign.right,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
@@ -68,7 +68,7 @@ class _AdminManageScreenState extends State<AdminManageScreen>
             // padding: EdgeInsets.all(10),
             color: AppColor.backgroundColor,
             child: Column(
-              children: [
+              children: const [
                 Expanded(child: AdminManageMenu()),
                 // AdminManageMenu(),
                 // AdminManageCharts(),

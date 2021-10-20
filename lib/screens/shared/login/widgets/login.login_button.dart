@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginButton extends StatefulWidget {
-  LoginButton({Key? key}) : super(key: key);
+  const LoginButton({Key? key}) : super(key: key);
 
   @override
   _LoginButtonState createState() => _LoginButtonState();
@@ -62,16 +62,9 @@ class _LoginButtonState extends State<LoginButton> {
 
     controller.beforeVerifyPhoneNumber();
     Future.delayed(const Duration(seconds: 0), () {
-      controller
-          .verifyPhoneNumber()
-          .then(
-            (value) {},
-          )
-          .catchError(
-        (onError) {
-          print('error from button...');
-        },
-      );
+      controller.verifyPhoneNumber().then((value) {}).catchError((onError) {
+        log('error from button...');
+      });
     });
   } // handleLoginClick
 }

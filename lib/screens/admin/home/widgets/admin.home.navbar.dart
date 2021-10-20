@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AdminHomeBottomNavbar extends StatefulWidget {
-  AdminHomeBottomNavbar({Key? key}) : super(key: key);
+  const AdminHomeBottomNavbar({Key? key}) : super(key: key);
 
   @override
   _AdminHomeBottomNavbarState createState() => _AdminHomeBottomNavbarState();

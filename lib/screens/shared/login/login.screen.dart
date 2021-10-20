@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const LoginTitle(),
                 Stack(
-                  children: [
+                  children: const [
                     LoginPhoneField(),
                     Positioned(
                       child: LoginButton(),
@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
             )),
           ),
 
-          LoginOTPBottomSheet(),
+          const LoginOTPBottomSheet(),
         ],
       ),
     );

@@ -12,7 +12,7 @@ import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 
 class AdminRoomsDetailScreen extends StatelessWidget {
-  AdminRoomsDetailScreen(
+  const AdminRoomsDetailScreen(
       {Key? key,
       required this.building,
       required this.floor,

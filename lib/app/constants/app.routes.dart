@@ -19,6 +19,17 @@ class AppRoute {
 }
 
 class AppRoutes {
+  //
+  //
+  // shared routes
+  static AppRoute get home => AppRoute(
+        name: '/home',
+        screen: const HomeScreen(),
+      );
+  static AppRoute get login => AppRoute(
+        name: '/login',
+        screen: const LoginScreen(),
+      );
   static AppRoute get notFound => AppRoute(
         name: '/404',
         screen: const NotFoundScreen(),
@@ -28,14 +39,19 @@ class AppRoutes {
         screen: const ForBiddenScreen(),
       );
 
-  static AppRoute get home => AppRoute(name: '/home', screen: HomeScreen());
-  static AppRoute get login => AppRoute(name: '/login', screen: LoginScreen());
-
+  //
+  //
+  // admin routes
   static AppRoute get adminRooms => AppRoute(
         name: '/admin-rooms',
-        screen: AdminBuildingsScreen(),
+        screen: const AdminBuildingsScreen(),
       );
 
+  //
+  //
+  //
+  //
+  // private list for mapping
   static List<AppRoute> get _list => [
         notFound,
         forBidden,

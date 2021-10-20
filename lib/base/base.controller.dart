@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-enum DialogConfirmType { Update, Submit }
+enum DialogConfirmType { update, submit }
 
 abstract class BaseController extends ChangeNotifier {
   AppLocalizations? get appLocalizations => AppLocalizations.of(context);
@@ -38,11 +38,11 @@ abstract class BaseController extends ChangeNotifier {
   }) {
     String getConfirmationTitle(DialogConfirmType type) {
       switch (type) {
-        case DialogConfirmType.Submit:
+        case DialogConfirmType.submit:
           return appLocalizations?.app_dialog_action_submit ??
               "app_dialog_action_submit";
 
-        case DialogConfirmType.Update:
+        case DialogConfirmType.update:
           return appLocalizations?.app_dialog_action_update ??
               "app_dialog_action_update";
 

@@ -1,6 +1,5 @@
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/screens/admin/manage/manage.screen.dart';
-import 'package:bvu_dormitory/screens/admin/reports/reports.screen.dart';
 import 'package:bvu_dormitory/screens/shared/messages/messages.screen.dart';
 import 'package:bvu_dormitory/screens/shared/newsfeed/newsfeed.screen.dart';
 import 'package:bvu_dormitory/screens/shared/profile/profile.screen.dart';
@@ -38,10 +37,10 @@ class AdminHomeController extends BaseController {
   PageController get pageController => _pageController;
 
   List<Widget> getNavItemScreens = [
-    AdminManageScreen(),
-    NewsFeedScreen(),
-    MessagesScreen(),
-    ProfileScreen(),
+    const AdminManageScreen(),
+    const NewsFeedScreen(),
+    const MessagesScreen(),
+    const ProfileScreen(),
   ];
 
   List<HomeBottomNavItem> get navItemDataList => [

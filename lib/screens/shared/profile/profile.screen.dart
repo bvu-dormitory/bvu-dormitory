@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -19,7 +19,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               Container(
@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 width: double.infinity,
                 height: 300,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Container(
@@ -35,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 width: double.infinity,
                 height: 300,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Container(
@@ -43,10 +43,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                 width: double.infinity,
                 height: 300,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              TextField(),
+              const TextField(),
             ],
           ),
         ),

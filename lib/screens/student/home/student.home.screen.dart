@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StudentHomeScreen extends StatefulWidget {
-  StudentHomeScreen({Key? key}) : super(key: key);
+  const StudentHomeScreen({Key? key}) : super(key: key);
 
   @override
   _StudentHomeScreenState createState() => _StudentHomeScreenState();
@@ -17,15 +17,15 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
       create: (_) => StudentHomeController(context: _),
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.all(10),
-          child: Center(
+          padding: const EdgeInsets.all(10),
+          child: const Center(
             child: Text(
               'Student',
               textAlign: TextAlign.center,
             ),
           ),
         ),
-        bottomNavigationBar: StudentHomeBottomNavbar(),
+        bottomNavigationBar: const StudentHomeBottomNavbar(),
       ),
     );
   }

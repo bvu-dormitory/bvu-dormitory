@@ -1,7 +1,4 @@
 import 'package:bvu_dormitory/base/base.firestore.model.dart';
-import 'package:bvu_dormitory/models/item.dart';
-import 'package:bvu_dormitory/models/service.dart';
-import 'package:bvu_dormitory/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Room extends FireStoreModel {

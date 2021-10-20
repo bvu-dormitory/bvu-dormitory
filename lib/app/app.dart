@@ -1,14 +1,13 @@
-import 'dart:developer';
+import 'package:flutter/material.dart';
 
-import 'package:bvu_dormitory/repositories/auth.repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:bvu_dormitory/app/constants/app.themes.dart';
 import 'package:bvu_dormitory/screens/shared/home/home.screen.dart';
 import 'package:bvu_dormitory/screens/shared/login/login.screen.dart';
+import 'package:bvu_dormitory/repositories/auth.repository.dart';
 
 import 'app.logger.dart';
 import 'app.controller.dart';
@@ -58,7 +57,9 @@ class _ApplicationState extends State<Application> {
               return MaterialApp(
                 // ROUTING
                 routes: AppRoutes.go, // ignore if using onGenerateRoute
-                home: (snapshot.hasData) ? HomeScreen() : LoginScreen(),
+                home: (snapshot.hasData)
+                    ? const HomeScreen()
+                    : const LoginScreen(),
                 // onGenerateRoute: (settings) {
                 //   log('onGenerateRoute...');
                 //   return AuthRepository.instance.currentUser != null

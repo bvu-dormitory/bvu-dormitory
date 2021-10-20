@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AdminManageMenu extends StatefulWidget {
-  AdminManageMenu({Key? key}) : super(key: key);
+  const AdminManageMenu({Key? key}) : super(key: key);
 
   @override
   _AdminManageMenuState createState() => _AdminManageMenuState();
@@ -21,17 +21,14 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // color: Colors.red,
-      child: GridView.count(
-        padding: const EdgeInsets.only(top: 15),
-        crossAxisCount: 3,
-        shrinkWrap: true,
-        childAspectRatio: MediaQuery.of(context).size.width / 420,
-        children: List.generate(
-          controller.menuItems.length,
-          (index) => _menuItem(controller.menuItems[index]),
-        ),
+    return GridView.count(
+      padding: const EdgeInsets.only(top: 15),
+      crossAxisCount: 3,
+      shrinkWrap: true,
+      childAspectRatio: MediaQuery.of(context).size.width / 420,
+      children: List.generate(
+        controller.menuItems.length,
+        (index) => _menuItem(controller.menuItems[index]),
       ),
     );
   }

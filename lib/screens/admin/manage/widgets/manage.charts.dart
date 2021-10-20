@@ -1,10 +1,9 @@
 import 'package:bvu_dormitory/screens/admin/manage/manage.controller.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AdminManageCharts extends StatefulWidget {
-  AdminManageCharts({Key? key}) : super(key: key);
+  const AdminManageCharts({Key? key}) : super(key: key);
 
   @override
   _AdminManageChartsState createState() => _AdminManageChartsState();
@@ -30,11 +29,8 @@ class _AdminManageChartsState extends State<AdminManageCharts> {
       // color: Colors.red,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 25),
-          // BarChart(BarChartData(
-
-          // )),
+        children: const [
+          SizedBox(height: 25),
         ],
       ),
     );

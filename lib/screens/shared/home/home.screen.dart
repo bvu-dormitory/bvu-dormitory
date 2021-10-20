@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
         if (snapshot.hasData) {
           return snapshot.data == UserRole.admin
               ? AdminHomeScreen()
-              : StudentHomeScreen();
+              : const StudentHomeScreen();
         }
 
         // cannot load current logged in user's role

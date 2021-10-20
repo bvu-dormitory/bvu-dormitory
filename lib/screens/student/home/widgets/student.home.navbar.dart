@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../student.home.controller.dart';
 
 class StudentHomeBottomNavbar extends StatefulWidget {
-  StudentHomeBottomNavbar({Key? key}) : super(key: key);
+  const StudentHomeBottomNavbar({Key? key}) : super(key: key);
 
   @override
   _StudentHomeBottomNavbarState createState() =>

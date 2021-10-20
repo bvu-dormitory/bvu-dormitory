@@ -1,14 +1,12 @@
-import 'package:bvu_dormitory/models/floor.dart';
-import 'package:bvu_dormitory/models/room.dart';
-import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/rooms.detail.screen.dart';
-import 'package:bvu_dormitory/screens/admin/manage/rooms/rooms.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:bvu_dormitory/models/building.dart';
+import 'package:bvu_dormitory/models/room.dart';
+import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/rooms.detail.screen.dart';
+import 'package:bvu_dormitory/screens/admin/manage/rooms/rooms.controller.dart';
 
 class AdminRoomsBody extends StatefulWidget {
   const AdminRoomsBody({Key? key}) : super(key: key);
@@ -90,7 +88,7 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
           trailing: const Icon(CupertinoIcons.right_chevron, size: 16),
           // selected: true,
           title: Text(
-            "${item.name}",
+            item.name,
             textAlign: TextAlign.left,
             style: TextStyle(
               color: Colors.black.withOpacity(0.75),
