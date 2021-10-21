@@ -8,19 +8,11 @@ import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.controller.dart';
 import 'package:bvu_dormitory/screens/admin/manage/buildings/widgets/buildings.body.dart';
 
+import './search/buildings.search.screen.dart';
+
 class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
   AdminBuildingsScreen({Key? key, String? previousPageTitle})
       : super(key: key, previousPageTitle: previousPageTitle);
-
-  @override
-  Widget body(BuildContext context) {
-    return const SafeArea(
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
-        child: AdminBuildingsBody(),
-      ),
-    );
-  }
 
   @override
   AdminBuildingsController provideController(BuildContext context) {
@@ -32,7 +24,8 @@ class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
 
   @override
   String provideTitle(BuildContext context) {
-    return "";
+    return AppLocalizations.of(context)?.admin_manage_buildings_title ??
+        "admin_manage_buildings_title";
   }
 
   @override
@@ -40,9 +33,31 @@ class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
     return CupertinoNavigationBar(
       transitionBetweenRoutes: true,
       previousPageTitle: AppLocalizations.of(context)?.admin_manage_title,
-      middle: Text(
-        AppLocalizations.of(context)?.admin_manage_buildings_title ??
-            "admin_manage_buildings_title",
+      middle: Text(provideTitle(context)),
+      trailing: CupertinoButton(
+        padding: EdgeInsets.zero,
+        minSize: 20,
+        borderRadius: BorderRadius.circular(20),
+        child: const Icon(CupertinoIcons.search),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => AdminBuildingsSearchScreen(
+                previousPageTitle: provideTitle(context),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget body(BuildContext context) {
+    return const SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: AdminBuildingsBody(),
       ),
     );
   }

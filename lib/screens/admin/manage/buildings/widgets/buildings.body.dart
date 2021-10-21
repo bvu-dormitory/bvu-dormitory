@@ -33,13 +33,17 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
         if (snapshot.hasData) {
           List<Building> buildings = snapshot.data!;
 
-          return ListView.builder(
-            // physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            primary: false,
-            itemCount: buildings.length,
-            itemBuilder: (context, index) =>
-                _buildingItem(buildings[index], buildings.length, index),
+          return CupertinoScrollbar(
+            isAlwaysShown: true,
+            scrollbarOrientation: ScrollbarOrientation.right,
+            child: ListView.builder(
+              // physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              primary: false,
+              itemCount: buildings.length,
+              itemBuilder: (context, index) =>
+                  _buildingItem(buildings[index], buildings.length, index),
+            ),
           );
         }
 

@@ -6,6 +6,8 @@ enum DialogConfirmType { update, submit }
 
 abstract class BaseController extends ChangeNotifier {
   AppLocalizations? get appLocalizations => AppLocalizations.of(context);
+  NavigatorState get navigator => Navigator.of(context);
+
   final BuildContext context;
   final String title;
 

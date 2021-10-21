@@ -37,13 +37,16 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
         return provideController(context);
       },
       child: Builder(
-        builder: (context) => CupertinoPageScaffold(
-          backgroundColor: AppColor.backgroundColor,
-          navigationBar: navigationBar(context),
-          child: Scaffold(
-            body: body(context),
-          ),
-        ),
+        builder: (context) {
+          return CupertinoPageScaffold(
+            backgroundColor: AppColor.backgroundColor,
+            navigationBar: navigationBar(context),
+            child: Scaffold(
+              backgroundColor: AppColor.backgroundColor,
+              body: body(context),
+            ),
+          );
+        },
       ),
     );
   }
