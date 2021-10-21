@@ -13,11 +13,12 @@ class AdminRoomsController extends BaseController {
   Building building;
   Floor floor;
 
-  AdminRoomsController(
-      {required BuildContext context,
-      required this.building,
-      required this.floor})
-      : super(context: context);
+  AdminRoomsController({
+    required BuildContext context,
+    required String title,
+    required this.building,
+    required this.floor,
+  }) : super(context: context, title: title);
 
   Stream<List<Room>> syncRooms() {
     return _buildingRepository.syncAllRooms(building.id!, floor.id!);

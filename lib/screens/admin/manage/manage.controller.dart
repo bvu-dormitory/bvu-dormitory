@@ -15,8 +15,10 @@ class ManageIconItem {
 }
 
 class AdminManageController extends BaseController {
-  AdminManageController({required BuildContext context})
-      : super(context: context);
+  AdminManageController({
+    required BuildContext context,
+    required String title,
+  }) : super(context: context, title: title);
 
   List<ManageIconItem> menuItems = [
     ManageIconItem(

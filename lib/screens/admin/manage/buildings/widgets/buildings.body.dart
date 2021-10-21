@@ -18,7 +18,6 @@ class AdminBuildingsBody extends StatefulWidget {
 
 class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
   late AdminBuildingsController controller;
-  // late List<bool> buildingItemExpansionList;
 
   @override
   void didChangeDependencies() {
@@ -81,7 +80,7 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
               collapsedBackgroundColor: Colors.white,
               onExpansionChanged: (value) {},
               childrenPadding: const EdgeInsets.only(bottom: 10),
-              initiallyExpanded: true,
+              initiallyExpanded: false,
               textColor: Colors.blue,
               title: Text(
                 "${controller.appLocalizations?.admin_manage_building} ${item.name}",
@@ -128,8 +127,12 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
           // navigate to the Rooms screen
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) =>
-                  AdminRoomsScreen(building: building, floor: floor),
+              builder: (context) => AdminRoomsScreen(
+                previousPageTitle:
+                    "${controller.appLocalizations?.admin_manage_building} ${building.name} - #${floor.order}",
+                building: building,
+                floor: floor,
+              ),
             ),
           );
         },

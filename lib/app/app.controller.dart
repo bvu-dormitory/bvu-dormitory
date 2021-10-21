@@ -9,7 +9,8 @@ class AppController extends BaseController {
   late ThemeMode _appThemeMode = ThemeMode.system;
   get appThemeMode => _appThemeMode;
 
-  AppController({required BuildContext context}) : super(context: context) {
+  AppController({required BuildContext context})
+      : super(context: context, title: "") {
     checkConnectivity();
   }
 

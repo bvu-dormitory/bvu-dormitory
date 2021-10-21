@@ -14,7 +14,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => StudentHomeController(context: _),
+      create: (_) => StudentHomeController(context: _, title: ""),
       child: Scaffold(
         body: Container(
           padding: const EdgeInsets.all(10),

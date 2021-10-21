@@ -37,7 +37,6 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
     return Container(
       margin: const EdgeInsets.all(10),
       child: CupertinoButton(
-        // color: Colors.blue.withOpacity(0.5),
         onPressed: () {
           Navigator.pushNamed(context, item.routeName);
         },
@@ -66,15 +65,6 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
             const SizedBox(
               height: 5,
             ),
-            // Text(
-            //   item.title,
-            //   // 'Abc',
-            //   style: TextStyle(
-            //     color: Colors.black.withOpacity(0.75),
-            //     fontSize: 14,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
             Hero(
               tag: item.routeName,
               child: Text(

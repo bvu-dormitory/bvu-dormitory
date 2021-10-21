@@ -61,6 +61,8 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => AdminRoomsDetailScreen(
+              previousPageTitle:
+                  "${controller.appLocalizations?.admin_manage_building} ${controller.building.name} - #${controller.floor.order}",
               building: controller.building,
               floor: controller.floor,
               room: item,

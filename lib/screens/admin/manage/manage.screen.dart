@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,74 +11,74 @@ import 'package:bvu_dormitory/screens/admin/manage/manage.controller.dart';
 import 'package:bvu_dormitory/screens/admin/manage/widgets/manage.menu.dart';
 import 'package:bvu_dormitory/repositories/user.repository.dart';
 
-class AdminManageScreen extends StatefulWidget {
-  const AdminManageScreen({Key? key}) : super(key: key);
+class AdminManageScreen extends BaseScreen<AdminManageController> {
+  AdminManageScreen({Key? key}) : super(key: key);
 
   @override
-  _AdminManageScreenState createState() => _AdminManageScreenState();
-}
-
-class _AdminManageScreenState extends State<AdminManageScreen>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+  CupertinoNavigationBar? navigationBar(BuildContext context) {}
 
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AdminManageController(context: _),
-      child: Scaffold(
-        body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverAppBar(
-              pinned: true,
-              elevation: 3,
-              expandedHeight: 150,
-              centerTitle: false,
-              titleSpacing: 30,
-              title: StreamBuilder<AppUser?>(
-                stream: UserRepository.getCurrentFireStoreUserStream(),
-                builder: (context, snapshot) => Text(
-                  "Xin chào, ${snapshot.data?.name}",
-                  textAlign: TextAlign.right,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+  AdminManageController provideController(BuildContext context) {
+    return AdminManageController(
+        context: context, title: provideTitle(context));
+  }
+
+  @override
+  String provideTitle(BuildContext context) {
+    return "";
+  }
+
+  @override
+  Widget body(BuildContext context) {
+    return NestedScrollView(
+      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+        SliverAppBar(
+          pinned: true,
+          elevation: 3,
+          expandedHeight: 150,
+          centerTitle: false,
+          titleSpacing: 30,
+          title: StreamBuilder<AppUser?>(
+            stream: UserRepository.getCurrentFireStoreUserStream(),
+            builder: (context, snapshot) => Text(
+              "Xin chào, ${snapshot.data?.name}",
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
               ),
-              // stretch: true,
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarIconBrightness: Brightness.light,
-                statusBarBrightness: Brightness.light,
-              ),
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('lib/assets/2805830.jpg'),
-                      fit: BoxFit.cover,
-                      alignment: Alignment.topLeft,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-          body: Container(
-            // padding: EdgeInsets.all(10),
-            color: AppColor.backgroundColor,
-            child: Column(
-              children: const [
-                Expanded(child: AdminManageMenu()),
-                // AdminManageMenu(),
-                // AdminManageCharts(),
-                // Expanded(
-                //   child: AdminManageCharts(),
-                // )
-              ],
             ),
           ),
+          // stretch: true,
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.light,
+            statusBarBrightness: Brightness.light,
+          ),
+          flexibleSpace: FlexibleSpaceBar(
+            background: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('lib/assets/2805830.jpg'),
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topLeft,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+      body: Container(
+        // padding: EdgeInsets.all(10),
+        color: AppColor.backgroundColor,
+        child: Column(
+          children: const [
+            Expanded(child: AdminManageMenu()),
+            // AdminManageMenu(),
+            // AdminManageCharts(),
+            // Expanded(
+            //   child: AdminManageCharts(),
+            // )
+          ],
         ),
       ),
     );

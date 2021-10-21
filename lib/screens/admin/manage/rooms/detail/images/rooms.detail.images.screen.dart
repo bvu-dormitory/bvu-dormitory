@@ -9,7 +9,8 @@ import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/models/building.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'rooms.detail.images.controller.dart';
 
 class AdminRoomsDetailImagesScreen
@@ -28,28 +29,18 @@ class AdminRoomsDetailImagesScreen
   final Room room;
 
   @override
-  AdminRoomsDetailImagesController initController(BuildContext context) {
-    return AdminRoomsDetailImagesController(
-      context: context,
-      building: building,
-      floor: floor,
-      room: room,
-    );
+  String provideTitle(BuildContext context) {
+    return "";
   }
 
   @override
-  Widget body(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.backgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Text(
-            controller.appLocalizations?.admin_manage_repair ??
-                "admin_manage_repair",
-          ),
-        ),
-      ),
+  AdminRoomsDetailImagesController provideController(BuildContext context) {
+    return AdminRoomsDetailImagesController(
+      context: context,
+      title: provideTitle(context),
+      building: building,
+      floor: floor,
+      room: room,
     );
   }
 
@@ -58,8 +49,26 @@ class AdminRoomsDetailImagesScreen
     return CupertinoNavigationBar(
       previousPageTitle: previousPageTitle,
       middle: Text(
-        controller.appLocalizations?.admin_manage_rooms_detail_images ??
+        AppLocalizations.of(context)?.admin_manage_rooms_detail_images ??
             "admin_manage_rooms_detail_images",
+      ),
+    );
+  }
+
+  @override
+  Widget body(BuildContext context) {
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Consumer<AdminRoomsDetailImagesController>(
+          builder: (context, value, child) {
+            print(value);
+            return Text(
+              AppLocalizations.of(context)?.admin_manage_repair ??
+                  "admin_manage_repair",
+            );
+          },
+        ),
       ),
     );
   }

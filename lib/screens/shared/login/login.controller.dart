@@ -11,7 +11,10 @@ import 'package:bvu_dormitory/app/app.logger.dart';
 import 'package:bvu_dormitory/app/constants/app.routes.dart';
 
 class LoginController extends BaseController {
-  LoginController({required BuildContext context}) : super(context: context);
+  LoginController({
+    required BuildContext context,
+    required String title,
+  }) : super(context: context, title: title);
 
   // native firebase auth params
   Duration otpTimeout = const Duration(seconds: 30);

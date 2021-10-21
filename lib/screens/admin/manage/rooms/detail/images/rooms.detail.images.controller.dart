@@ -8,10 +8,11 @@ import 'package:flutter/material.dart';
 class AdminRoomsDetailImagesController extends BaseController {
   AdminRoomsDetailImagesController({
     required BuildContext context,
+    required String title,
     required this.building,
     required this.floor,
     required this.room,
-  }) : super(context: context);
+  }) : super(context: context, title: title);
 
   final Building building;
   final Floor floor;

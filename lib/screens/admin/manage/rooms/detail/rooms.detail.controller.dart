@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,19 +28,53 @@ class AdminRoomsDetailController extends BaseController {
   Floor floor;
   Room room;
 
-  CarouselController carouselController = CarouselController();
-
   AdminRoomsDetailController({
     required BuildContext context,
+    required String title,
     required this.building,
     required this.floor,
     required this.room,
-  }) : super(context: context);
+  }) : super(context: context, title: title);
 
   Stream<List<Room>> syncRooms() {
     return _buildingRepository.syncAllRooms(building.id!, floor.id!);
   }
 
+  /// Info menu
+  List<AdminRoomMenuItem> get infoMenuItems => [
+        AdminRoomMenuItem(
+            title: appLocalizations?.admin_manage_rooms_detail_images ??
+                "admin_manage_rooms_detail_images",
+            icon: CupertinoIcons.photo,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AdminRoomsDetailImagesScreen(
+                    building: building,
+                    floor: floor,
+                    room: room,
+                    previousPageTitle: title,
+                  ),
+                ),
+              );
+            }),
+        AdminRoomMenuItem(
+          title:
+              appLocalizations?.admin_manage_service ?? "admin_manage_service",
+          icon: CupertinoIcons.drop,
+        ),
+        AdminRoomMenuItem(
+          title: appLocalizations?.admin_manage_item ?? "admin_manage_item",
+          icon: CupertinoIcons.lightbulb,
+        ),
+        AdminRoomMenuItem(
+          title:
+              appLocalizations?.admin_manage_student ?? "admin_manage_student",
+          icon: CupertinoIcons.person_2,
+        ),
+      ];
+
+  /// Message menu
   List<AdminRoomMenuItem> get messageMenuItems => [
         AdminRoomMenuItem(
           title: appLocalizations?.admin_manage_rooms_detail_contact_chat ??
@@ -60,40 +96,7 @@ class AdminRoomsDetailController extends BaseController {
         ),
       ];
 
-  List<AdminRoomMenuItem> get infoMenuItems => [
-        AdminRoomMenuItem(
-            title: appLocalizations?.admin_manage_rooms_detail_images ??
-                "admin_manage_rooms_detail_images",
-            icon: CupertinoIcons.photo,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => AdminRoomsDetailImagesScreen(
-                    building: building,
-                    floor: floor,
-                    room: room,
-                    previousPageTitle:
-                        "${appLocalizations?.admin_manage_room ?? "admin_manage_room"} ${room.name}",
-                  ),
-                ),
-              );
-            }),
-        AdminRoomMenuItem(
-          title:
-              appLocalizations?.admin_manage_service ?? "admin_manage_service",
-          icon: CupertinoIcons.drop,
-        ),
-        AdminRoomMenuItem(
-          title: appLocalizations?.admin_manage_item ?? "admin_manage_item",
-          icon: CupertinoIcons.lightbulb,
-        ),
-        AdminRoomMenuItem(
-          title:
-              appLocalizations?.admin_manage_student ?? "admin_manage_student",
-          icon: CupertinoIcons.person_2,
-        ),
-      ];
-
+  /// Invoice menu
   List<AdminRoomMenuItem> get invoiceMenuItems => [
         AdminRoomMenuItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_add ??
@@ -107,6 +110,7 @@ class AdminRoomsDetailController extends BaseController {
         ),
       ];
 
+  /// Repair menu
   List<AdminRoomMenuItem> get repairMenuItems => [
         AdminRoomMenuItem(
           title: appLocalizations?.admin_manage_rooms_detail_repair_list ??

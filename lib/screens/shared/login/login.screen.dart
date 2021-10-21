@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ChangeNotifierProvider<LoginController>(
-        create: (_) => LoginController(context: context),
+        create: (_) => LoginController(context: context, title: ""),
         child: _body(),
       ),
     );

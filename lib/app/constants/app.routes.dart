@@ -44,7 +44,7 @@ class AppRoutes {
   // admin routes
   static AppRoute get adminRooms => AppRoute(
         name: '/admin-rooms',
-        screen: const AdminBuildingsScreen(),
+        screen: AdminBuildingsScreen(),
       );
 
   //

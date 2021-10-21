@@ -9,8 +9,10 @@ import 'package:bvu_dormitory/repositories/building.repository.dart';
 class AdminBuildingsController extends BaseController {
   BuildingRepository get _buildingRepository => BuildingRepository();
 
-  AdminBuildingsController({required BuildContext context})
-      : super(context: context);
+  AdminBuildingsController({
+    required BuildContext context,
+    required String title,
+  }) : super(context: context, title: title);
 
   Stream<List<Building>> syncBuildings() {
     return _buildingRepository.syncAll();

@@ -19,8 +19,10 @@ class HomeBottomNavItem {
 }
 
 class AdminHomeController extends BaseController {
-  AdminHomeController({required BuildContext context})
-      : super(context: context) {
+  AdminHomeController({
+    required BuildContext context,
+    required String title,
+  }) : super(title: title, context: context) {
     notifyListeners();
   }
 
@@ -36,12 +38,12 @@ class AdminHomeController extends BaseController {
   final PageController _pageController = PageController();
   PageController get pageController => _pageController;
 
-  List<Widget> getNavItemScreens = [
-    const AdminManageScreen(),
-    const NewsFeedScreen(),
-    const MessagesScreen(),
-    const ProfileScreen(),
-  ];
+  List<Widget> get getNavItemScreens => [
+        AdminManageScreen(),
+        const NewsFeedScreen(),
+        const MessagesScreen(),
+        const ProfileScreen(),
+      ];
 
   List<HomeBottomNavItem> get navItemDataList => [
         HomeBottomNavItem(

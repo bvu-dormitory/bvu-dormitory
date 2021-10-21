@@ -15,8 +15,10 @@ class HomeBottomNavItem {
 }
 
 class StudentHomeController extends BaseController {
-  StudentHomeController({required BuildContext context})
-      : super(context: context);
+  StudentHomeController({
+    required BuildContext context,
+    required String title,
+  }) : super(context: context, title: title);
 
   int _currentNavBarIndex = 0;
   int get currentNavBarIndex => _currentNavBarIndex;
