@@ -3,5 +3,5 @@ import 'package:flutter/material.dart';
 
 class AdminRoomsDetailItemsController extends BaseController {
   AdminRoomsDetailItemsController({required BuildContext context})
-      : super(context: context);
+      : super(context: context, title: "");
 }

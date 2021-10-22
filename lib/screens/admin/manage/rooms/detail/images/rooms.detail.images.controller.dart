@@ -5,6 +5,12 @@ import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:flutter/material.dart';
 
+class RoomImage {
+  final String url;
+
+  RoomImage(this.url);
+}
+
 class AdminRoomsDetailImagesController extends BaseController {
   AdminRoomsDetailImagesController({
     required BuildContext context,
@@ -18,5 +24,5 @@ class AdminRoomsDetailImagesController extends BaseController {
   final Floor floor;
   final Room room;
 
-  RoomRepository _roomRepository = RoomRepository();
+  final RoomRepository roomRepository = RoomRepository();
 }

@@ -1,25 +1,36 @@
-// import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/images/rooms.detail.images.controller.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:provider/src/provider.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
-// class AdminRoomsDetailImagesBody extends StatefulWidget {
-//   @override
-//   State<StatefulWidget> createState() => _AdminRoomsDetailImagesBodyState();
-// }
+import 'package:bvu_dormitory/app/constants/app.styles.dart';
+import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/images/rooms.detail.images.controller.dart';
 
-// class _AdminRoomsDetailImagesBodyState
-//     extends State<AdminRoomsDetailImagesBody> {
-//   late AdminRoomsDetailImagesController controller;
+class AdminRoomsDetailImagesBody extends StatefulWidget {
+  const AdminRoomsDetailImagesBody({Key? key}) : super(key: key);
 
-//   @override
-//   void didChangeDependencies() {
-//     super.didChangeDependencies();
-//     controller = context.watch<AdminRoomsDetailImagesController>();
-//   }
+  @override
+  State<StatefulWidget> createState() => _AdminRoomsDetailImagesBodyState();
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return 
-//   }
-// }
+class _AdminRoomsDetailImagesBodyState
+    extends State<AdminRoomsDetailImagesBody> {
+  late AdminRoomsDetailImagesController controller;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    controller = context.watch<AdminRoomsDetailImagesController>();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          'Tối đa 5 ảnh.',
+          style: AppStyles.menuGroupTextStyle,
+        ),
+      ],
+    );
+  }
+}

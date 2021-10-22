@@ -21,12 +21,21 @@ class AdminRoomsScreen extends BaseScreen<AdminRoomsController> {
   final Building building;
   final Floor floor;
 
+  String getTitle(BuildContext context) {
+    final buildingString =
+        "${AppLocalizations.of(context)?.admin_manage_building} ${building.name}";
+
+    final floorString =
+        "${AppLocalizations.of(context)?.admin_manage_floor} ${floor.order}";
+
+    return "$buildingString - $floorString";
+  }
+
   @override
   AdminRoomsController provideController(BuildContext context) {
     return AdminRoomsController(
       context: context,
-      title:
-          "${AppLocalizations.of(context)?.admin_manage_building} ${building.name} - ${AppLocalizations.of(context)?.admin_manage_floor} ${floor.order}",
+      title: getTitle(context),
       building: building,
       floor: floor,
     );

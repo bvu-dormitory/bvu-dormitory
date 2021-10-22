@@ -17,22 +17,26 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
   @protected
   late final bool _haveNavigationBar;
 
-  /// previous screen title
+  /// Previous screen title. Purpose is to display on the [CupertinoNavigationBar.previousPageTitle]
   @protected
   String? get previousPageTitle => _previousPageTitle;
   late final String? _previousPageTitle;
 
-  /// current screen controller
+  /// Current screen controller.
+  /// This step injects the controller into the widget tree,
+  /// so you cannot access the controller [T] in this [context].
   T provideController(BuildContext context);
 
-  /// screen body
+  /// Screen body.
+  /// This context can access the controller [T].
   Widget body(BuildContext context);
 
-  /// trailing widget for the navigationbar, avoid return if the screen doesnt want to show the navigationbar
+  /// Trailing widget for the navigationbar, leave the function blank if dont want to show the navigationbar on screen.
+  /// This [context] can access the controller [T].
   Widget? navigationBarTrailing(BuildContext context);
 
   /// screen navbar
-  CupertinoNavigationBar? navigationBar(BuildContext context) {
+  ObstructingPreferredSizeWidget? navigationBar(BuildContext context) {
     return CupertinoNavigationBar(
       transitionBetweenRoutes: true,
       previousPageTitle: previousPageTitle,
@@ -55,6 +59,7 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
             backgroundColor: AppColor.backgroundColor,
             navigationBar: _haveNavigationBar ? navigationBar(context) : null,
             child: Scaffold(
+              extendBody: true,
               backgroundColor: AppColor.backgroundColor,
               body: body(context),
             ),

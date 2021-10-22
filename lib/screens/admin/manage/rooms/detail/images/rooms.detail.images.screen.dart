@@ -1,18 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/models/building.dart';
-import 'package:bvu_dormitory/app/constants/app.colors.dart';
 
 import 'rooms.detail.images.controller.dart';
+import 'rooms.detail.images.body.dart';
 
 class AdminRoomsDetailImagesScreen
     extends BaseScreen<AdminRoomsDetailImagesController> {
@@ -46,17 +44,10 @@ class AdminRoomsDetailImagesScreen
 
   @override
   Widget body(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Consumer<AdminRoomsDetailImagesController>(
-          builder: (context, value, child) {
-            return Text(
-              AppLocalizations.of(context)?.admin_manage_repair ??
-                  "admin_manage_repair",
-            );
-          },
-        ),
+        padding: EdgeInsets.all(20),
+        child: AdminRoomsDetailImagesBody(),
       ),
     );
   }

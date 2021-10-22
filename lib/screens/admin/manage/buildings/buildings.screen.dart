@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -30,7 +31,7 @@ class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
       padding: EdgeInsets.zero,
       minSize: 20,
       borderRadius: BorderRadius.circular(20),
-      child: const Icon(CupertinoIcons.search),
+      child: const Icon(FluentIcons.search_24_regular),
       onPressed: () {
         Navigator.of(context).push(
           CupertinoPageRoute(

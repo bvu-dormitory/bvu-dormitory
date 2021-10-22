@@ -75,6 +75,12 @@
 
 
 
+    "message_compose_button": "Tin nhắn mới",
+
+    "newsfeed_compose_button": "Soạn tin mới",
+
+
+
     "admin_manage_building": "Khu",
     "admin_manage_floor": "Tầng",
     "admin_manage_room": "Phòng",

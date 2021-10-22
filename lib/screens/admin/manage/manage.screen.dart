@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,40 +33,7 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
   Widget body(BuildContext context) {
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) => [
-        SliverAppBar(
-          pinned: true,
-          elevation: 3,
-          expandedHeight: 150,
-          centerTitle: false,
-          titleSpacing: 30,
-          title: StreamBuilder<AppUser?>(
-            stream: UserRepository.getCurrentFireStoreUserStream(),
-            builder: (context, snapshot) => Text(
-              "Xin chào, ${snapshot.data?.name}",
-              textAlign: TextAlign.right,
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          // stretch: true,
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarIconBrightness: Brightness.light,
-            statusBarBrightness: Brightness.light,
-          ),
-          flexibleSpace: FlexibleSpaceBar(
-            background: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('lib/assets/2805830.jpg'),
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topLeft,
-                ),
-              ),
-            ),
-          ),
-        ),
+        _sliverAppBar(context),
       ],
       body: Container(
         // padding: EdgeInsets.all(10),
@@ -79,6 +48,83 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
             // )
           ],
         ),
+      ),
+    );
+  }
+
+  _sliverAppBar(BuildContext context) {
+    return SliverAppBar(
+      pinned: true,
+      elevation: 2,
+      expandedHeight: 120,
+      centerTitle: false,
+      titleSpacing: 30,
+      title: StreamBuilder<AppUser?>(
+        stream: UserRepository.getCurrentFireStoreUserStream(),
+        builder: (context, snapshot) => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Xin chào, ${snapshot.data?.name}",
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withOpacity(0.25),
+                    blurRadius: 20,
+                    offset: const Offset(2, 2),
+                  ),
+                ],
+              ),
+            ),
+            const CircleAvatar(
+              backgroundColor: Colors.amber,
+              radius: 15,
+              backgroundImage: AssetImage('lib/assets/icons/default-user.png'),
+            ),
+          ],
+        ),
+      ),
+      // stretch: true,
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark,
+      ),
+      flexibleSpace: LayoutBuilder(
+        builder: (context, constraints) {
+          // final top = constraints.biggest.height;
+          // log("$top");
+
+          return FlexibleSpaceBar(
+            collapseMode: CollapseMode.pin,
+            background: Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  child: Image(
+                    image: AssetImage('lib/assets/2805830.jpg'),
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topLeft,
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.topRight,
+                      colors: [
+                        Colors.blue.withOpacity(0.75),
+                        Colors.lightBlue.withOpacity(0.5),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

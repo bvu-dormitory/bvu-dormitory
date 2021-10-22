@@ -1,10 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:carousel_slider/carousel_controller.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/building.dart';
@@ -12,14 +10,7 @@ import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/repositories/building.repository.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/images/rooms.detail.images.screen.dart';
-
-class AdminRoomMenuItem {
-  String title;
-  IconData icon;
-  Function? onPressed;
-
-  AdminRoomMenuItem({required this.title, required this.icon, this.onPressed});
-}
+import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 
 class AdminRoomsDetailController extends BaseController {
   BuildingRepository get _buildingRepository => BuildingRepository();
@@ -41,50 +32,51 @@ class AdminRoomsDetailController extends BaseController {
   }
 
   /// Info menu
-  List<AdminRoomMenuItem> get infoMenuItems => [
-        AdminRoomMenuItem(
-            title: appLocalizations?.admin_manage_rooms_detail_images ??
-                "admin_manage_rooms_detail_images",
-            icon: CupertinoIcons.photo,
-            onPressed: () {
-              Navigator.of(context).push(
-                CupertinoPageRoute(
-                  builder: (context) => AdminRoomsDetailImagesScreen(
-                    building: building,
-                    floor: floor,
-                    room: room,
-                    previousPageTitle: title,
-                  ),
+  List<AppMenuGroupItem> get infoMenuItems => [
+        AppMenuGroupItem(
+          title: appLocalizations?.admin_manage_rooms_detail_images ??
+              "admin_manage_rooms_detail_images",
+          icon: FluentIcons.image_multiple_24_filled,
+          onPressed: () {
+            Navigator.of(context).push(
+              CupertinoPageRoute(
+                builder: (context) => AdminRoomsDetailImagesScreen(
+                  building: building,
+                  floor: floor,
+                  room: room,
+                  previousPageTitle: title,
                 ),
-              );
-            }),
-        AdminRoomMenuItem(
+              ),
+            );
+          },
+        ),
+        AppMenuGroupItem(
           title:
               appLocalizations?.admin_manage_service ?? "admin_manage_service",
-          icon: CupertinoIcons.drop,
+          icon: FluentIcons.wifi_1_24_filled,
         ),
-        AdminRoomMenuItem(
+        AppMenuGroupItem(
           title: appLocalizations?.admin_manage_item ?? "admin_manage_item",
-          icon: CupertinoIcons.lightbulb,
+          icon: FluentIcons.bed_24_filled,
         ),
-        AdminRoomMenuItem(
+        AppMenuGroupItem(
           title:
               appLocalizations?.admin_manage_student ?? "admin_manage_student",
-          icon: CupertinoIcons.person_2,
+          icon: FluentIcons.people_24_filled,
         ),
       ];
 
   /// Message menu
-  List<AdminRoomMenuItem> get messageMenuItems => [
-        AdminRoomMenuItem(
+  List<AppMenuGroupItem> get messageMenuItems => [
+        AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_contact_chat ??
               "admin_manage_rooms_detail_contact_chat",
-          icon: CupertinoIcons.bubble_left_bubble_right,
+          icon: FluentIcons.chat_24_filled,
         ),
-        AdminRoomMenuItem(
+        AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_contact_phone ??
               "admin_manage_rooms_detail_contact_phone",
-          icon: CupertinoIcons.phone,
+          icon: FluentIcons.dialpad_24_filled,
           onPressed: () {
             showCupertinoModalBottomSheet(
               context: context,
@@ -97,30 +89,30 @@ class AdminRoomsDetailController extends BaseController {
       ];
 
   /// Invoice menu
-  List<AdminRoomMenuItem> get invoiceMenuItems => [
-        AdminRoomMenuItem(
+  List<AppMenuGroupItem> get invoiceMenuItems => [
+        AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_add ??
               "admin_manage_rooms_detail_invoice_add",
-          icon: CupertinoIcons.add,
+          icon: FluentIcons.receipt_add_24_filled,
         ),
-        AdminRoomMenuItem(
+        AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_list ??
               "admin_manage_rooms_detail_invoice_list",
-          icon: CupertinoIcons.square_stack_3d_up,
+          icon: FluentIcons.checkbox_person_24_filled,
         ),
       ];
 
   /// Repair menu
-  List<AdminRoomMenuItem> get repairMenuItems => [
-        AdminRoomMenuItem(
+  List<AppMenuGroupItem> get repairMenuItems => [
+        AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_repair_list ??
               "admin_manage_rooms_detail_repair_list",
-          icon: CupertinoIcons.question,
+          icon: FluentIcons.chat_help_24_filled,
         ),
-        AdminRoomMenuItem(
+        AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_repair_history ??
               "admin_manage_rooms_detail_repair_history",
-          icon: CupertinoIcons.checkmark_alt,
+          icon: FluentIcons.checkbox_checked_24_filled,
         ),
       ];
 }

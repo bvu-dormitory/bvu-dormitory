@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// import 'package:bvu_dormitory/helpers/extensions/navigator.extensions.dart';
+
 enum DialogConfirmType { update, submit }
 
 abstract class BaseController extends ChangeNotifier {
   AppLocalizations? get appLocalizations => AppLocalizations.of(context);
   NavigatorState get navigator => Navigator.of(context);
 
+  //  final AppNavigator navigator;
   final BuildContext context;
   final String title;
 
@@ -75,5 +78,16 @@ abstract class BaseController extends ChangeNotifier {
       ),
       barrierDismissible: false,
     );
+  }
+}
+
+class AppNavigator extends NavigatorState {
+  // final NavigatorState state;
+  // AppNavigator();
+
+  Future<T?> pushTo<T extends Object?>(Widget screen) {
+    return super.push(CupertinoPageRoute(
+      builder: (context) => screen,
+    ));
   }
 }

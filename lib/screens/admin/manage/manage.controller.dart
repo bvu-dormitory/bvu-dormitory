@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/app/constants/app.routes.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.screen.dart';
@@ -20,6 +22,21 @@ class AdminManageController extends BaseController {
     required BuildContext context,
     required String title,
   }) : super(context: context, title: title);
+
+  late bool _isSliverCollasped = false;
+  onSliverScroll(double height) {
+    if (height >= 115) {
+      if (!_isSliverCollasped) {
+        _isSliverCollasped = true;
+        notifyListeners();
+      }
+    } else {
+      if (_isSliverCollasped) {
+        _isSliverCollasped = false;
+        notifyListeners();
+      }
+    }
+  }
 
   List<ManageIconItem> get menuItems => [
         ManageIconItem(
