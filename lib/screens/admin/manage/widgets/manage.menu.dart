@@ -41,7 +41,7 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
       child: CupertinoButton(
         onPressed: () {
           controller.navigator.push(
-            MaterialPageRoute(builder: (context) => item.screen),
+            CupertinoPageRoute(builder: (context) => item.screen),
           );
         },
         child: Column(

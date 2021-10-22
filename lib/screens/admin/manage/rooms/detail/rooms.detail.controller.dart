@@ -48,7 +48,7 @@ class AdminRoomsDetailController extends BaseController {
             icon: CupertinoIcons.photo,
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
+                CupertinoPageRoute(
                   builder: (context) => AdminRoomsDetailImagesScreen(
                     building: building,
                     floor: floor,

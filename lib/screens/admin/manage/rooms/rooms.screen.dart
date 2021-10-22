@@ -25,8 +25,8 @@ class AdminRoomsScreen extends BaseScreen<AdminRoomsController> {
   AdminRoomsController provideController(BuildContext context) {
     return AdminRoomsController(
       context: context,
-      title: AppLocalizations.of(context)?.admin_manage_rooms_title ??
-          "admin_manage_floors_title",
+      title:
+          "${AppLocalizations.of(context)?.admin_manage_building} ${building.name} - ${AppLocalizations.of(context)?.admin_manage_floor} ${floor.order}",
       building: building,
       floor: floor,
     );

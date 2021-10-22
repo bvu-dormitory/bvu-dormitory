@@ -130,10 +130,9 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
         onPressed: () {
           // navigate to the Rooms screen
           Navigator.of(context).push(
-            MaterialPageRoute(
+            CupertinoPageRoute(
               builder: (context) => AdminRoomsScreen(
-                previousPageTitle:
-                    "${controller.appLocalizations?.admin_manage_building} ${building.name} - #${floor.order}",
+                previousPageTitle: controller.title,
                 building: building,
                 floor: floor,
               ),

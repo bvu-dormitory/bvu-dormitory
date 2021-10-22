@@ -33,7 +33,7 @@ class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
       child: const Icon(CupertinoIcons.search),
       onPressed: () {
         Navigator.of(context).push(
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (_) => AdminBuildingsSearchScreen(
               previousPageTitle:
                   Provider.of<AdminBuildingsController>(context).title,
