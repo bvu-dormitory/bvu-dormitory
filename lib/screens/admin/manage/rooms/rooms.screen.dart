@@ -22,31 +22,18 @@ class AdminRoomsScreen extends BaseScreen<AdminRoomsController> {
   final Floor floor;
 
   @override
-  String provideTitle(BuildContext context) {
-    return "";
-  }
-
-  @override
   AdminRoomsController provideController(BuildContext context) {
     return AdminRoomsController(
       context: context,
-      title: provideTitle(context),
+      title: AppLocalizations.of(context)?.admin_manage_rooms_title ??
+          "admin_manage_floors_title",
       building: building,
       floor: floor,
     );
   }
 
   @override
-  CupertinoNavigationBar? navigationBar(BuildContext context) {
-    return CupertinoNavigationBar(
-      transitionBetweenRoutes: true,
-      previousPageTitle: previousPageTitle,
-      middle: Text(
-        AppLocalizations.of(context)?.admin_manage_rooms_title ??
-            "admin_manage_floors_title",
-      ),
-    );
-  }
+  Widget? navigationBarTrailing(BuildContext context) {}
 
   @override
   Widget body(BuildContext context) {

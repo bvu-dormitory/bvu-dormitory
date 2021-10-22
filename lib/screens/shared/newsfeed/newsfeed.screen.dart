@@ -14,6 +14,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return const Scaffold(
       body: SafeArea(
         child: Center(

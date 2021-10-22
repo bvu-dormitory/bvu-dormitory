@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/models/user.dart';
@@ -12,21 +13,19 @@ import 'package:bvu_dormitory/screens/admin/manage/widgets/manage.menu.dart';
 import 'package:bvu_dormitory/repositories/user.repository.dart';
 
 class AdminManageScreen extends BaseScreen<AdminManageController> {
-  AdminManageScreen({Key? key}) : super(key: key);
-
-  @override
-  CupertinoNavigationBar? navigationBar(BuildContext context) {}
+  AdminManageScreen({Key? key}) : super(key: key, haveNavigationBar: false);
 
   @override
   AdminManageController provideController(BuildContext context) {
     return AdminManageController(
-        context: context, title: provideTitle(context));
+      context: context,
+      title: AppLocalizations.of(context)?.admin_manage_title ??
+          "admin_manage_title",
+    );
   }
 
   @override
-  String provideTitle(BuildContext context) {
-    return "";
-  }
+  Widget? navigationBarTrailing(BuildContext context) {}
 
   @override
   Widget body(BuildContext context) {

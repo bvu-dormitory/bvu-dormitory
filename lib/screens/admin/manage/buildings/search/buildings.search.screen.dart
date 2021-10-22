@@ -11,22 +11,12 @@ class AdminBuildingsSearchScreen
   }) : super(key: key, previousPageTitle: previousPageTitle);
 
   @override
-  CupertinoNavigationBar? navigationBar(BuildContext context) {
-    return CupertinoNavigationBar(
-      previousPageTitle: previousPageTitle,
-    );
-  }
-
-  @override
   AdminBuildingsSearchController provideController(BuildContext context) {
-    return AdminBuildingsSearchController(
-        context: context, title: provideTitle(context));
+    return AdminBuildingsSearchController(context: context, title: "");
   }
 
   @override
-  String provideTitle(BuildContext context) {
-    return "";
-  }
+  Widget? navigationBarTrailing(BuildContext context) {}
 
   @override
   Widget body(BuildContext context) {

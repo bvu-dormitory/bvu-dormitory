@@ -6,20 +6,15 @@ import 'package:bvu_dormitory/screens/admin/home/admin.home.controller.dart';
 import 'package:bvu_dormitory/screens/admin/home/widgets/admin.home.navbar.dart';
 
 class AdminHomeScreen extends BaseScreen<AdminHomeController> {
-  AdminHomeScreen({Key? key}) : super(key: key);
+  AdminHomeScreen({Key? key}) : super(key: key, haveNavigationBar: false);
 
   @override
   AdminHomeController provideController(BuildContext context) {
-    return AdminHomeController(context: context, title: provideTitle(context));
+    return AdminHomeController(context: context, title: "");
   }
 
   @override
-  String provideTitle(BuildContext context) {
-    return "";
-  }
-
-  @override
-  CupertinoNavigationBar? navigationBar(BuildContext context) {}
+  Widget? navigationBarTrailing(BuildContext context) {}
 
   @override
   Widget body(BuildContext context) {

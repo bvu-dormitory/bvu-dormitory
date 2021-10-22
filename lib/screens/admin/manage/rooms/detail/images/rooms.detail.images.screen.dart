@@ -1,16 +1,17 @@
 import 'dart:developer';
 
-import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/models/building.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
+
 import 'rooms.detail.images.controller.dart';
 
 class AdminRoomsDetailImagesScreen
@@ -29,15 +30,11 @@ class AdminRoomsDetailImagesScreen
   final Room room;
 
   @override
-  String provideTitle(BuildContext context) {
-    return "";
-  }
-
-  @override
   AdminRoomsDetailImagesController provideController(BuildContext context) {
     return AdminRoomsDetailImagesController(
       context: context,
-      title: provideTitle(context),
+      title: AppLocalizations.of(context)?.admin_manage_rooms_detail_images ??
+          "admin_manage_rooms_detail_images",
       building: building,
       floor: floor,
       room: room,
@@ -45,15 +42,7 @@ class AdminRoomsDetailImagesScreen
   }
 
   @override
-  CupertinoNavigationBar? navigationBar(BuildContext context) {
-    return CupertinoNavigationBar(
-      previousPageTitle: previousPageTitle,
-      middle: Text(
-        AppLocalizations.of(context)?.admin_manage_rooms_detail_images ??
-            "admin_manage_rooms_detail_images",
-      ),
-    );
-  }
+  Widget? navigationBarTrailing(BuildContext context) {}
 
   @override
   Widget body(BuildContext context) {
@@ -62,7 +51,6 @@ class AdminRoomsDetailImagesScreen
         padding: const EdgeInsets.all(20),
         child: Consumer<AdminRoomsDetailImagesController>(
           builder: (context, value, child) {
-            print(value);
             return Text(
               AppLocalizations.of(context)?.admin_manage_repair ??
                   "admin_manage_repair",

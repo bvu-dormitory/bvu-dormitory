@@ -34,7 +34,7 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
           List<Building> buildings = snapshot.data!;
 
           return CupertinoScrollbar(
-            isAlwaysShown: true,
+            // isAlwaysShown: true,
             scrollbarOrientation: ScrollbarOrientation.right,
             child: ListView.builder(
               // physics: NeverScrollableScrollPhysics(),

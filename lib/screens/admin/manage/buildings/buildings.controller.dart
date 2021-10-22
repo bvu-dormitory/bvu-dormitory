@@ -30,18 +30,4 @@ class AdminBuildingsController extends BaseController {
           AdminBuildingsSearchScreen(previousPageTitle: title),
     ));
   }
-
-  // void deleteBuilding(Building item) {
-  //   log('deleting building item...');
-
-  //   _buildingRepository.delete(item.id!).then((value) {
-  //     Fluttertoast.showToast(
-  //       msg: appLocalizations?.app_toast_deleted("\"$item.name\"") ?? 'Đã xóa',
-  //     );
-
-  //     Navigator.of(context).pop();
-  //   }).catchError((onError) {
-  //     showErrorDialog(onError);
-  //   });
-  // }
 }

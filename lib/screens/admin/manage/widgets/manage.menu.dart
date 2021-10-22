@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/screens/admin/manage/manage.controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +40,9 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
       margin: const EdgeInsets.all(10),
       child: CupertinoButton(
         onPressed: () {
-          Navigator.pushNamed(context, item.routeName);
+          controller.navigator.push(
+            MaterialPageRoute(builder: (context) => item.screen),
+          );
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,16 +69,12 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
             const SizedBox(
               height: 5,
             ),
-            Hero(
-              tag: item.routeName,
-              child: Text(
-                item.title,
-                // 'Abc',
-                style: TextStyle(
-                  color: Colors.black.withOpacity(0.75),
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+            Text(
+              item.title,
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.75),
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],
