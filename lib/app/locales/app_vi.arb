@@ -81,10 +81,18 @@
 
 
 
+
+    "admin_manage_welcome": "Xin chào, {name}.",
+    "@admin_manage_welcome": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
     "admin_manage_building": "Khu",
     "admin_manage_floor": "Tầng",
     "admin_manage_room": "Phòng",
-
     "admin_manage_title": "Quản lí",
     "admin_manage_service": "Dịch vụ",
     "admin_manage_contact": "Liên lạc",
@@ -92,6 +100,30 @@
     "admin_manage_student": "Sinh viên",
     "admin_manage_invoice": "Hóa đơn",
     "admin_manage_repair": "Yêu cầu sửa chữa",
+    "admin_manage_stat": "Thống kê",
+
+
+    "admin_manage_student_all": "Tổng số",
+    "admin_manage_student_active": "Đang ở lại",
+    "admin_manage_student_absent": "Vắng mặt",
+    "admin_manage_student_search": "Tìm kiếm theo tên hoặc số điện thoại",
+    "admin_manage_student_menu_add": "Thêm Hồ sơ",
+    "admin_manage_student_menu_export_excel": "Xuất Excel",
+
+    "admin_manage_student_menu_add_field_first_name": "Tên",
+    "admin_manage_student_menu_add_field_last_name": "Họ và tên đệm",
+    "admin_manage_student_menu_add_field_phone": "Số điện thoại",
+    "admin_manage_student_menu_add_field_gender": "Giới tính",
+    "admin_manage_student_menu_add_field_dob": "Ngày sinh",
+    "admin_manage_student_menu_add_field_hometown": "Quê quán",
+    "admin_manage_student_menu_add_submit": "Hoàn tất",
+    "admin_manage_student_menu_add_datepicker_guide": "Cuộn để chọn ngày sinh",
+
+    "admin_manage_student_menu_export_excel_options": "Các tùy chọn xuất Excel",
+    "admin_manage_student_menu_export_excel_all": "Tất cả sinh viên",
+    "admin_manage_student_menu_export_excel_active": "Danh sách đang ở lại",
+    "admin_manage_student_menu_export_excel_absent": "Danh sách vắng mặt",
+
 
 
     "admin_manage_buildings_title": "Các Khu",
@@ -105,8 +137,10 @@
     },
 
 
+
     "admin_manage_rooms_title": "Các Phòng",
     "admin_manage_rooms_detail_images": "Hình ảnh",
+    "admin_manage_rooms_detail_images_maximum": "Tối đa 5 ảnh",
     "admin_manage_rooms_detail_info": "Thông tin",
 
     "admin_manage_rooms_detail_contact_chat": "Nhắn tin tới phòng",

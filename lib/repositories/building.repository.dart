@@ -3,7 +3,7 @@ import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 
-class BuildingRepository extends FireStoreRepository {
+class BuildingRepository extends FirebaseRepository {
   BuildingRepository() : super(collectionPath: 'buildings');
 
   Stream<List<Building>> syncAll() {
@@ -33,7 +33,7 @@ class BuildingRepository extends FireStoreRepository {
         .orderBy('name')
         .snapshots()
         .map(
-          (event) => Room.fromFireStoreStream(event),
+          (event) => Room.fromFireStoreQuery(event),
         );
   }
 }

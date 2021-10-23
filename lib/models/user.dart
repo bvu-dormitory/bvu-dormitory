@@ -7,6 +7,26 @@ enum UserRole {
   student,
 }
 
+enum UserGender {
+  male,
+  female,
+}
+
+extension UserExtension on UserGender {
+  String get name {
+    switch (this) {
+      case UserGender.male:
+        {
+          return "Nam";
+        }
+      case UserGender.female:
+        {
+          return "Nữ";
+        }
+    }
+  }
+}
+
 class AppUser extends FireStoreModel {
   String name;
   UserRole role;

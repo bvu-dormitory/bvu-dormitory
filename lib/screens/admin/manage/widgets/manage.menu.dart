@@ -59,7 +59,7 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withOpacity(0.0125),
                     offset: const Offset(2, 5),
                     blurRadius: 10,
                   ),
@@ -72,7 +72,7 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
             Text(
               item.title,
               style: TextStyle(
-                color: Colors.black.withOpacity(0.75),
+                color: Colors.blueGrey.withOpacity(1),
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),

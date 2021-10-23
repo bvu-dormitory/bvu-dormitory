@@ -55,7 +55,7 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
   _sliverAppBar(BuildContext context) {
     return SliverAppBar(
       pinned: true,
-      elevation: 2,
+      elevation: 1,
       expandedHeight: 120,
       centerTitle: false,
       titleSpacing: 30,
@@ -63,20 +63,25 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
         stream: UserRepository.getCurrentFireStoreUserStream(),
         builder: (context, snapshot) => Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Xin chào, ${snapshot.data?.name}",
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w800,
-                shadows: [
-                  Shadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 20,
-                    offset: const Offset(2, 2),
-                  ),
-                ],
+            Flexible(
+              child: Text(
+                AppLocalizations.of(context)?.admin_manage_welcome(
+                        snapshot.data?.name ?? "error_getting_name") ??
+                    "error_getting_name",
+                style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.25),
+                      blurRadius: 20,
+                      offset: const Offset(2, 2),
+                    ),
+                  ],
+                ),
               ),
             ),
             const CircleAvatar(
@@ -103,7 +108,7 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
               children: [
                 Container(
                   width: double.infinity,
-                  child: Image(
+                  child: const Image(
                     image: AssetImage('lib/assets/2805830.jpg'),
                     fit: BoxFit.cover,
                     alignment: Alignment.topLeft,

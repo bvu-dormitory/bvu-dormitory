@@ -2,7 +2,7 @@ import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:bvu_dormitory/screens/admin/home/admin.home.controller.dart';
+import 'package:bvu_dormitory/screens/admin/home/home.controller.dart';
 import 'package:provider/provider.dart';
 
 class AdminHomeScreen extends BaseScreen<AdminHomeController> {

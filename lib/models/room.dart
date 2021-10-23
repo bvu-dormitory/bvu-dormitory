@@ -9,7 +9,7 @@ class Room extends FireStoreModel {
     required this.name,
   }) : super(id: id);
 
-  static List<Room> fromFireStoreStream(
+  static List<Room> fromFireStoreQuery(
       QuerySnapshot<Map<String, dynamic>> event) {
     return event.docs
         .map(
@@ -19,5 +19,12 @@ class Room extends FireStoreModel {
           ),
         )
         .toList();
+  }
+
+  static Room fromFireStoreDocument(DocumentSnapshot<Map<String, dynamic>> e) {
+    return Room(
+      id: e.id,
+      name: e['name'],
+    );
   }
 }

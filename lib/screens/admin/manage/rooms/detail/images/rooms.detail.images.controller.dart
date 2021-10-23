@@ -20,9 +20,9 @@ class AdminRoomsDetailImagesController extends BaseController {
     required this.room,
   }) : super(context: context, title: title);
 
+  final RoomRepository roomRepository = RoomRepository();
+
   final Building building;
   final Floor floor;
   final Room room;
-
-  final RoomRepository roomRepository = RoomRepository();
 }

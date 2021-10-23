@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bvu_dormitory/models/user.dart';
-import 'package:bvu_dormitory/screens/admin/home/admin.home.screen.dart';
+import 'package:bvu_dormitory/screens/admin/home/home.screen.dart';
 import 'package:bvu_dormitory/screens/student/home/student.home.screen.dart';
 
 class HomeScreen extends StatelessWidget {

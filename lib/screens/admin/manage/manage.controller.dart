@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bvu_dormitory/app/constants/app.routes.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.screen.dart';
+import 'package:bvu_dormitory/screens/admin/manage/students/students.screen.dart';
 import 'package:flutter/material.dart';
 
 class ManageIconItem {
@@ -40,32 +41,35 @@ class AdminManageController extends BaseController {
 
   List<ManageIconItem> get menuItems => [
         ManageIconItem(
-          title: "Sinh viên",
+          title:
+              appLocalizations?.admin_manage_student ?? "admin_manage_student",
           iconPath: 'lib/assets/icons/profile.png',
-          screen: AppRoutes.notFound.screen,
+          screen: AdminStudentsScreen(previousPageTitle: title),
         ),
         ManageIconItem(
-          title: "Phòng",
+          title: appLocalizations?.admin_manage_room ?? "admin_manage_room",
           iconPath: 'lib/assets/icons/room-key.png',
           screen: AdminBuildingsScreen(previousPageTitle: title),
         ),
         ManageIconItem(
-          title: "Dịch vụ",
+          title:
+              appLocalizations?.admin_manage_service ?? "admin_manage_services",
           iconPath: 'lib/assets/icons/water-drop.png',
           screen: AppRoutes.notFound.screen,
         ),
         ManageIconItem(
-          title: "Tài sản",
+          title: appLocalizations?.admin_manage_item ?? "admin_manage_item",
           iconPath: 'lib/assets/icons/idea.png',
           screen: AppRoutes.notFound.screen,
         ),
         ManageIconItem(
-          title: "Hóa đơn",
+          title:
+              appLocalizations?.admin_manage_invoice ?? "admin_manage_invoice",
           iconPath: 'lib/assets/icons/bill.png',
           screen: AppRoutes.notFound.screen,
         ),
         ManageIconItem(
-          title: "Thống kê",
+          title: appLocalizations?.admin_manage_stat ?? "admin_manage_stat",
           iconPath: 'lib/assets/icons/pie-chart-1.png',
           screen: AppRoutes.notFound.screen,
         ),

@@ -5,20 +5,25 @@ import 'package:flutter/material.dart';
 
 class AppMenuGroupItem {
   String title;
-  IconData icon;
+  bool hasTrailingArrow;
+  IconData? icon;
   Function? onPressed;
 
-  AppMenuGroupItem({required this.title, required this.icon, this.onPressed});
+  AppMenuGroupItem(
+      {required this.title,
+      this.hasTrailingArrow = true,
+      this.icon,
+      this.onPressed});
 }
 
 class AppMenuGroup extends StatelessWidget {
   const AppMenuGroup({
     Key? key,
-    required this.title,
+    this.title,
     required this.items,
   }) : super(key: key);
 
-  final String title;
+  final String? title;
   final List<AppMenuGroupItem> items;
 
   @override
@@ -26,8 +31,10 @@ class AppMenuGroup extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: AppStyles.menuGroupTextStyle),
-        const SizedBox(height: 10),
+        if (title != null) ...{
+          Text(title!, style: AppStyles.menuGroupTextStyle),
+          const SizedBox(height: 10),
+        },
         Column(
           children: List.generate(
             items.length,
@@ -69,9 +76,11 @@ class AppMenuGroup extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(icon.icon, size: 20),
+          leading: icon.icon != null ? Icon(icon.icon, size: 20) : null,
           minLeadingWidth: 10,
-          trailing: const Icon(CupertinoIcons.right_chevron, size: 16),
+          trailing: icon.hasTrailingArrow
+              ? const Icon(CupertinoIcons.right_chevron, size: 16)
+              : null,
           title: Text(
             icon.title,
             textAlign: TextAlign.left,

@@ -17,6 +17,10 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
   @protected
   late final bool _haveNavigationBar;
 
+  /// Screen build context, have access to the controller under the [body].
+  @protected
+  late BuildContext context;
+
   /// Previous screen title. Purpose is to display on the [CupertinoNavigationBar.previousPageTitle]
   @protected
   String? get previousPageTitle => _previousPageTitle;
@@ -55,6 +59,7 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
       },
       child: Builder(
         builder: (context) {
+          this.context = context;
           return CupertinoPageScaffold(
             backgroundColor: AppColor.backgroundColor,
             navigationBar: _haveNavigationBar ? navigationBar(context) : null,
