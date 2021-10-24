@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:spannable_grid/spannable_grid.dart';
 
 import 'package:bvu_dormitory/base/base.screen.dart';
+import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/screens/admin/manage/students/add/students.add.controller.dart';
 
 class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
@@ -18,30 +21,62 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
   AdminStudentsAddController provideController(BuildContext context) {
     return AdminStudentsAddController(
       context: context,
-      title: AppLocalizations.of(context)?.admin_manage_student_menu_add ?? "admin_manage_student_menu_add",
+      title: AppLocalizations.of(context)!.admin_manage_student_menu_add,
     );
   }
 
   @override
-  Widget? navigationBarTrailing(BuildContext context) {}
+  Widget? navigationBarTrailing(BuildContext context) {
+    final controller = context.read<AdminStudentsAddController>();
+
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      child: Text(AppLocalizations.of(context)!.admin_manage_student_menu_add_continue),
+      onPressed: controller.continueButtonEnabled ? controller.submit : null,
+    );
+  }
 
   @override
   Widget body(BuildContext context) {
-    final AdminStudentsAddController controller = context.read<AdminStudentsAddController>();
+    final AdminStudentsAddController controller = context.watch<AdminStudentsAddController>();
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
+    return WillPopScope(
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
           child: Form(
             key: controller.formKey,
-            child: _formFields(context),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              child: _formFields(context),
+            ),
           ),
         ),
       ),
+      onWillPop: () {
+        if (!controller.isFormEmpty) {
+          controller.showConfirmDialog(
+            title: AppLocalizations.of(context)!.app_dialog_title_warning,
+            body: Text(AppLocalizations.of(context)!.admin_manage_student_menu_add_warning_data),
+            confirmType: DialogConfirmType.submit,
+            onSubmit: () {
+              controller.navigator.pop();
+              controller.navigator.pop();
+            },
+            onDismiss: () {
+              controller.navigator.pop();
+            },
+          );
+        } else {
+          controller.navigator.pop();
+        }
+
+        // prevent popping
+        return Future.value(false);
+      },
     );
   }
 
@@ -56,7 +91,7 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
         Container(
           margin: const EdgeInsets.only(left: 10),
           child: Text(
-            AppLocalizations.of(context)?.admin_manage_student_menu_add_guide ?? "admin_manage_student_menu_add_guide",
+            AppLocalizations.of(context)!.admin_manage_student_menu_add_guide,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -66,9 +101,9 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
         SpannableGrid(
           // showGrid: true,
           columns: 4,
-          rows: 8,
+          rows: 9,
           spacing: 10.0,
-          rowHeight: 100,
+          rowHeight: 115,
           cells: List.generate(
             controller.formFields.length,
             (index) {
@@ -86,35 +121,40 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
                   required: field.required,
                   type: field.type,
                   title: field.label,
-                  onTap: field.onTap,
                   validator: field.validator,
+                  formatters: field.formatters,
+                  maxLength: field.maxLength,
+                  icon: field.icon,
+                  pickerType: field.pickerType,
+                  pickerData: field.pickerData,
+                  pickerInitialData: field.pickerInitialData,
+                  onPickerItemChanged: field.onPickerSelectedItemChanged,
                 ),
               );
             },
-          ),
-        ),
-        const SizedBox(height: 30),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10),
-          child: CupertinoButton.filled(
-            child: Text(AppLocalizations.of(context)?.admin_manage_student_menu_add_submit ?? "admin_manage_student_menu_add_submit"),
-            onPressed: context.read<AdminStudentsAddController>().submit,
           ),
         ),
       ],
     );
   }
 
-  _field(
-      {required TextEditingController fieldController,
-      required String title,
-      required TextInputType type,
-      required TextInputAction action,
-      bool required = false,
-      bool editable = true,
-      int maxLines = 1,
-      String? Function(String?)? validator,
-      void Function()? onTap}) {
+  _field({
+    required TextEditingController fieldController,
+    required String title,
+    required TextInputType type,
+    required TextInputAction action,
+    bool required = false,
+    bool editable = true,
+    int maxLines = 1,
+    IconData? icon,
+    List<TextInputFormatter>? formatters,
+    String? Function(String?)? validator,
+    required int maxLength,
+    List? pickerData,
+    dynamic pickerInitialData,
+    void Function(dynamic)? onPickerItemChanged,
+    StudentFormFieldPickerType? pickerType,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -122,41 +162,62 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (required) ...{
-              const Text(
-                "* ",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 16,
-                ),
-              ),
-            },
             Text(
               title,
               style: const TextStyle(
-                  // color: Colors.blueGrey,
-                  ),
+                color: Colors.blueGrey,
+                // fontWeight: FontWeight.w500,
+              ),
             ),
+            if (required) ...{
+              const SizedBox(width: 5),
+              const Icon(FluentIcons.star_24_filled, size: 7, color: Colors.red),
+            },
           ],
         ),
         const SizedBox(height: 5),
         TextFormField(
           controller: fieldController,
-          onTap: onTap,
+          onTap: () {
+            if (pickerType != null) {
+              if (pickerType == StudentFormFieldPickerType.gender) {
+                showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) {
+                    return _genderPicker(onPickerItemChanged!);
+                  },
+                );
+              } else {
+                showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) {
+                    return _datePicker(
+                      initialValue: pickerInitialData,
+                      onPickerItemChange: onPickerItemChanged!,
+                    );
+                  },
+                );
+              }
+            }
+          },
           readOnly: !editable,
           keyboardType: type,
           textInputAction: action,
           maxLines: maxLines,
+          maxLength: maxLength,
           validator: validator,
+          inputFormatters: formatters,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
             contentPadding: EdgeInsets.only(
               top: maxLines > 1 ? 15 : 0,
               bottom: 0,
-              left: 15,
+              left: 0,
               right: 5,
             ),
+            errorText: null,
+            prefixIcon: icon != null ? Icon(icon) : null,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
               borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.5)),
@@ -169,13 +230,17 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
               borderRadius: BorderRadius.circular(6),
               borderSide: BorderSide(width: 2, color: Colors.red.withOpacity(0.5)),
             ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+              borderSide: BorderSide(width: 2, color: Colors.orange.shade900.withOpacity(0.25)),
+            ),
           ),
         ),
       ],
     );
   }
 
-  _genderPicker() {
+  _genderPicker(void Function(int) onPickerItemChanged) {
     final controller = context.read<AdminStudentsAddController>();
 
     return Container(
@@ -192,7 +257,7 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
                 onPressed: () => Navigator.pop(context),
                 padding: EdgeInsets.zero,
                 child: Text(
-                  AppLocalizations.of(context)?.app_dialog_action_cancel ?? "app_dialog_action_cancel",
+                  AppLocalizations.of(context)!.app_dialog_action_cancel,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.red,
@@ -203,7 +268,7 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
                 onPressed: () => Navigator.pop(context),
                 padding: EdgeInsets.zero,
                 child: Text(
-                  AppLocalizations.of(context)?.app_dialog_action_ok ?? "app_dialog_action_ok",
+                  AppLocalizations.of(context)!.app_dialog_action_ok,
                   style: const TextStyle(
                     fontSize: 16,
                   ),
@@ -215,7 +280,7 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
           Expanded(
             child: CupertinoPicker(
               itemExtent: 30,
-              onSelectedItemChanged: controller.onGenderPickerSelectedIndexChanged,
+              onSelectedItemChanged: onPickerItemChanged,
               children: List.generate(
                 controller.genderValues.length,
                 (index) => Text(controller.genderValues[index]),
@@ -229,8 +294,7 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
 
   _datePicker({
     DateTime? initialValue,
-    required Function(DateTime) onValueChanged,
-    required Function() onDeleteButtonPressed,
+    required void Function(dynamic) onPickerItemChange,
   }) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
@@ -243,10 +307,12 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CupertinoButton(
-                onPressed: onDeleteButtonPressed,
+                onPressed: () {
+                  onPickerItemChange(null);
+                },
                 padding: EdgeInsets.zero,
                 child: Text(
-                  AppLocalizations.of(context)?.app_action_delete ?? "app_action_delete",
+                  AppLocalizations.of(context)!.app_action_delete,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.red,
@@ -257,7 +323,7 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
                 onPressed: () => Navigator.pop(context),
                 padding: EdgeInsets.zero,
                 child: Text(
-                  AppLocalizations.of(context)?.app_dialog_action_ok ?? "app_dialog_action_ok",
+                  AppLocalizations.of(context)!.app_dialog_action_ok,
                   style: const TextStyle(
                     fontSize: 16,
                   ),
@@ -268,8 +334,8 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
           const SizedBox(height: 20),
           Expanded(
             child: CupertinoDatePicker(
-              initialDateTime: initialValue,
-              onDateTimeChanged: onValueChanged,
+              // initialDateTime: initialValue,
+              onDateTimeChanged: onPickerItemChange,
               mode: CupertinoDatePickerMode.date,
             ),
           ),

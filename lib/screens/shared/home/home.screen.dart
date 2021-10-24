@@ -16,14 +16,17 @@ class HomeScreen extends StatelessWidget {
       future: AuthRepository.getCurrentUserRole(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return snapshot.data == UserRole.admin
-              ? AdminHomeScreen()
-              : const StudentHomeScreen();
+          return snapshot.data == UserRole.admin ? AdminHomeScreen() : const StudentHomeScreen();
         }
 
         // cannot load current logged in user's role
-        return const CupertinoActivityIndicator(
-          radius: 15,
+        return const Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: CupertinoActivityIndicator(
+              radius: 15,
+            ),
+          ),
         );
       },
     );

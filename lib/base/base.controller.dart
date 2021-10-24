@@ -22,13 +22,10 @@ abstract class BaseController extends ChangeNotifier {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: Text(appLocalizations?.app_dialog_title_error ??
-              "app_dialog_title_error"),
+          title: Text(appLocalizations?.app_dialog_title_error ?? "app_dialog_title_error"),
           content: Text(content),
           actions: [
-            CupertinoDialogAction(
-                child: Text(appLocalizations?.app_dialog_action_ok ?? "Ok"),
-                onPressed: () => Navigator.pop(context)),
+            CupertinoDialogAction(child: Text(appLocalizations?.app_dialog_action_ok ?? "Ok"), onPressed: () => Navigator.pop(context)),
           ],
         );
       },
@@ -37,19 +34,18 @@ abstract class BaseController extends ChangeNotifier {
 
   showConfirmDialog({
     required String title,
-    required Widget? body,
+    Widget? body,
     required DialogConfirmType confirmType,
     required void Function() onSubmit,
+    void Function()? onDismiss,
   }) {
     String getConfirmationTitle(DialogConfirmType type) {
       switch (type) {
         case DialogConfirmType.submit:
-          return appLocalizations?.app_dialog_action_submit ??
-              "app_dialog_action_submit";
+          return appLocalizations?.app_dialog_action_submit ?? "app_dialog_action_submit";
 
         case DialogConfirmType.update:
-          return appLocalizations?.app_dialog_action_update ??
-              "app_dialog_action_update";
+          return appLocalizations?.app_dialog_action_update ?? "app_dialog_action_update";
 
         default:
           return "localle_name_undefined";
@@ -64,11 +60,16 @@ abstract class BaseController extends ChangeNotifier {
         actions: [
           CupertinoDialogAction(
             child: Text(
-              appLocalizations?.app_dialog_action_cancel ??
-                  "app_dialog_action_cancel",
+              appLocalizations?.app_dialog_action_cancel ?? "app_dialog_action_cancel",
               style: const TextStyle(color: Colors.red),
             ),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              if (onDismiss != null) {
+                onDismiss();
+              } else {
+                Navigator.of(context).pop();
+              }
+            },
           ),
           CupertinoDialogAction(
             child: Text(getConfirmationTitle(confirmType)),

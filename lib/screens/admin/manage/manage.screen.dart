@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:bvu_dormitory/base/base.screen.dart';
+import 'package:bvu_dormitory/repositories/auth.repository.dart';
+import 'package:bvu_dormitory/screens/shared/login/login.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,8 +23,7 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
   AdminManageController provideController(BuildContext context) {
     return AdminManageController(
       context: context,
-      title: AppLocalizations.of(context)?.admin_manage_title ??
-          "admin_manage_title",
+      title: AppLocalizations.of(context)?.admin_manage_title ?? "admin_manage_title",
     );
   }
 
@@ -61,33 +62,53 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
       titleSpacing: 30,
       title: StreamBuilder<AppUser?>(
         stream: UserRepository.getCurrentFireStoreUserStream(),
-        builder: (context, snapshot) => Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        builder: (context, snapshot) => Column(
           children: [
-            Flexible(
-              child: Text(
-                AppLocalizations.of(context)?.admin_manage_welcome(
-                        snapshot.data?.name ?? "error_getting_name") ??
-                    "error_getting_name",
-                style: TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.25),
-                      blurRadius: 20,
-                      offset: const Offset(2, 2),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Text(
+                    AppLocalizations.of(context)?.admin_manage_welcome(snapshot.data?.name ?? "error_getting_name") ?? "error_getting_name",
+                    style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 20,
+                          offset: const Offset(2, 2),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            const CircleAvatar(
-              backgroundColor: Colors.amber,
-              radius: 15,
-              backgroundImage: AssetImage('lib/assets/icons/default-user.png'),
+                // const CircleAvatar(
+                //   backgroundColor: Colors.amber,
+                //   radius: 15,
+                //   backgroundImage: AssetImage('lib/assets/icons/default-user.png'),
+                // ),
+                CupertinoButton(
+                  color: Colors.white.withOpacity(0.85),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    'Sign out',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onPressed: () {
+                    AuthRepository.signOut().then(
+                      (value) => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),
