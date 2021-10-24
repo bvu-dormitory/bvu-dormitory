@@ -34,11 +34,11 @@ class AdminStudentsScreen extends BaseScreen<AdminStudentsController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CupertinoSearchTextField(
-              placeholder:
-                  AppLocalizations.of(context)?.admin_manage_student_search,
-            ),
-            const SizedBox(height: 30),
+            // CupertinoSearchTextField(
+            //   placeholder:
+            //       AppLocalizations.of(context)?.admin_manage_student_search,
+            // ),
+            // const SizedBox(height: 30),
             const AdminStudentsStats(),
             const SizedBox(height: 30),
             _menu(context),

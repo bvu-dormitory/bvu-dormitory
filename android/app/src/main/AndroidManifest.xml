@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bvu_dormitory">
+    package="com.bvu.dormitory">
 
   <uses-permission android:name="android.permission.INTERNET"/>
 
    <application
-        android:label="bvu_dormitory"
+        android:label="BVU Dormitory"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

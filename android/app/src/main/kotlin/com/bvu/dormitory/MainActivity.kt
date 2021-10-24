@@ -1,4 +1,4 @@
-package com.example.bvu_dormitory
+package com.bvu.dormitory
 
 import io.flutter.embedding.android.FlutterActivity
 
