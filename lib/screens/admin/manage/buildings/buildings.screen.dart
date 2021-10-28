@@ -13,15 +13,16 @@ import 'package:bvu_dormitory/screens/admin/manage/buildings/widgets/buildings.b
 import './search/buildings.search.screen.dart';
 
 class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
-  AdminBuildingsScreen({Key? key, String? previousPageTitle})
-      : super(key: key, previousPageTitle: previousPageTitle);
+  AdminBuildingsScreen({
+    Key? key,
+    String? previousPageTitle,
+  }) : super(key: key, previousPageTitle: previousPageTitle);
 
   @override
   AdminBuildingsController provideController(BuildContext context) {
     return AdminBuildingsController(
       context: context,
-      title: AppLocalizations.of(context)?.admin_manage_buildings_title ??
-          "admin_manage_buildings_title",
+      title: AppLocalizations.of(context)?.admin_manage_buildings_title ?? "admin_manage_buildings_title",
     );
   }
 
@@ -36,8 +37,7 @@ class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
         Navigator.of(context).push(
           CupertinoPageRoute(
             builder: (_) => AdminBuildingsSearchScreen(
-              previousPageTitle:
-                  Provider.of<AdminBuildingsController>(context).title,
+              previousPageTitle: Provider.of<AdminBuildingsController>(context).title,
             ),
           ),
         );

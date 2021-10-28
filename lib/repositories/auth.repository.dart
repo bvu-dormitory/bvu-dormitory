@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/app/app.logger.dart';
 import 'package:bvu_dormitory/app/app.notifications.dart';
 import 'package:bvu_dormitory/models/user.dart';
@@ -11,8 +13,12 @@ class AuthRepository {
   /// determining whether the FirebaseAuth user logged in
   static Future<bool> isAuthenticated() async {
     var theUser = await instance.authStateChanges().first;
-    print(theUser);
+    log(theUser.toString());
     return Future(() => theUser != null);
+  }
+
+  static Future<bool> isPhoneNumberRegistered(String phoneNumber) {
+    return UserRepository.isFireStoreUserExists(phoneNumber);
   }
 
   /// signing out current logged-in user
@@ -29,17 +35,16 @@ class AuthRepository {
   /// getting current user info
   static Future<UserRole?> getCurrentUserRole() async {
     var theUser = await UserRepository.getCurrentFireStoreUser();
-    return theUser?.role;
+    log('FireStore user: ${theUser!.phoneNumber}');
+    log('Role: ${theUser.role}');
+    return theUser.role;
   }
 
   /// updating FCM device token to use later
   static updateUserFCMToken() async {
     try {
       var deviceToken = await AppNotifications.instance.getToken();
-      var theUser = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(AuthRepository.instance.currentUser?.phoneNumber)
-          .get();
+      var theUser = await FirebaseFirestore.instance.collection('users').doc(AuthRepository.instance.currentUser?.phoneNumber).get();
 
       await theUser.reference.update({
         'fcm_token': deviceToken,

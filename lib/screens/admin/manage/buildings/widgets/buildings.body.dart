@@ -41,8 +41,7 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
               shrinkWrap: true,
               primary: false,
               itemCount: buildings.length,
-              itemBuilder: (context, index) =>
-                  _buildingItem(buildings[index], buildings.length, index),
+              itemBuilder: (context, index) => _buildingItem(buildings[index], buildings.length, index),
             ),
           );
         }
@@ -109,13 +108,9 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
     );
   }
 
-  List<Widget> _buildingItemFloors(
-      Building building, AsyncSnapshot<List<Floor>> snapshot) {
+  List<Widget> _buildingItemFloors(Building building, AsyncSnapshot<List<Floor>> snapshot) {
     return snapshot.hasData
-        ? List.generate(
-            snapshot.data!.length,
-            (index) =>
-                _buildingItemFloor(building, snapshot.data!.elementAt(index)))
+        ? List.generate(snapshot.data!.length, (index) => _buildingItemFloor(building, snapshot.data!.elementAt(index)))
         : [
             const Text('Empty'),
           ];
@@ -125,8 +120,12 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
     return Container(
       width: double.infinity,
       child: CupertinoButton(
-        padding:
-            const EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 20),
+        padding: const EdgeInsets.only(
+          top: 15,
+          bottom: 15,
+          left: 15,
+          right: 20,
+        ),
         onPressed: () {
           // navigate to the Rooms screen
           Navigator.of(context).push(

@@ -1,5 +1,12 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/helpers/extensions/string.extensions.dart';
+import 'package:bvu_dormitory/models/building.dart';
+import 'package:bvu_dormitory/models/floor.dart';
+import 'package:bvu_dormitory/models/room.dart';
+import 'package:bvu_dormitory/repositories/auth.repository.dart';
+import 'package:bvu_dormitory/repositories/building.repository.dart';
+import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/user.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 enum StudentFormFieldPickerType {
   date,
@@ -22,6 +28,7 @@ class StudentProfileFormField {
   final bool required;
   final String label;
   final bool editable;
+  final bool enabled;
   final void Function()? onTap;
   final String? Function(String?)? validator;
   final TextInputType type;
@@ -45,6 +52,7 @@ class StudentProfileFormField {
     this.validator,
     this.icon,
     required this.maxLength,
+    this.enabled = true,
     this.formatters,
     this.onTap,
     this.pickerData,
@@ -54,11 +62,73 @@ class StudentProfileFormField {
   });
 }
 
-class AdminStudentsAddController extends BaseController {
-  AdminStudentsAddController({
+class AdminRoomsDetailStudentsAddController extends BaseController {
+  AdminRoomsDetailStudentsAddController({
     required BuildContext context,
+    required this.previousPageTitle,
     required String title,
-  }) : super(context: context, title: title);
+    required this.building,
+    required this.floor,
+    required this.room,
+    this.student,
+  }) : super(context: context, title: title) {
+    if (student != null) {
+      log(student!.notes ?? "notes empty");
+
+      genderController = TextEditingController(
+        text: UserGender.values.firstWhere((element) => element.name == student!.gender, orElse: () => UserGender.male).name,
+      );
+      lastNameController = TextEditingController(text: student!.lastName);
+      firstNameController = TextEditingController(text: student!.firstName);
+      dobController = TextEditingController(text: getDateStringValue(student!.birthDate));
+      homeTownController = TextEditingController(text: student!.hometown);
+      idController = TextEditingController(text: student!.citizenIdNumber);
+      phoneController = TextEditingController(text: student!.phoneNumber!.replaceFirst("+84", "0"));
+      parentPhoneController = TextEditingController(text: student!.parentPhoneNumber ?? "");
+      mssvController = TextEditingController(text: student!.studentIdNumber ?? "");
+      joinDateController = TextEditingController(text: getDateStringValue(student!.joinDate));
+      outDateController = TextEditingController(text: student!.outDate != null ? getDateStringValue(student!.outDate!) : "");
+      notesController = TextEditingController(text: student!.notes);
+    } else {
+      isViewing = false;
+      isFormEditing = true;
+
+      genderController = TextEditingController(text: UserGender.male.name);
+      lastNameController = TextEditingController(text: "Nguyễn");
+      firstNameController = TextEditingController(text: "Anh Tuấn");
+      dobController = TextEditingController(text: "01-09-2000");
+      homeTownController = TextEditingController(text: "Thanh Hóa");
+      idController = TextEditingController(text: "038200016566");
+      phoneController = TextEditingController(text: "0333326585");
+      parentPhoneController = TextEditingController();
+      mssvController = TextEditingController();
+      joinDateController = TextEditingController(text: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}");
+      outDateController = TextEditingController();
+      notesController = TextEditingController();
+    }
+  }
+
+  String previousPageTitle;
+  Building building;
+  Floor floor;
+  Room room;
+  Student? student;
+
+  // check whether is viewing or adding a new student
+  bool _isViewing = true;
+  bool get isViewing => _isViewing;
+  set isViewing(bool viewing) {
+    _isViewing = viewing;
+    notifyListeners();
+  }
+
+  // check whether the form is editing
+  bool _isFormEditing = false;
+  bool get isFormEditing => _isFormEditing;
+  set isFormEditing(bool editing) {
+    _isFormEditing = editing;
+    notifyListeners();
+  }
 
   bool _continueButtonEnabled = true;
   bool get continueButtonEnabled => _continueButtonEnabled;
@@ -97,30 +167,31 @@ class AdminStudentsAddController extends BaseController {
         notesController,
       ];
 
-  final genderController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final firstNameController = TextEditingController();
-  final dobController = TextEditingController();
-  final homeTownController = TextEditingController();
-  final idController = TextEditingController();
-  final phoneController = TextEditingController();
-  final parentPhoneController = TextEditingController();
-  final mssvController = TextEditingController();
-  final joinDateController = TextEditingController();
-  final outDateController = TextEditingController();
-  final notesController = TextEditingController();
+  late final TextEditingController genderController;
+  late final TextEditingController lastNameController;
+  late final TextEditingController firstNameController;
+  late final TextEditingController dobController;
+  late final TextEditingController homeTownController;
+  late final TextEditingController idController;
+  late final TextEditingController phoneController;
+  late final TextEditingController parentPhoneController;
+  late final TextEditingController mssvController;
+  late final TextEditingController joinDateController;
+  late final TextEditingController outDateController;
+  late final TextEditingController notesController;
 
   StudentProfileFormField get lastNameField => StudentProfileFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_last_name,
         controller: lastNameController,
         colStart: 1,
         rowStart: 1,
-        colSpan: 2,
+        colSpan: 4,
         required: true,
         type: TextInputType.name,
         maxLength: 30,
         icon: FluentIcons.text_field_24_regular,
         formatters: [],
+        enabled: isFormEditing,
         validator: (value) {
           if (value == null || value.isEmpty) {
             return appLocalizations!.admin_manage_student_menu_add_validation_failed_required;
@@ -131,11 +202,12 @@ class AdminStudentsAddController extends BaseController {
   StudentProfileFormField get firstNameField => StudentProfileFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_first_name,
         controller: firstNameController,
-        colStart: 3,
-        rowStart: 1,
-        colSpan: 2,
+        colStart: 1,
+        rowStart: 2,
+        colSpan: 4,
         maxLength: 20,
         required: true,
+        enabled: isFormEditing,
         icon: FluentIcons.text_field_24_regular,
         type: TextInputType.name,
         validator: (value) {
@@ -149,10 +221,11 @@ class AdminStudentsAddController extends BaseController {
         label: appLocalizations!.admin_manage_student_menu_add_field_gender,
         controller: genderController,
         colStart: 1,
-        rowStart: 2,
-        colSpan: 2,
+        rowStart: 3,
+        colSpan: 4,
         required: true,
         editable: false,
+        enabled: isFormEditing,
         icon: FluentIcons.people_24_regular,
         maxLength: 10,
         validator: (value) {
@@ -168,11 +241,12 @@ class AdminStudentsAddController extends BaseController {
   StudentProfileFormField get dobField => StudentProfileFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_dob,
         controller: dobController,
-        colStart: 3,
-        rowStart: 2,
-        colSpan: 2,
+        colStart: 1,
+        rowStart: 4,
+        colSpan: 4,
         required: true,
         editable: false,
+        enabled: isFormEditing,
         maxLength: 10,
         icon: FluentIcons.food_cake_24_regular,
         pickerType: StudentFormFieldPickerType.date,
@@ -188,9 +262,10 @@ class AdminStudentsAddController extends BaseController {
         label: appLocalizations!.admin_manage_student_menu_add_field_hometown,
         controller: homeTownController,
         colStart: 1,
-        rowStart: 3,
+        rowStart: 5,
         colSpan: 4,
         required: true,
+        enabled: isFormEditing,
         maxLength: 100,
         icon: FluentIcons.globe_24_regular,
         validator: (value) {
@@ -204,9 +279,10 @@ class AdminStudentsAddController extends BaseController {
         label: appLocalizations!.admin_manage_student_menu_add_field_id,
         controller: idController,
         colStart: 1,
-        rowStart: 4,
+        rowStart: 6,
         colSpan: 4,
         required: true,
+        enabled: isFormEditing,
         maxLength: 20,
         icon: FluentIcons.phone_24_regular,
         validator: (value) {
@@ -220,15 +296,20 @@ class AdminStudentsAddController extends BaseController {
         label: appLocalizations!.admin_manage_student_menu_add_field_phone,
         controller: phoneController,
         colStart: 1,
-        rowStart: 5,
+        rowStart: 7,
         colSpan: 4,
         required: true,
+        enabled: student == null,
         maxLength: 10,
         icon: FluentIcons.call_24_regular,
         type: TextInputType.number,
         validator: (value) {
           if (value == null || value.isEmpty) {
             return appLocalizations!.admin_manage_student_menu_add_validation_failed_required;
+          }
+
+          if (!value.isValidPhoneNumber) {
+            return appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_invalid;
           }
         },
       );
@@ -237,8 +318,9 @@ class AdminStudentsAddController extends BaseController {
         label: appLocalizations!.admin_manage_student_menu_add_field_parent_phone,
         controller: parentPhoneController,
         colStart: 1,
-        rowStart: 6,
+        rowStart: 8,
         colSpan: 4,
+        enabled: isFormEditing,
         maxLength: 10,
         icon: FluentIcons.call_transfer_20_regular,
         type: TextInputType.number,
@@ -248,9 +330,10 @@ class AdminStudentsAddController extends BaseController {
         label: appLocalizations!.admin_manage_student_menu_add_field_mssv,
         controller: mssvController,
         colStart: 1,
-        rowStart: 7,
+        rowStart: 9,
         colSpan: 4,
         maxLength: 15,
+        enabled: isFormEditing,
         icon: FluentIcons.hat_graduation_24_regular,
       );
 
@@ -258,8 +341,9 @@ class AdminStudentsAddController extends BaseController {
         label: appLocalizations!.admin_manage_student_menu_add_field_join_date,
         controller: joinDateController,
         colStart: 1,
-        rowStart: 8,
-        colSpan: 2,
+        rowStart: 10,
+        enabled: isFormEditing,
+        colSpan: 4,
         required: true,
         editable: false,
         maxLength: 10,
@@ -276,9 +360,10 @@ class AdminStudentsAddController extends BaseController {
   StudentProfileFormField get outDateField => StudentProfileFormField(
       label: appLocalizations!.admin_manage_student_menu_add_field_out_date,
       controller: outDateController,
-      colStart: 3,
-      rowStart: 8,
-      colSpan: 2,
+      colStart: 1,
+      rowStart: 11,
+      colSpan: 4,
+      enabled: isFormEditing,
       editable: false,
       maxLength: 10,
       icon: FluentIcons.calendar_arrow_right_20_regular,
@@ -289,9 +374,10 @@ class AdminStudentsAddController extends BaseController {
         label: appLocalizations!.admin_manage_student_menu_add_field_notes,
         controller: notesController,
         colStart: 1,
-        rowStart: 9,
+        rowStart: 12,
         colSpan: 4,
         maxLength: 255,
+        enabled: isFormEditing,
         icon: FluentIcons.comment_24_regular,
       );
 
@@ -345,26 +431,60 @@ class AdminStudentsAddController extends BaseController {
 
   submit() {
     if (formKey.currentState!.validate()) {
-      // process
+      _continueButtonEnabled = false;
+      notifyListeners();
+
+      // check whether the given phone number is already registered
+      AuthRepository.isPhoneNumberRegistered(phoneController.text.replaceFirst("0", "+84")).then((exists) {
+        if (exists) {
+          showSnackbar(appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_exists, const Duration(seconds: 3), () {
+            _continueButtonEnabled = true;
+            notifyListeners();
+          });
+        } else {
+          // process adding new user here
+          _continueButtonEnabled = true;
+          notifyListeners();
+
+          // adding new Student
+          if (student == null) {
+            RoomRepository.addStudent(building.id!, floor.id!, room.id!, room.studentIdList ?? [], getFormData()).catchError((onError) {
+              showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
+            });
+          }
+        }
+      }).catchError((onError) {
+        showSnackbar(onError, const Duration(seconds: 3), () {
+          _continueButtonEnabled = true;
+          notifyListeners();
+        });
+      });
     } else {
       _continueButtonEnabled = false;
       notifyListeners();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: const Duration(seconds: 3),
-          content: Text(
-            appLocalizations!.admin_manage_student_menu_add_validation_failed,
-            textAlign: TextAlign.center,
-          ),
-          onVisible: () {
-            Future.delayed(const Duration(seconds: 3), () {
-              _continueButtonEnabled = true;
-              notifyListeners();
-            });
-          },
-        ),
+      showSnackbar(
+        appLocalizations!.admin_manage_student_menu_add_validation_failed,
+        const Duration(seconds: 3),
+        () {
+          _continueButtonEnabled = true;
+          notifyListeners();
+        },
       );
     }
+  }
+
+  Student getFormData() {
+    return Student(
+      id: phoneController.text.replaceFirst("0", "+84"),
+      firstName: firstNameController.text,
+      lastName: lastNameController.text,
+      isActive: true,
+      gender: gender,
+      hometown: homeTownController.text,
+      birthDate: dateOfBirth!,
+      joinDate: joinDate!,
+      citizenIdNumber: idController.text,
+    );
   }
 }

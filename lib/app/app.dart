@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -54,12 +56,16 @@ class _ApplicationState extends State<Application> {
             // stream: AuthRepository.instance.userChanges(),
             future: AuthRepository.instance.userChanges().first,
             builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                // log(snapshot.hasData.toString());
+                log('User logged in');
+                log(snapshot.data.toString());
+              }
+
               return MaterialApp(
                 // ROUTING
                 routes: AppRoutes.go, // ignore if using onGenerateRoute
-                home: (snapshot.hasData)
-                    ? const HomeScreen()
-                    : const LoginScreen(),
+                home: (snapshot.hasData) ? const HomeScreen() : const LoginScreen(),
                 // onGenerateRoute: (settings) {
                 //   log('onGenerateRoute...');
                 //   return AuthRepository.instance.currentUser != null

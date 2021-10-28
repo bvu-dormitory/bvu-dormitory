@@ -5,15 +5,20 @@ import 'package:flutter/material.dart';
 
 class AppMenuGroupItem {
   String title;
+  TextStyle? titleStyle;
   bool hasTrailingArrow;
+  Widget? subTitle;
   IconData? icon;
   Function? onPressed;
 
-  AppMenuGroupItem(
-      {required this.title,
-      this.hasTrailingArrow = true,
-      this.icon,
-      this.onPressed});
+  AppMenuGroupItem({
+    required this.title,
+    this.titleStyle,
+    this.subTitle,
+    this.hasTrailingArrow = true,
+    this.icon,
+    this.onPressed,
+  });
 }
 
 class AppMenuGroup extends StatelessWidget {
@@ -78,18 +83,18 @@ class AppMenuGroup extends StatelessWidget {
         child: ListTile(
           leading: icon.icon != null ? Icon(icon.icon, size: 20) : null,
           minLeadingWidth: 10,
-          trailing: icon.hasTrailingArrow
-              ? const Icon(CupertinoIcons.right_chevron, size: 16)
-              : null,
+          trailing: icon.hasTrailingArrow ? const Icon(CupertinoIcons.right_chevron, size: 16) : null,
+          subtitle: icon.subTitle,
           title: Text(
             icon.title,
             textAlign: TextAlign.left,
-            style: TextStyle(
-              color: Colors.black.withOpacity(0.75),
-              fontWeight: FontWeight.w400,
-              fontSize: 15,
-              // fontSize: 20,
-            ),
+            style: icon.titleStyle ??
+                TextStyle(
+                  color: Colors.black.withOpacity(0.75),
+                  fontWeight: FontWeight.w400,
+                  fontSize: 15,
+                  // fontSize: 20,
+                ),
           ),
         ),
       ),

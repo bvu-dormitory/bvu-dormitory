@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +17,24 @@ class HomeScreen extends StatelessWidget {
       // stream: FirebaseAuth.instance.userChanges(),
       future: AuthRepository.getCurrentUserRole(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(snapshot.error.toString()),
+              ),
+            );
+
+            return const Scaffold(
+              body: Center(
+                child: Text('Error'),
+              ),
+            );
+          }
           return snapshot.data == UserRole.admin ? AdminHomeScreen() : const StudentHomeScreen();
         }
 
-        // cannot load current logged in user's role
+        log('Checking user role...');
         return const Scaffold(
           backgroundColor: Colors.white,
           body: Center(

@@ -16,6 +16,7 @@
     "app_action_edit": "Chỉnh sửa",
 
     
+    "app_toast_copied": "Đã sao chép vào Clipboard",
     "app_toast_deleted": "Đã xóa {name}",
     "@app_toast_deleted": {
         "placeholders": {
@@ -111,25 +112,6 @@
     "admin_manage_student_menu_add": "Thêm Hồ sơ",
     "admin_manage_student_menu_export_excel": "Xuất Excel",
 
-    "admin_manage_student_menu_add_field_first_name": "Tên",
-    "admin_manage_student_menu_add_field_last_name": "Họ và tên đệm",
-    "admin_manage_student_menu_add_field_id": "Số CCCD/CMND",
-    "admin_manage_student_menu_add_field_notes": "Ghi chú",
-    "admin_manage_student_menu_add_field_join_date": "Ngày vào",
-    "admin_manage_student_menu_add_field_out_date": "Ngày ra",
-    "admin_manage_student_menu_add_field_phone": "Số điện thoại",
-    "admin_manage_student_menu_add_field_parent_phone": "Số điện thoại phụ huynh",
-    "admin_manage_student_menu_add_field_gender": "Giới tính",
-    "admin_manage_student_menu_add_field_dob": "Ngày sinh",
-    "admin_manage_student_menu_add_field_mssv": "Mã số sinh viên",
-    "admin_manage_student_menu_add_field_hometown": "Quê quán",
-    "admin_manage_student_menu_add_continue": "Tiếp tục", 
-    "admin_manage_student_menu_add_datepicker_guide": "Cuộn để chọn ngày sinh",
-    "admin_manage_student_menu_add_guide": "Những trường có dấu * là bắt buộc.",
-    "admin_manage_student_menu_add_validation_failed": "Vui lòng điền vào những trường còn thiếu trước khi tiếp tục.",
-    "admin_manage_student_menu_add_validation_failed_required": "Còn thiếu",
-    "admin_manage_student_menu_add_warning_data": "Đã có dữ liệu được nhập, nếu rời đi sẽ không thể khôi phục, vẫn tiếp tục rời đi ?",
-
     "admin_manage_student_menu_export_excel_options": "Các tùy chọn xuất Excel",
     "admin_manage_student_menu_export_excel_all": "Tất cả sinh viên",
     "admin_manage_student_menu_export_excel_active": "Danh sách đang ở lại",
@@ -148,8 +130,16 @@
     },
 
 
-
     "admin_manage_rooms_title": "Các Phòng",
+    "admin_manage_rooms_quantity": "Đang ở: {quantity}",
+    "@admin_manage_rooms_quantity": {
+        "placeholders": {
+            "quantity": {
+                "type": "int"
+            }
+        }
+    },
+
     "admin_manage_rooms_detail_images": "Hình ảnh",
     "admin_manage_rooms_detail_images_maximum": "Tối đa 5 ảnh",
     "admin_manage_rooms_detail_info": "Thông tin",
@@ -161,5 +151,68 @@
     "admin_manage_rooms_detail_invoice_list": "Danh sách Hóa đơn",
 
     "admin_manage_rooms_detail_repair_list": "Đang yêu cầu",
-    "admin_manage_rooms_detail_repair_history": "Đã xử lí"
+    "admin_manage_rooms_detail_repair_history": "Đã xử lí",
+
+
+    "admin_manage_rooms_detail_students_empty": "Chưa có thông tin.",
+    "admin_manage_rooms_detail_students_change_room": "Chuyển phòng",
+    "admin_manage_rooms_detail_students_change_delete_profile": "Xóa thông tin hồ sơ",
+    "admin_manage_rooms_detail_students_view_profile": "Thông tin hồ sơ",
+    "admin_manage_rooms_detail_students_parent": "Phụ huynh",
+    "admin_manage_rooms_detail_students_copy_phone": "Sao chép số",
+    "admin_manage_rooms_detail_students_parent_empty": "chưa cung cấp số điện thoại",
+    "admin_manage_rooms_detail_students_online_chat": "Nhắn tin riêng",
+    "admin_manage_rooms_detail_students_sms": "Nhắn tin tới số điện thoại (mất cước phí)",
+    "admin_manage_rooms_detail_students_call": "Gọi tới số điện thoại (mất cước phí)",
+    "admin_manage_rooms_detail_students_invoices": "Các hóa đơn đã đóng",
+    "admin_manage_rooms_detail_students_sms_welcome_template": "sms:{phone}?body=Chào {name}, ",
+    "@admin_manage_rooms_detail_students_sms_welcome_template": {
+        "placeholders": {
+            "phone": {
+                "type": "String"
+            },
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "admin_manage_rooms_detail_students_sms_parent_welcome_template": "sms:{phone}?body=Kính chào phụ huynh của em {name}, ",
+    "@admin_manage_rooms_detail_students_sms_parent_welcome_template": {
+        "placeholders": {
+            "phone": {
+                "type": "String"
+            },
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+
+
+    "admin_manage_student_menu_add_field_first_name": "Tên",
+    "admin_manage_student_menu_add_field_last_name": "Họ và tên đệm",
+    "admin_manage_student_menu_add_field_id": "Số CCCD/CMND",
+    "admin_manage_student_menu_add_field_notes": "Ghi chú",
+    "admin_manage_student_menu_add_field_join_date": "Ngày vào",
+    "admin_manage_student_menu_add_field_out_date": "Ngày ra",
+    "admin_manage_student_menu_add_field_phone": "Số điện thoại",
+    "admin_manage_student_menu_add_field_parent_phone": "Số điện thoại phụ huynh",
+    "admin_manage_student_menu_add_field_gender": "Giới tính",
+    "admin_manage_student_menu_add_field_dob": "Ngày sinh",
+    "admin_manage_student_menu_add_field_mssv": "Mã số sinh viên",
+    "admin_manage_student_menu_add_field_hometown": "Quê quán",
+    "admin_manage_student_menu_add_continue": "Tiếp tục", 
+    "admin_manage_student_menu_add_save": "Lưu thay đổi", 
+    "admin_manage_student_menu_add_datepicker_guide": "Cuộn để chọn ngày sinh",
+    "admin_manage_student_menu_add_guide": "Những trường có dấu * là bắt buộc.",
+    "admin_manage_student_menu_add_validation_failed": "Vui lòng điền vào những trường còn thiếu trước khi tiếp tục.",
+    "admin_manage_student_menu_add_validation_failed_required": "Còn thiếu",
+    "admin_manage_student_menu_add_warning_data": "Đã có dữ liệu được nhập, nếu rời đi sẽ không thể khôi phục, vẫn tiếp tục rời đi ?",
+    "admin_manage_student_menu_add_validation_failed_phone_exists": "Số điện thoại này đã được đăng kí với người dùng khác, vui lòng kiểm tra lại",
+    "admin_manage_student_menu_add_validation_failed_phone_invalid": "Số điện thoại không hợp lệ",
+
+    "admin_manage_student_menu_add_room_title": "Chọn phòng",
+    "admin_manage_student_menu_add_room_menu_top_5_fullable_rooms": "Top 5 phòng còn ít chỗ trống nhất",
+    "admin_manage_student_menu_add_room_menu_custom": "Tự chọn"
+
 }

@@ -15,6 +15,15 @@
 		<string>en_US</string>
 		<string>vi_VN</string>
 	</array>
+
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>https</string>
+  <string>http</string>
+	<string>sms</string>
+	<string>tel</string>
+</array>
+
 	<key>CFBundleName</key>
 	<string>BVU Dormitory</string>
 	<key>CFBundlePackageType</key>

@@ -25,15 +25,12 @@ class _LoginButtonState extends State<LoginButton> {
 
   @override
   Widget build(BuildContext context) {
-    log('rebuild login button...');
     return CupertinoButton(
       child: controller.loginInProcess
           ? const CupertinoActivityIndicator(
               radius: 10,
             )
-          : Text(
-              AppLocalizations.of(context)?.login_button_title ??
-                  "login_button_title",
+          : Text(AppLocalizations.of(context)?.login_button_title ?? "login_button_title",
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.blue.shade800,
@@ -47,16 +44,13 @@ class _LoginButtonState extends State<LoginButton> {
       // disabledColor: Colors.yellowAccent.shade700,
       alignment: Alignment.centerRight,
       borderRadius: BorderRadius.circular(50),
-      onPressed:
-          controller.loginButtonEnabled == false ? null : handleLoginClick,
+      onPressed: controller.loginButtonEnabled == false ? null : handleLoginClick,
     );
   }
 
   handleLoginClick() {
     if (!controller.phoneInputController.text.isValidPhoneNumber) {
-      controller.showErrorDialog(
-          controller.appLocalizations?.login_error_phone_invalid_format ??
-              "login_error_phone_invalid_format");
+      controller.showErrorDialog(controller.appLocalizations?.login_error_phone_invalid_format ?? "login_error_phone_invalid_format");
       return;
     }
 

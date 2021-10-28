@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,7 +40,7 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
             primary: false,
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              return _floorItem(
+              return _roomItem(
                 snapshot.data!.elementAt(index),
                 index == 0,
                 index == (snapshot.data!.length - 1),
@@ -55,14 +56,13 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
     );
   }
 
-  _floorItem(Room item, bool isFirst, bool isLast) {
+  _roomItem(Room item, bool isFirst, bool isLast) {
     return CupertinoButton(
       onPressed: () {
         Navigator.of(context).push(
           CupertinoPageRoute(
             builder: (context) => AdminRoomsDetailScreen(
-              previousPageTitle:
-                  "${controller.appLocalizations?.admin_manage_building} ${controller.building.name} - #${controller.floor.order}",
+              previousPageTitle: "${controller.appLocalizations?.admin_manage_building} ${controller.building.name} - #${controller.floor.order}",
               building: controller.building,
               floor: controller.floor,
               room: item,
@@ -87,25 +87,27 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
           ),
         ),
         child: ListTile(
-          trailing: const Icon(CupertinoIcons.right_chevron, size: 16),
-          // selected: true,
-          title: Text(
-            item.name,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: Colors.black.withOpacity(0.75),
-              fontWeight: FontWeight.w500,
-              // fontSize: 20,
+            trailing: const Icon(CupertinoIcons.right_chevron, size: 16),
+            // selected: true,
+            title: Text(
+              item.name,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.75),
+                fontWeight: FontWeight.w700,
+                // fontSize: 20,
+              ),
             ),
-          ),
-          // subtitle: Text(
-          //   'descriptions',
-          //   style: TextStyle(
-          //     color: Colors.black.withOpacity(0.6),
-          //     // fontWeight: FontWeight.bold,
-          //   ),
-          // ),
-        ),
+            subtitle: Container(
+              margin: const EdgeInsets.only(top: 10),
+              child: Text(
+                controller.appLocalizations!.admin_manage_rooms_quantity(item.studentIdList?.length ?? 0),
+                style: TextStyle(
+                  color: Colors.black.withOpacity(0.6),
+                  // fontWeight: FontWeight.bold,
+                ),
+              ),
+            )),
       ),
     );
   }

@@ -70,7 +70,7 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
               children: [
                 Flexible(
                   child: Text(
-                    AppLocalizations.of(context)?.admin_manage_welcome(snapshot.data?.name ?? "error_getting_name") ?? "error_getting_name",
+                    AppLocalizations.of(context)!.admin_manage_welcome(snapshot.data?.fullName ?? "error_getting_name"),
                     style: TextStyle(
                       overflow: TextOverflow.ellipsis,
                       color: Colors.white,

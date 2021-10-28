@@ -26,8 +26,7 @@ class AdminBuildingsController extends BaseController {
 
   void search(String roomName) {
     navigator.push(MaterialPageRoute(
-      builder: (context) =>
-          AdminBuildingsSearchScreen(previousPageTitle: title),
+      builder: (context) => AdminBuildingsSearchScreen(previousPageTitle: title),
     ));
   }
 }

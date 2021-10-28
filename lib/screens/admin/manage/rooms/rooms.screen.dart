@@ -16,17 +16,16 @@ class AdminRoomsScreen extends BaseScreen<AdminRoomsController> {
     required String previousPageTitle,
     required this.building,
     required this.floor,
+    this.isPickingRoomForNewUser = false,
   }) : super(key: key, previousPageTitle: previousPageTitle);
 
+  final bool isPickingRoomForNewUser;
   final Building building;
   final Floor floor;
 
   String getTitle(BuildContext context) {
-    final buildingString =
-        "${AppLocalizations.of(context)?.admin_manage_building} ${building.name}";
-
-    final floorString =
-        "${AppLocalizations.of(context)?.admin_manage_floor} ${floor.order}";
+    final buildingString = "${AppLocalizations.of(context)?.admin_manage_building} ${building.name}";
+    final floorString = "${AppLocalizations.of(context)?.admin_manage_floor} ${floor.order}";
 
     return "$buildingString - $floorString";
   }

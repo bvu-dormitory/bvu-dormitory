@@ -1,45 +1,118 @@
+import 'dart:developer';
+
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
+import 'package:bvu_dormitory/base/base.controller.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:spannable_grid/spannable_grid.dart';
 
+import 'package:bvu_dormitory/models/building.dart';
+import 'package:bvu_dormitory/models/floor.dart';
+import 'package:bvu_dormitory/models/room.dart';
+import 'package:bvu_dormitory/models/user.dart';
+
 import 'package:bvu_dormitory/base/base.screen.dart';
-import 'package:bvu_dormitory/base/base.controller.dart';
-import 'package:bvu_dormitory/screens/admin/manage/students/add/students.add.controller.dart';
+import 'rooms.details.students.add.controller.dart';
 
-class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
-  AdminStudentsAddScreen({
+class AdminRoomsDetailStudentsAddScreen extends StatelessWidget {
+  AdminRoomsDetailStudentsAddScreen({
     Key? key,
-    required String previousPageTitle,
-  }) : super(key: key, previousPageTitle: previousPageTitle);
+    required this.building,
+    required this.floor,
+    required this.room,
+    this.student,
+    required this.previousPageTitle,
+  }) : super(key: key);
+
+  String previousPageTitle;
+  Building building;
+  Floor floor;
+  Room room;
+  Student? student;
 
   @override
-  AdminStudentsAddController provideController(BuildContext context) {
-    return AdminStudentsAddController(
+  Widget build(BuildContext context) {
+    final controller = AdminRoomsDetailStudentsAddController(
       context: context,
-      title: AppLocalizations.of(context)!.admin_manage_student_menu_add,
+      title: student == null ? AppLocalizations.of(context)!.admin_manage_student_menu_add : student!.fullName,
+      previousPageTitle: previousPageTitle,
+      building: building,
+      floor: floor,
+      room: room,
+      student: student,
     );
+
+    log(controller.toString());
+
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: const AdminRoomsDetailStudentsBody(),
+    );
+  }
+}
+
+class AdminRoomsDetailStudentsBody extends StatefulWidget {
+  const AdminRoomsDetailStudentsBody({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _AdminRoomsDetailStudentsBodyState();
+}
+
+class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsBody> {
+  late AdminRoomsDetailStudentsAddController controller;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    controller = context.watch<AdminRoomsDetailStudentsAddController>();
   }
 
   @override
-  Widget? navigationBarTrailing(BuildContext context) {
-    final controller = context.read<AdminStudentsAddController>();
-
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      child: Text(AppLocalizations.of(context)!.admin_manage_student_menu_add_continue),
-      onPressed: controller.continueButtonEnabled ? controller.submit : null,
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: _navigationBar(),
+      child: Scaffold(
+        backgroundColor: AppColor.backgroundColor,
+        body: _body(),
+      ),
     );
   }
 
-  @override
-  Widget body(BuildContext context) {
-    final AdminStudentsAddController controller = context.watch<AdminStudentsAddController>();
+  _navigationBar() {
+    return CupertinoNavigationBar(
+      middle: Text(controller.title),
+      previousPageTitle: controller.previousPageTitle,
+      trailing: CupertinoButton(
+        padding: EdgeInsets.zero,
+        child: Text(_getTrailingButtonTitle()),
+        onPressed: controller.isViewing
+            ? () {
+                controller.isViewing = !controller.isViewing;
+                controller.isFormEditing = true;
+              }
+            : controller.submit,
+      ),
+    );
+  }
 
+  String _getTrailingButtonTitle() {
+    if (controller.isViewing) {
+      if (!controller.isFormEditing) {
+        return AppLocalizations.of(context)!.app_action_edit;
+      }
+    }
+
+    return AppLocalizations.of(context)!.admin_manage_student_menu_add_continue;
+  }
+
+  _body() {
     return WillPopScope(
       child: SafeArea(
         child: SingleChildScrollView(
@@ -57,6 +130,11 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
         ),
       ),
       onWillPop: () {
+        // viewing is not necessary for asking
+        if (controller.student != null) {
+          return Future.value(true);
+        }
+
         if (!controller.isFormEmpty) {
           controller.showConfirmDialog(
             title: AppLocalizations.of(context)!.app_dialog_title_warning,
@@ -81,27 +159,30 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
   }
 
   _formFields(BuildContext context) {
-    final controller = context.watch<AdminStudentsAddController>();
+    final controller = context.watch<AdminRoomsDetailStudentsAddController>();
 
     return Column(
       // mainAxisSize: MainAxisSize.max,
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
-          margin: const EdgeInsets.only(left: 10),
-          child: Text(
-            AppLocalizations.of(context)!.admin_manage_student_menu_add_guide,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
+        if (!controller.isViewing) ...{
+          Container(
+            margin: const EdgeInsets.only(left: 10),
+            child: Text(
+              AppLocalizations.of(context)!.admin_manage_student_menu_add_guide,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 30),
+          const SizedBox(height: 30),
+        },
         SpannableGrid(
           // showGrid: true,
+          editingOnLongPress: false,
           columns: 4,
-          rows: 9,
+          rows: 12,
           spacing: 10.0,
           rowHeight: 115,
           cells: List.generate(
@@ -127,6 +208,7 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
                   icon: field.icon,
                   pickerType: field.pickerType,
                   pickerData: field.pickerData,
+                  enabled: field.enabled,
                   pickerInitialData: field.pickerInitialData,
                   onPickerItemChanged: field.onPickerSelectedItemChanged,
                 ),
@@ -143,6 +225,7 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
     required String title,
     required TextInputType type,
     required TextInputAction action,
+    bool enabled = true,
     bool required = false,
     bool editable = true,
     int maxLines = 1,
@@ -176,72 +259,91 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: fieldController,
-          onTap: () {
-            if (pickerType != null) {
-              if (pickerType == StudentFormFieldPickerType.gender) {
-                showCupertinoModalPopup(
-                  context: context,
-                  builder: (context) {
-                    return _genderPicker(onPickerItemChanged!);
-                  },
-                );
-              } else {
-                showCupertinoModalPopup(
-                  context: context,
-                  builder: (context) {
-                    return _datePicker(
-                      initialValue: pickerInitialData,
-                      onPickerItemChange: onPickerItemChanged!,
+        Stack(
+          children: [
+            TextFormField(
+              controller: fieldController,
+              enabled: enabled,
+              onTap: () {
+                if (pickerType != null) {
+                  if (pickerType == StudentFormFieldPickerType.gender) {
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (context) {
+                        return _genderPicker(onPickerItemChanged!);
+                      },
                     );
-                  },
-                );
-              }
-            }
-          },
-          readOnly: !editable,
-          keyboardType: type,
-          textInputAction: action,
-          maxLines: maxLines,
-          maxLength: maxLength,
-          validator: validator,
-          inputFormatters: formatters,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: EdgeInsets.only(
-              top: maxLines > 1 ? 15 : 0,
-              bottom: 0,
-              left: 0,
-              right: 5,
+                  } else {
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (context) {
+                        return _datePicker(
+                          initialValue: pickerInitialData,
+                          onPickerItemChange: onPickerItemChanged!,
+                        );
+                      },
+                    );
+                  }
+                }
+              },
+              readOnly: !editable,
+              keyboardType: type,
+              textInputAction: action,
+              maxLines: maxLines,
+              maxLength: maxLength,
+              validator: validator,
+              inputFormatters: formatters,
+              style: !enabled ? const TextStyle(color: Colors.grey) : null,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.only(
+                  top: maxLines > 1 ? 15 : 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 5,
+                ),
+                prefixIcon: icon != null ? Icon(icon) : null,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.5)),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.5)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(width: 2, color: Colors.blue.withOpacity(0.5)),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(width: 2, color: Colors.red.withOpacity(0.5)),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(width: 2, color: Colors.orange.shade900.withOpacity(0.25)),
+                ),
+              ),
             ),
-            errorText: null,
-            prefixIcon: icon != null ? Icon(icon) : null,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.5)),
+            Positioned(
+              right: 0,
+              child: CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: const Icon(Ionicons.ios_copy_outline),
+                onPressed: () {
+                  _copyFieldInfo(fieldController.text);
+                },
+              ),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(width: 2, color: Colors.blue.withOpacity(0.5)),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(width: 2, color: Colors.red.withOpacity(0.5)),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(width: 2, color: Colors.orange.shade900.withOpacity(0.25)),
-            ),
-          ),
+          ],
         ),
       ],
     );
   }
 
   _genderPicker(void Function(int) onPickerItemChanged) {
-    final controller = context.read<AdminStudentsAddController>();
+    final controller = context.read<AdminRoomsDetailStudentsAddController>();
 
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
@@ -296,6 +398,8 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
     DateTime? initialValue,
     required void Function(dynamic) onPickerItemChange,
   }) {
+    var value = null;
+
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
       height: 200,
@@ -320,7 +424,10 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
                 ),
               ),
               CupertinoButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigator.pop(context);
+                  onPickerItemChange(value);
+                },
                 padding: EdgeInsets.zero,
                 child: Text(
                   AppLocalizations.of(context)!.app_dialog_action_ok,
@@ -335,12 +442,22 @@ class AdminStudentsAddScreen extends BaseScreen<AdminStudentsAddController> {
           Expanded(
             child: CupertinoDatePicker(
               // initialDateTime: initialValue,
-              onDateTimeChanged: onPickerItemChange,
+              onDateTimeChanged: (val) {
+                value = val;
+              },
               mode: CupertinoDatePickerMode.date,
             ),
           ),
         ],
       ),
     );
+  }
+
+  _copyFieldInfo(String fieldValue) {
+    FlutterClipboard.copy(fieldValue).then((value) {
+      controller.showSnackbar(AppLocalizations.of(context)!.app_toast_copied, const Duration(seconds: 5), () {});
+    }).catchError((onError) {
+      controller.showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
+    });
   }
 }

@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
-  BaseScreen(
-      {Key? key, bool haveNavigationBar = true, String? previousPageTitle})
-      : super(key: key) {
+  BaseScreen({Key? key, bool haveNavigationBar = true, String? previousPageTitle}) : super(key: key) {
     _previousPageTitle = previousPageTitle;
     _haveNavigationBar = haveNavigationBar;
   }
