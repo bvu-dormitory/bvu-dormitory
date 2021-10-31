@@ -73,6 +73,9 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
     required this.room,
     this.student,
   }) : super(context: context, title: title) {
+    genderValues = UserGender.values.map((e) => e.name).toList();
+    genderValues.insert(0, "");
+
     if (student != null) {
       log(student!.notes ?? "notes empty");
 
@@ -96,6 +99,8 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
     } else {
       isViewing = false;
       isFormEditing = true;
+
+      _dateOfBirth = DateTime(2000, 9, 1);
 
       genderController = TextEditingController(text: UserGender.male.name);
       lastNameController = TextEditingController(text: "Nguyễn");
@@ -395,7 +400,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   ///
   ///
   /// Available gender names
-  final List<String> genderValues = UserGender.values.map((e) => e.name).toList();
+  late final List<String> genderValues;
 
   /// Gender value
   String _gender = "";
