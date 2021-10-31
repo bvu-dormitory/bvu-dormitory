@@ -111,8 +111,8 @@ class Student extends AppUser {
   static fromFireStoreDocument(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
-    log('parsing...');
-    log('active:' + data['active'].toString());
+    // log('parsing...');
+    // log('active:' + data['active'].toString());
 
     final student = Student(
       id: snapshot.id,
@@ -130,7 +130,7 @@ class Student extends AppUser {
       parentPhoneNumber: data['parent_phone'],
     );
 
-    log('parsing done...');
+    // log('parsing done...');
     return student;
   }
 
@@ -159,6 +159,7 @@ class Student extends AppUser {
       'birth_date': _getDateStringValue(birthDate),
       'hometown': hometown,
       'citizen_id': citizenIdNumber,
+      'student_id': studentIdNumber,
       'parent_phone': parentPhoneNumber,
       'join_date': _getDateStringValue(joinDate),
       'out_date': outDate != null ? _getDateStringValue(outDate!) : "",

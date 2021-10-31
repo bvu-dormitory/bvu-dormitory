@@ -16,12 +16,16 @@ class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
   AdminBuildingsScreen({
     Key? key,
     String? previousPageTitle,
+    this.pickingRoom = false,
   }) : super(key: key, previousPageTitle: previousPageTitle);
+
+  final bool pickingRoom;
 
   @override
   AdminBuildingsController provideController(BuildContext context) {
     return AdminBuildingsController(
       context: context,
+      pickingRoom: pickingRoom,
       title: AppLocalizations.of(context)?.admin_manage_buildings_title ?? "admin_manage_buildings_title",
     );
   }

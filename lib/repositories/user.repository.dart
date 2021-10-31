@@ -5,9 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
 
-class UserRepository extends FirebaseRepository {
+class UserRepository {
   static final instance = FirebaseFirestore.instance.collection('users');
-  UserRepository() : super(collectionPath: 'users');
 
   /// check whether the just logged-in user have data in the "users" collection
   static Future<bool> isUserWithPhoneNumerExists(User? authUser) async {
@@ -30,7 +29,10 @@ class UserRepository extends FirebaseRepository {
   }
 
   static Stream<AppUser?> getCurrentFireStoreUserStream() {
-    return instance.doc(AuthRepository.instance.currentUser?.phoneNumber).snapshots().map((user) => AppUser.fromFireStoreDocument(user));
+    return instance
+        .doc(AuthRepository.instance.currentUser?.phoneNumber)
+        .snapshots()
+        .map((user) => AppUser.fromFireStoreDocument(user));
   }
 
   static Future<void> addStudent(Student student) {

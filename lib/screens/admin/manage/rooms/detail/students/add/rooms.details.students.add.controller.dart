@@ -7,6 +7,7 @@ import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
 import 'package:bvu_dormitory/repositories/building.repository.dart';
 import 'package:bvu_dormitory/repositories/room.repository.dart';
+import 'package:bvu_dormitory/repositories/user.repository.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,9 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       log(student!.notes ?? "notes empty");
 
       genderController = TextEditingController(
-        text: UserGender.values.firstWhere((element) => element.name == student!.gender, orElse: () => UserGender.male).name,
+        text: UserGender.values
+            .firstWhere((element) => element.name == student!.gender, orElse: () => UserGender.male)
+            .name,
       );
       lastNameController = TextEditingController(text: student!.lastName);
       firstNameController = TextEditingController(text: student!.firstName);
@@ -87,7 +90,8 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       parentPhoneController = TextEditingController(text: student!.parentPhoneNumber ?? "");
       mssvController = TextEditingController(text: student!.studentIdNumber ?? "");
       joinDateController = TextEditingController(text: getDateStringValue(student!.joinDate));
-      outDateController = TextEditingController(text: student!.outDate != null ? getDateStringValue(student!.outDate!) : "");
+      outDateController =
+          TextEditingController(text: student!.outDate != null ? getDateStringValue(student!.outDate!) : "");
       notesController = TextEditingController(text: student!.notes);
     } else {
       isViewing = false;
@@ -102,7 +106,8 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       phoneController = TextEditingController(text: "0333326585");
       parentPhoneController = TextEditingController();
       mssvController = TextEditingController();
-      joinDateController = TextEditingController(text: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}");
+      joinDateController =
+          TextEditingController(text: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}");
       outDateController = TextEditingController();
       notesController = TextEditingController();
     }
@@ -315,16 +320,20 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       );
 
   StudentProfileFormField get parentPhoneField => StudentProfileFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_parent_phone,
-        controller: parentPhoneController,
-        colStart: 1,
-        rowStart: 8,
-        colSpan: 4,
-        enabled: isFormEditing,
-        maxLength: 10,
-        icon: FluentIcons.call_transfer_20_regular,
-        type: TextInputType.number,
-      );
+      label: appLocalizations!.admin_manage_student_menu_add_field_parent_phone,
+      controller: parentPhoneController,
+      colStart: 1,
+      rowStart: 8,
+      colSpan: 4,
+      enabled: isFormEditing,
+      maxLength: 10,
+      icon: FluentIcons.call_transfer_20_regular,
+      type: TextInputType.number,
+      validator: (value) {
+        if ((value != null && value.isNotEmpty) && !value.isValidPhoneNumber) {
+          return appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_invalid;
+        }
+      });
 
   StudentProfileFormField get mssvField => StudentProfileFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_mssv,
@@ -429,36 +438,85 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
     return "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}";
   }
 
-  submit() {
-    if (formKey.currentState!.validate()) {
-      _continueButtonEnabled = false;
-      notifyListeners();
-
+  submit() async {
+    addNewStudent() {
       // check whether the given phone number is already registered
-      AuthRepository.isPhoneNumberRegistered(phoneController.text.replaceFirst("0", "+84")).then((exists) {
+      AuthRepository.isPhoneNumberRegistered(
+        phoneController.text.replaceFirst("0", "+84"),
+      ).then((exists) {
+        // the phonenumber is already registered => disallow adding
         if (exists) {
-          showSnackbar(appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_exists, const Duration(seconds: 3), () {
+          showSnackbar(appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_exists,
+              const Duration(seconds: 3), () {
             _continueButtonEnabled = true;
             notifyListeners();
           });
         } else {
-          // process adding new user here
-          _continueButtonEnabled = true;
-          notifyListeners();
+          // the phonenumber is not registered => allow adding
+          // process adding new user
+          showLoadingDialog();
 
-          // adding new Student
-          if (student == null) {
-            RoomRepository.addStudent(building.id!, floor.id!, room.id!, room.studentIdList ?? [], getFormData()).catchError((onError) {
-              showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
+          RoomRepository.addStudent(
+            building.id!,
+            floor.id!,
+            room.id!,
+            room.studentIdList ?? [],
+            getFormData(),
+          ).catchError((onError) {
+            showSnackbar(onError.toString(), const Duration(seconds: 5), () {
+              _continueButtonEnabled = true;
+              notifyListeners();
             });
-          }
+          }).then((value) {
+            showSnackbar(appLocalizations!.admin_manage_student_menu_add_save_done, const Duration(seconds: 3), () {});
+            // adding new student to this room successfully => return to the student list screen
+            navigator.pop();
+          }).whenComplete(() {
+            _isFormEditing = true;
+            notifyListeners();
+
+            // when the future completed, hide the loading indicator
+            navigator.pop();
+          });
         }
       }).catchError((onError) {
         showSnackbar(onError, const Duration(seconds: 3), () {
           _continueButtonEnabled = true;
           notifyListeners();
         });
+      }).whenComplete(() {
+        _isFormEditing = true;
+        notifyListeners();
       });
+    }
+
+    updateStudentInfo() {
+      // process updating user info
+      UserRepository.addStudent(getFormData()).catchError((onError) {
+        showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
+      }).then((value) {
+        showSnackbar(appLocalizations!.admin_manage_student_menu_add_save_done, const Duration(seconds: 3), () {});
+      }).whenComplete(() {
+        _isFormEditing = true;
+        _continueButtonEnabled = true;
+        notifyListeners();
+      });
+    }
+
+    if (formKey.currentState!.validate()) {
+      // checking connectivity before process
+      if (await hasConnectivity()) {
+        _continueButtonEnabled = false;
+        _isFormEditing = false;
+        notifyListeners();
+
+        // adding new Student
+        if (student == null) {
+          addNewStudent();
+        } else {
+          updateStudentInfo();
+        }
+      }
     } else {
       _continueButtonEnabled = false;
       notifyListeners();
@@ -475,6 +533,8 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   }
 
   Student getFormData() {
+    log('the gender: $gender');
+
     return Student(
       id: phoneController.text.replaceFirst("0", "+84"),
       firstName: firstNameController.text,
@@ -484,7 +544,10 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       hometown: homeTownController.text,
       birthDate: dateOfBirth!,
       joinDate: joinDate!,
+      parentPhoneNumber: parentPhoneController.text,
+      studentIdNumber: mssvController.text,
       citizenIdNumber: idController.text,
+      notes: notesController.text,
     );
   }
 }

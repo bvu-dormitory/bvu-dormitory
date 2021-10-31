@@ -1,4 +1,6 @@
+import 'package:bvu_dormitory/repositories/student.repository.dart';
 import 'package:bvu_dormitory/screens/admin/manage/students/students.controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,8 +41,8 @@ class _AdminStudentsStatsState extends State<AdminStudentsStats> {
   _totalQuantityChip(BuildContext context) {
     final controller = context.read<AdminStudentsController>();
 
-    return FutureBuilder<int?>(
-      future: controller.getStudentsQuantity(),
+    return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      future: StudentRepository.getStudentAccountsList(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           controller.showErrorDialog(snapshot.error.toString());
@@ -75,7 +77,7 @@ class _AdminStudentsStatsState extends State<AdminStudentsStats> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "${snapshot.data}",
+                "${snapshot.data?.size ?? '_'}",
                 // "500",
                 style: TextStyle(
                   color: Colors.blue.shade700,
@@ -85,8 +87,7 @@ class _AdminStudentsStatsState extends State<AdminStudentsStats> {
               ),
               const SizedBox(height: 15),
               Text(
-                controller.appLocalizations?.admin_manage_student_all ??
-                    "admin_manage_student_all",
+                controller.appLocalizations?.admin_manage_student_all ?? "admin_manage_student_all",
                 style: TextStyle(
                   color: Colors.blue.shade800,
                   fontWeight: FontWeight.bold,
@@ -102,8 +103,8 @@ class _AdminStudentsStatsState extends State<AdminStudentsStats> {
   _activeQuantityChip(BuildContext context) {
     final controller = context.read<AdminStudentsController>();
 
-    return FutureBuilder<int?>(
-      future: controller.getActiveStudentsQuantity(),
+    return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      future: StudentRepository.getActiveStudentAccountsList(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           controller.showErrorDialog(snapshot.error.toString());
@@ -138,7 +139,7 @@ class _AdminStudentsStatsState extends State<AdminStudentsStats> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "${snapshot.data}",
+                "${snapshot.data?.size ?? '_'}",
                 style: TextStyle(
                   color: Colors.green.shade700,
                   fontSize: 30,
@@ -147,8 +148,7 @@ class _AdminStudentsStatsState extends State<AdminStudentsStats> {
               ),
               const SizedBox(height: 15),
               Text(
-                controller.appLocalizations?.admin_manage_student_active ??
-                    "admin_manage_student_active",
+                controller.appLocalizations?.admin_manage_student_active ?? "admin_manage_student_active",
                 style: TextStyle(
                   color: Colors.green.shade800,
                   fontWeight: FontWeight.bold,
@@ -164,8 +164,8 @@ class _AdminStudentsStatsState extends State<AdminStudentsStats> {
   _absentQuantityChip(BuildContext context) {
     final controller = context.read<AdminStudentsController>();
 
-    return FutureBuilder<int?>(
-      future: controller.getAbsentStudentsQuantity(),
+    return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      future: StudentRepository.getAbsentsStudentAccountsList(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           controller.showErrorDialog(snapshot.error.toString());
@@ -200,7 +200,7 @@ class _AdminStudentsStatsState extends State<AdminStudentsStats> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "${snapshot.data}",
+                "${snapshot.data?.size ?? '0'}",
                 // "500",
                 style: TextStyle(
                   color: Colors.yellow.shade900,
@@ -210,8 +210,7 @@ class _AdminStudentsStatsState extends State<AdminStudentsStats> {
               ),
               const SizedBox(height: 15),
               Text(
-                controller.appLocalizations?.admin_manage_student_absent ??
-                    "admin_manage_student_absent",
+                controller.appLocalizations?.admin_manage_student_absent ?? "admin_manage_student_absent",
                 style: TextStyle(
                   color: Colors.yellow.shade900,
                   fontWeight: FontWeight.bold,

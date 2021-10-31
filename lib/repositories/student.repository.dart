@@ -1,42 +1,37 @@
 import 'package:bvu_dormitory/base/base.firestore.repo.dart';
 import 'package:bvu_dormitory/models/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-class StudentRepository extends FirebaseRepository {
-  StudentRepository() : super(collectionPath: "users");
+class StudentRepository {
+  static final instance = FirebaseFirestore.instance.collection('users');
 
-  Future<int?> getStudentAccountsQuantity() async {
-    try {
-      final students = await self
-          .where('role', isEqualTo: describeEnum(UserRole.student))
-          .get();
-      return students.size;
-    } catch (e) {
-      Future.error(e);
-    }
+  static Future<QuerySnapshot<Map<String, dynamic>>> getStudentAccountsList() async {
+    final students = await instance.where('role', isEqualTo: describeEnum(UserRole.student)).get();
+    return students;
   }
 
-  Future<int?> getActiveStudentAccountsQuantity() async {
-    try {
-      final students = await self
-          .where('role', isEqualTo: describeEnum(UserRole.student))
-          .where('active', isEqualTo: true)
-          .get();
-      return students.size;
-    } catch (e) {
-      Future.error(e);
-    }
+  static Future<QuerySnapshot<Map<String, dynamic>>> getActiveStudentAccountsList() async {
+    final students = await instance
+        .where('role', isEqualTo: describeEnum(UserRole.student))
+        .where(
+          'active',
+          isEqualTo: true,
+        )
+        .get();
+
+    return students;
   }
 
-  Future<int?> getAbsentsStudentAccountsQuantity() async {
-    try {
-      final students = await self
-          .where('role', isEqualTo: describeEnum(UserRole.student))
-          .where('active', isEqualTo: false)
-          .get();
-      return students.size;
-    } catch (e) {
-      Future.error(e);
-    }
+  static Future<QuerySnapshot<Map<String, dynamic>>> getAbsentsStudentAccountsList() async {
+    final students = await instance
+        .where('role', isEqualTo: describeEnum(UserRole.student))
+        .where(
+          'active',
+          isEqualTo: false,
+        )
+        .get();
+
+    return students;
   }
 }

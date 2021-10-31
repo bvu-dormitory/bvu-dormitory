@@ -1,17 +1,19 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/models/user.dart';
+import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.screen.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/students/add/rooms.details.students.add.screen.dart';
-import 'package:clipboard/clipboard.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AdminRoomsDetailStudentsController extends BaseController {
   AdminRoomsDetailStudentsController({
@@ -22,9 +24,9 @@ class AdminRoomsDetailStudentsController extends BaseController {
     required this.room,
   }) : super(context: context, title: title);
 
-  final Building building;
-  final Floor floor;
-  final Room room;
+  Building building;
+  Floor floor;
+  Room room;
 
   void onStudentItemPressed(Student student) {
     showBottomSheetModal(student.fullName, null, true, [
@@ -38,7 +40,7 @@ class AdminRoomsDetailStudentsController extends BaseController {
                 color: Colors.black.withOpacity(0.5),
               ),
             ),
-            icon: const Icon(FluentIcons.chat_help_24_regular),
+            icon: const Icon(FluentIcons.send_24_regular),
             onPressed: () {},
           ),
           AppModalBottomSheetItem(
@@ -48,9 +50,10 @@ class AdminRoomsDetailStudentsController extends BaseController {
                 color: Colors.black.withOpacity(0.5),
               ),
             ),
-            icon: const Icon(FluentIcons.chat_arrow_back_20_regular),
+            icon: const Icon(FluentIcons.chat_24_regular),
             onPressed: () {
-              _makePhoneCall(appLocalizations!.admin_manage_rooms_detail_students_sms_welcome_template(student.id!, student.fullName));
+              _makePhoneCall(appLocalizations!
+                  .admin_manage_rooms_detail_students_sms_welcome_template(student.id!, student.fullName));
             },
           ),
           AppModalBottomSheetItem(
@@ -60,81 +63,60 @@ class AdminRoomsDetailStudentsController extends BaseController {
                 color: Colors.black.withOpacity(0.5),
               ),
             ),
-            icon: const Icon(FluentIcons.call_outbound_24_regular),
+            icon: const Icon(FluentIcons.call_24_regular),
             onPressed: () {
               _makePhoneCall("tel:${student.id!}");
-            },
-          ),
-          AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_copy_phone,
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
-            icon: Icon(
-              FluentIcons.copy_24_regular,
-              color: student.parentPhoneNumber != null ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.25),
-            ),
-            onPressed: () {
-              _copyPhone(student.id!);
             },
           ),
         ],
       ),
       AppModalBottomSheetMenuGroup(
         title: appLocalizations!.admin_manage_rooms_detail_students_parent +
-            (student.parentPhoneNumber == null ? " (${appLocalizations!.admin_manage_rooms_detail_students_parent_empty})" : ""),
+            (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty
+                ? " (${appLocalizations!.admin_manage_rooms_detail_students_parent_empty})"
+                : ""),
         items: [
           AppModalBottomSheetItem(
             label: Text(
               appLocalizations!.admin_manage_rooms_detail_students_sms,
               style: TextStyle(
-                color: student.parentPhoneNumber != null ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.25),
+                color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
+                    ? Colors.black.withOpacity(0.25)
+                    : Colors.black.withOpacity(0.5),
               ),
             ),
             icon: Icon(
-              FluentIcons.chat_arrow_back_20_regular,
-              color: student.parentPhoneNumber != null ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.25),
+              FluentIcons.chat_24_regular,
+              color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
+                  ? Colors.black.withOpacity(0.25)
+                  : Colors.black.withOpacity(0.55),
             ),
-            onPressed: student.parentPhoneNumber == null
+            onPressed: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
                 ? null
                 : () {
-                    _makePhoneCall(appLocalizations!.admin_manage_rooms_detail_students_sms_parent_welcome_template(student.id!, student.fullName));
+                    _makePhoneCall(appLocalizations!
+                        .admin_manage_rooms_detail_students_sms_parent_welcome_template(student.id!, student.fullName));
                   },
           ),
           AppModalBottomSheetItem(
             label: Text(
               appLocalizations!.admin_manage_rooms_detail_students_call,
               style: TextStyle(
-                color: student.parentPhoneNumber != null ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.25),
+                color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
+                    ? Colors.black.withOpacity(0.25)
+                    : Colors.black.withOpacity(0.5),
               ),
             ),
             icon: Icon(
-              FluentIcons.call_outbound_24_regular,
-              color: student.parentPhoneNumber != null ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.25),
+              FluentIcons.call_24_regular,
+              color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
+                  ? Colors.black.withOpacity(0.25)
+                  : Colors.black.withOpacity(0.5),
             ),
-            onPressed: student.parentPhoneNumber == null
+            onPressed: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
                 ? null
                 : () {
                     _makePhoneCall("tel:${student.parentPhoneNumber!}");
-                  },
-          ),
-          AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_copy_phone,
-              style: TextStyle(
-                color: student.parentPhoneNumber != null ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.25),
-              ),
-            ),
-            icon: Icon(
-              FluentIcons.copy_24_regular,
-              color: student.parentPhoneNumber != null ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.25),
-            ),
-            onPressed: student.parentPhoneNumber == null
-                ? null
-                : () {
-                    _copyPhone(student.parentPhoneNumber!);
                   },
           ),
         ],
@@ -159,66 +141,150 @@ class AdminRoomsDetailStudentsController extends BaseController {
         items: [
           AppModalBottomSheetItem(
             label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_view_profile,
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
-            icon: const Icon(FluentIcons.eye_show_24_regular),
-            onPressed: () {
-              navigator.push(CupertinoPageRoute(
-                builder: (context) => AdminRoomsDetailStudentsAddScreen(
-                  building: building,
-                  floor: floor,
-                  room: room,
-                  student: student,
-                  previousPageTitle: title,
-                ),
-              ));
-            },
-          ),
-          AppModalBottomSheetItem(
-            label: Text(
               appLocalizations!.admin_manage_rooms_detail_students_change_room,
               style: TextStyle(
                 color: Colors.black.withOpacity(0.5),
               ),
             ),
-            icon: const Icon(FluentIcons.send_24_regular),
-            onPressed: () {},
+            icon: const Icon(FluentIcons.arrow_sync_24_regular),
+            onPressed: () {
+              _changeRoom(student);
+            },
           ),
           AppModalBottomSheetItem(
             label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_change_delete_profile,
+              appLocalizations!.admin_manage_rooms_detail_students_view_profile,
               style: TextStyle(
                 color: Colors.black.withOpacity(0.5),
               ),
             ),
+            icon: const Icon(FluentIcons.info_24_regular),
+            onPressed: () async {
+              navigator.pop();
+              navigator
+                  .push(CupertinoPageRoute(
+                      builder: (context) => AdminRoomsDetailStudentsAddScreen(
+                            building: building,
+                            floor: floor,
+                            room: room,
+                            student: student,
+                            previousPageTitle: title,
+                          )))
+                  .then((value) {
+                // reload data after the StudentAddScreen poped
+                notifyListeners();
+              });
+            },
+          ),
+          AppModalBottomSheetItem(
+            label: Text(
+              appLocalizations!.admin_manage_rooms_detail_students_change_delete_profile,
+              style: TextStyle(color: Colors.black.withOpacity(0.5)),
+            ),
             icon: const Icon(FluentIcons.delete_24_regular),
-            onPressed: () {},
+            onPressed: () {
+              _deleteStudent(student);
+            },
           ),
         ],
       ),
     ]);
   }
 
-  _copyPhone(String phone) {
-    log('copying $phone');
-    navigator.pop();
-
-    FlutterClipboard.copy(phone).then((value) {
-      showSnackbar(appLocalizations!.app_toast_copied, const Duration(seconds: 5), () {});
-    }).catchError((onError) {
-      showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
-    });
+  Future<Room> loadRoom() {
+    return RoomRepository.loadRoom(building.id!, floor.id!, room.id!);
   }
+
+  // _copyPhone(String phone) {
+  //   log('copying $phone');
+  //   navigator.pop();
+
+  //   FlutterClipboard.copy(phone).then((value) {
+  //     showSnackbar(appLocalizations!.app_toast_copied, const Duration(seconds: 5), () {});
+  //   }).catchError((onError) {
+  //     showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
+  //   });
+  // }
 
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
       log('launch');
     } else {
-      showSnackbar('Có lỗi trong quá trình xử lý', const Duration(seconds: 3), () {});
+      showSnackbar(appLocalizations!.app_toast_error_processing, const Duration(seconds: 3), () {});
+    }
+  }
+
+  void _deleteStudent(Student student) {
+    showConfirmDialog(
+      title: appLocalizations!.app_dialog_title_delete,
+      body: Text(appLocalizations!.admin_manage_rooms_detail_students_confirm_delete),
+      confirmType: DialogConfirmType.submit,
+      dismissible: true,
+      onSubmit: () async {
+        navigator.pop();
+
+        if (await hasConnectivity()) {
+          showLoadingDialog();
+
+          Future.delayed(const Duration(seconds: 0), () {
+            RoomRepository.deleteStudent(building.id!, floor.id!, room.id!, room.studentIdList ?? [], student)
+                .then((value) {
+              showSnackbar(appLocalizations!.app_toast_deleted(student.fullName), const Duration(seconds: 5), () {});
+            }).catchError((onError) {
+              showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
+            }).whenComplete(() {
+              notifyListeners();
+              navigator.pop();
+            });
+          });
+        }
+
+        navigator.pop();
+      },
+    );
+  }
+
+  void _changeRoom(Student student) async {
+    if (await hasConnectivity()) {
+      // picking room to move to
+      navigator
+          .push(CupertinoPageRoute(
+              builder: (context) => AdminBuildingsScreen(
+                    previousPageTitle: title,
+                    pickingRoom: true,
+                  )))
+          .then((value) async {
+        if (value != null) {
+          // log('received room: $value');
+          final destinationRoom = (value[2] as Room);
+          final destinationFloor = (value[1] as Floor);
+          final destinationBuilding = (value[0] as Building);
+
+          RoomRepository.moveStudent(
+            oldBuildingId: building.id!,
+            oldFloorId: floor.id!,
+            oldRoomId: room.id!,
+            oldRoomStudentIdList: room.studentIdList ?? [],
+            destinationBuildingId: destinationBuilding.id!,
+            destinationFloorId: destinationFloor.id!,
+            destinationRoomId: destinationRoom.id!,
+            destinationRoomStudentIdList: destinationRoom.studentIdList ?? [],
+            studentToMove: student,
+          ).then((value) {
+            showSnackbar(appLocalizations!.admin_manage_rooms_detail_students_toast_moved(destinationRoom.name),
+                const Duration(seconds: 5), () {});
+          }).catchError((onError) {
+            showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
+          }).whenComplete(() {
+            notifyListeners();
+          });
+        }
+
+        navigator.pop();
+      });
+    } else {
+      navigator.pop();
     }
   }
 }

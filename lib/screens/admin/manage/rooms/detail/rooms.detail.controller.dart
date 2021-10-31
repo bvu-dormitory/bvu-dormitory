@@ -28,9 +28,13 @@ class AdminRoomsDetailController extends BaseController {
     required this.room,
   }) : super(context: context, title: title);
 
-  Stream<List<Room>> syncRooms() {
-    return _buildingRepository.syncAllRooms(building.id!, floor.id!);
-  }
+  // Stream<List<Room>> syncRooms() {
+  //   return _buildingRepository.syncAllRooms(building.id!, floor.id!);
+  // }
+
+  // Stream<Room> syncRoom() {
+  //   return _buildingRepository.syncRoom(building.id!, floor.id!, room.id!);
+  // }
 
   /// Info menu
   List<AppMenuGroupItem> get infoMenuItems => [
@@ -79,18 +83,6 @@ class AdminRoomsDetailController extends BaseController {
           title: appLocalizations?.admin_manage_rooms_detail_contact_chat ?? "admin_manage_rooms_detail_contact_chat",
           icon: FluentIcons.chat_24_filled,
         ),
-        AppMenuGroupItem(
-          title: appLocalizations?.admin_manage_rooms_detail_contact_phone ?? "admin_manage_rooms_detail_contact_phone",
-          icon: FluentIcons.dialpad_24_filled,
-          onPressed: () {
-            showCupertinoModalBottomSheet(
-              context: context,
-              builder: (context) => Container(
-                height: 300,
-              ),
-            );
-          },
-        ),
       ];
 
   /// Invoice menu
@@ -112,7 +104,8 @@ class AdminRoomsDetailController extends BaseController {
           icon: FluentIcons.chat_help_24_filled,
         ),
         AppMenuGroupItem(
-          title: appLocalizations?.admin_manage_rooms_detail_repair_history ?? "admin_manage_rooms_detail_repair_history",
+          title:
+              appLocalizations?.admin_manage_rooms_detail_repair_history ?? "admin_manage_rooms_detail_repair_history",
           icon: FluentIcons.checkbox_checked_24_filled,
         ),
       ];

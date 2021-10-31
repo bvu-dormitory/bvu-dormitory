@@ -39,7 +39,6 @@ dependencies:
   flutter_cupertino_date_picker: ^1.0.26+2
 
   animated_text_kit: ^4.2.1
-  google_fonts: ^2.1.0
   fl_chart: ^0.40.2
   modal_bottom_sheet: ^2.0.0
   fluttertoast: ^8.0.8
@@ -64,6 +63,8 @@ dependencies:
   cloud_firestore: ^2.5.4
   firebase_messaging: ^10.0.9
   firebase_storage: ^10.0.6
+
+  excel: ^2.0.0-null-safety-3
 
 dev_dependencies:
   flutter_test:

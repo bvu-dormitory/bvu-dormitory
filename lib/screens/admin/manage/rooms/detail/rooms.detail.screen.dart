@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:bvu_dormitory/repositories/building.repository.dart';
+import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/students/add/rooms.details.students.add.screen.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,17 +43,17 @@ class AdminRoomsDetailScreen extends BaseScreen<AdminRoomsDetailController> {
 
   @override
   Widget body(BuildContext context) {
-    final controller = context.read<AdminRoomsDetailController>();
-
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: _body(controller),
+        child: _body(),
       ),
     );
   }
 
-  _body(AdminRoomsDetailController controller) {
+  _body() {
+    final controller = context.watch<AdminRoomsDetailController>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

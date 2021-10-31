@@ -67,6 +67,7 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
                   child: Text(
@@ -91,11 +92,17 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
                 //   backgroundImage: AssetImage('lib/assets/icons/default-user.png'),
                 // ),
                 CupertinoButton(
-                  color: Colors.white.withOpacity(0.85),
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    'Sign out',
-                    style: TextStyle(color: Colors.black),
+                  padding: EdgeInsets.zero,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.85),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      AppLocalizations.of(context)!.admin_manage_sign_out,
+                      style: const TextStyle(color: Colors.black),
+                    ),
                   ),
                   onPressed: () {
                     AuthRepository.signOut().then(

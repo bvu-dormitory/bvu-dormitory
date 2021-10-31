@@ -59,16 +59,21 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
   _roomItem(Room item, bool isFirst, bool isLast) {
     return CupertinoButton(
       onPressed: () {
-        Navigator.of(context).push(
-          CupertinoPageRoute(
-            builder: (context) => AdminRoomsDetailScreen(
-              previousPageTitle: "${controller.appLocalizations?.admin_manage_building} ${controller.building.name} - #${controller.floor.order}",
-              building: controller.building,
-              floor: controller.floor,
-              room: item,
+        if (controller.pickingRoom) {
+          controller.navigator.pop(item);
+        } else {
+          controller.navigator.push(
+            CupertinoPageRoute(
+              builder: (context) => AdminRoomsDetailScreen(
+                previousPageTitle:
+                    "${controller.appLocalizations?.admin_manage_building} ${controller.building.name} - #${controller.floor.order}",
+                building: controller.building,
+                floor: controller.floor,
+                room: item,
+              ),
             ),
-          ),
-        );
+          );
+        }
       },
       // color: Colors.white,
       padding: const EdgeInsets.all(0),

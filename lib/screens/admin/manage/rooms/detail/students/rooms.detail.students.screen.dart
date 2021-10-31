@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -38,14 +39,19 @@ class AdminRoomsDetailStudentsScreen extends BaseScreen<AdminRoomsDetailStudents
       padding: EdgeInsets.zero,
       child: const Icon(FluentIcons.person_add_24_regular),
       onPressed: () {
-        Navigator.of(context).push(CupertinoPageRoute(
-          builder: (context) => AdminRoomsDetailStudentsAddScreen(
+        Navigator.of(context)
+            .push(CupertinoPageRoute(
+          builder: (_) => AdminRoomsDetailStudentsAddScreen(
             building: building,
             floor: floor,
-            room: room,
-            previousPageTitle: "",
+            room: context.read<AdminRoomsDetailStudentsController>().room,
+            previousPageTitle: context.read<AdminRoomsDetailStudentsController>().title,
           ),
-        ));
+        ))
+            .then((value) {
+          // reload data after the StudentAddScreen popped
+          context.read<AdminRoomsDetailStudentsController>().notifyListeners();
+        });
       },
     );
   }
@@ -66,51 +72,92 @@ class AdminRoomsDetailStudentsScreen extends BaseScreen<AdminRoomsDetailStudents
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(20),
-        child: room.studentIdList != null ? _studentsList() : Text(AppLocalizations.of(context)!.admin_manage_rooms_detail_students_empty),
+        child: room.studentIdList != null
+            ? _studentsList()
+            : Text(AppLocalizations.of(context)!.admin_manage_rooms_detail_students_empty),
       ),
     );
   }
 
   _studentsList() {
-    final controller = context.read<AdminRoomsDetailStudentsController>();
+    final controller = context.watch<AdminRoomsDetailStudentsController>();
 
-    return FutureBuilder<List<Student>?>(
-      future: BuildingRepository.getStudentsInRoom(room.studentIdList!),
+    return FutureBuilder<Room>(
+      future: controller.loadRoom(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          log('getting students in the room done');
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 3), () {});
+              return const SafeArea(
+                child: Center(
+                  child: Text('Error'),
+                ),
+              );
+            }
 
-          if (snapshot.hasData) {
-            return AppMenuGroup(
-              items: snapshot.data!
-                  .map((e) => AppMenuGroupItem(
-                        title: e.fullName,
-                        titleStyle: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                        ),
-                        subTitle: Text(e.id!),
-                        onPressed: () => controller.onStudentItemPressed(e),
-                      ))
-                  .toList(),
-            );
-          }
+            if (snapshot.hasData) {
+              controller.room = snapshot.data!;
 
-          if (snapshot.hasError) {
-            controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 3), () {});
-            return const Scaffold(
-              body: Center(
-                child: Text('Error'),
+              return FutureBuilder<List<Student>?>(
+                future: RoomRepository.getStudentsInRoom(snapshot.data!.studentIdList!),
+                builder: (context, snapshot) {
+                  return _loadStudents(snapshot);
+                },
+              );
+            } else {
+              return const Center(
+                child: Text('No data.'),
+              );
+            }
+          default:
+            return const SafeArea(
+              child: Center(
+                child: CupertinoActivityIndicator(radius: 15),
               ),
             );
-          }
         }
-
-        return const Scaffold(
-          body: Center(
-            child: CupertinoActivityIndicator(radius: 15),
-          ),
-        );
       },
     );
+  }
+
+  _loadStudents(AsyncSnapshot<List<Student>?> snapshot) {
+    final controller = context.read<AdminRoomsDetailStudentsController>();
+
+    switch (snapshot.connectionState) {
+      case ConnectionState.done:
+        if (snapshot.hasError) {
+          controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 3), () {});
+          return const SafeArea(
+            child: Center(
+              child: Text('Error'),
+            ),
+          );
+        }
+
+        if (snapshot.hasData) {
+          return AppMenuGroup(
+            items: snapshot.data!
+                .map((student) => AppMenuGroupItem(
+                      title: student.fullName,
+                      titleStyle: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                      subTitle: Text(student.id!),
+                      onPressed: () => controller.onStudentItemPressed(student),
+                    ))
+                .toList(),
+          );
+        } else {
+          return const Center(
+            child: Text('No data.'),
+          );
+        }
+
+      default:
+        return const Center(
+          child: CupertinoActivityIndicator(radius: 15),
+        );
+    }
   }
 }

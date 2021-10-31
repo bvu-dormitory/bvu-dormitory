@@ -8,8 +8,6 @@ import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/repositories/building.repository.dart';
 
 class AdminRoomsController extends BaseController {
-  BuildingRepository get _buildingRepository => BuildingRepository();
-
   Building building;
   Floor floor;
 
@@ -18,9 +16,12 @@ class AdminRoomsController extends BaseController {
     required String title,
     required this.building,
     required this.floor,
+    this.pickingRoom = false,
   }) : super(context: context, title: title);
 
+  final bool pickingRoom;
+
   Stream<List<Room>> syncRooms() {
-    return _buildingRepository.syncAllRooms(building.id!, floor.id!);
+    return BuildingRepository.syncAllRooms(building.id!, floor.id!);
   }
 }

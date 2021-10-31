@@ -9,19 +9,20 @@ import 'package:bvu_dormitory/repositories/building.repository.dart';
 import 'search/buildings.search.screen.dart';
 
 class AdminBuildingsController extends BaseController {
-  BuildingRepository get _buildingRepository => BuildingRepository();
-
   AdminBuildingsController({
     required BuildContext context,
     required String title,
+    this.pickingRoom = false,
   }) : super(context: context, title: title);
 
+  final bool pickingRoom;
+
   Stream<List<Building>> syncBuildings() {
-    return _buildingRepository.syncAll();
+    return BuildingRepository.syncAll();
   }
 
-  Stream<List<Floor>> getFloors(String buildingId) {
-    return _buildingRepository.syncAllFloors(buildingId);
+  Stream<List<Floor>> syncFloors(String buildingId) {
+    return BuildingRepository.syncAllFloors(buildingId);
   }
 
   void search(String roomName) {

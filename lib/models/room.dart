@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/base/base.firestore.model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'building.dart';
+import 'floor.dart';
 
 class Room extends FireStoreModel {
   final String name;
@@ -27,6 +32,7 @@ class Room extends FireStoreModel {
 
   static Room fromFireStoreDocument(DocumentSnapshot<Map<String, dynamic>> e) {
     Map<String, dynamic> doc = e.data() as Map<String, dynamic>;
+    // log('mapping room...');
 
     return Room(
       id: e.id,

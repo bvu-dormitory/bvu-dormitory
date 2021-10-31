@@ -42,8 +42,7 @@ class AdminHomeController extends BaseController {
   int get currentNavBarIndex => _currentNavBarIndex;
   set currentNavBarIndex(int index) {
     _currentNavBarIndex = index;
-    _pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 150), curve: Curves.ease);
+    _pageController.jumpToPage(index);
     notifyListeners();
   }
 
@@ -61,8 +60,7 @@ class AdminHomeController extends BaseController {
           activeIcon: const Icon(FluentIcons.grid_24_filled),
         ),
         HomeBottomNavItem(
-          title:
-              appLocalizations?.home_screen_navbar_item_newsfeed ?? "Bảng tin",
+          title: appLocalizations?.home_screen_navbar_item_newsfeed ?? "Bảng tin",
           icon: const Icon(FluentIcons.news_24_regular),
           activeIcon: const Icon(FluentIcons.news_24_filled),
         ),

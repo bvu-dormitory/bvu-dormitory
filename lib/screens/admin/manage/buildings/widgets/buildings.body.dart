@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/rooms.screen.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +60,7 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
 
   _buildingItem(Building item, int total, int index) {
     return StreamBuilder<List<Floor>>(
-      stream: controller.getFloors(item.id!),
+      stream: controller.syncFloors(item.id!),
       builder: (context, snapshot) => ClipRRect(
         borderRadius: index == 0
             ? const BorderRadius.vertical(top: Radius.circular(10))
@@ -128,15 +130,23 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
         ),
         onPressed: () {
           // navigate to the Rooms screen
-          Navigator.of(context).push(
+          Navigator.of(context)
+              .push(
             CupertinoPageRoute(
               builder: (context) => AdminRoomsScreen(
                 previousPageTitle: controller.title,
                 building: building,
                 floor: floor,
+                pickingRoom: controller.pickingRoom,
               ),
             ),
-          );
+          )
+              .then((value) {
+            if (value != null) {
+              // log('room id_: $value');
+              Navigator.of(context).pop([building, floor, value]);
+            }
+          });
         },
         alignment: Alignment.centerLeft,
         child: Row(

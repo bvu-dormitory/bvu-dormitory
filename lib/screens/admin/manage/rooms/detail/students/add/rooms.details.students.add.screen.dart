@@ -41,15 +41,16 @@ class AdminRoomsDetailStudentsAddScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = AdminRoomsDetailStudentsAddController(
       context: context,
-      title: student == null ? AppLocalizations.of(context)!.admin_manage_student_menu_add : student!.fullName,
+      title: student == null
+          ? AppLocalizations.of(context)!.admin_manage_student_menu_add
+          : AppLocalizations.of(context)!.admin_manage_rooms_detail_students_view_profile,
       previousPageTitle: previousPageTitle,
       building: building,
       floor: floor,
       room: room,
       student: student,
     );
-
-    log(controller.toString());
+    log("room students: ${room.studentIdList?.length ?? 0}");
 
     return ChangeNotifierProvider.value(
       value: controller,
@@ -92,12 +93,13 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
       trailing: CupertinoButton(
         padding: EdgeInsets.zero,
         child: Text(_getTrailingButtonTitle()),
-        onPressed: controller.isViewing
+        onPressed: controller.isViewing && !controller.isFormEditing
             ? () {
-                controller.isViewing = !controller.isViewing;
                 controller.isFormEditing = true;
               }
-            : controller.submit,
+            : controller.continueButtonEnabled
+                ? controller.submit
+                : null,
       ),
     );
   }
@@ -106,6 +108,8 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
     if (controller.isViewing) {
       if (!controller.isFormEditing) {
         return AppLocalizations.of(context)!.app_action_edit;
+      } else {
+        return AppLocalizations.of(context)!.admin_manage_student_menu_add_save;
       }
     }
 
@@ -131,7 +135,7 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
       ),
       onWillPop: () {
         // viewing is not necessary for asking
-        if (controller.student != null) {
+        if (!controller.isFormEditing || controller.student != null) {
           return Future.value(true);
         }
 
@@ -166,7 +170,7 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (!controller.isViewing) ...{
+        if (controller.isFormEditing) ...{
           Container(
             margin: const EdgeInsets.only(left: 10),
             child: Text(

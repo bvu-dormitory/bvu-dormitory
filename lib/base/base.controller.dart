@@ -1,9 +1,10 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:connectivity/connectivity.dart';
 
 // import 'package:bvu_dormitory/helpers/extensions/navigator.extensions.dart';
 
@@ -37,11 +38,31 @@ abstract class BaseController extends ChangeNotifier {
   AppLocalizations? get appLocalizations => AppLocalizations.of(context);
   NavigatorState get navigator => Navigator.of(context);
 
-  //  final AppNavigator navigator;
   final BuildContext context;
   final String title;
 
   BaseController({required this.title, required this.context});
+
+  Future<bool> hasConnectivity() async {
+    final result = await Connectivity().checkConnectivity();
+
+    if (result == ConnectivityResult.none) {
+      showSnackbar(appLocalizations!.app_connectivity_none, const Duration(seconds: 3), () {});
+    }
+
+    return result != ConnectivityResult.none;
+  }
+
+  showLoadingDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+        content: LinearProgressIndicator(
+          minHeight: 2,
+        ),
+      ),
+    );
+  }
 
   // showing an error alert dialog
   showErrorDialog(String content) {
@@ -52,7 +73,8 @@ abstract class BaseController extends ChangeNotifier {
           title: Text(appLocalizations?.app_dialog_title_error ?? "app_dialog_title_error"),
           content: Text(content),
           actions: [
-            CupertinoDialogAction(child: Text(appLocalizations?.app_dialog_action_ok ?? "Ok"), onPressed: () => Navigator.pop(context)),
+            CupertinoDialogAction(
+                child: Text(appLocalizations?.app_dialog_action_ok ?? "Ok"), onPressed: () => Navigator.pop(context)),
           ],
         );
       },
@@ -60,8 +82,9 @@ abstract class BaseController extends ChangeNotifier {
   }
 
   showConfirmDialog({
-    required String title,
     Widget? body,
+    bool dismissible = false,
+    required String title,
     required DialogConfirmType confirmType,
     required void Function() onSubmit,
     void Function()? onDismiss,
@@ -81,6 +104,7 @@ abstract class BaseController extends ChangeNotifier {
 
     showDialog(
       context: context,
+      barrierDismissible: dismissible,
       builder: (_) => CupertinoAlertDialog(
         title: Text(title),
         content: body,
@@ -104,7 +128,6 @@ abstract class BaseController extends ChangeNotifier {
           ),
         ],
       ),
-      barrierDismissible: false,
     );
   }
 
@@ -121,7 +144,8 @@ abstract class BaseController extends ChangeNotifier {
     });
   }
 
-  void showBottomSheetModal(String title, TextStyle? titleStyle, bool dismissable, List<AppModalBottomSheetMenuGroup> groups) {
+  void showBottomSheetModal(
+      String title, TextStyle? titleStyle, bool dismissable, List<AppModalBottomSheetMenuGroup> groups) {
     showCupertinoModalBottomSheet(
       context: context,
       expand: false,
@@ -213,16 +237,5 @@ abstract class BaseController extends ChangeNotifier {
         );
       },
     );
-  }
-}
-
-class AppNavigator extends NavigatorState {
-  // final NavigatorState state;
-  // AppNavigator();
-
-  Future<T?> pushTo<T extends Object?>(Widget screen) {
-    return super.push(CupertinoPageRoute(
-      builder: (context) => screen,
-    ));
   }
 }

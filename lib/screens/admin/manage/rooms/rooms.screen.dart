@@ -16,10 +16,10 @@ class AdminRoomsScreen extends BaseScreen<AdminRoomsController> {
     required String previousPageTitle,
     required this.building,
     required this.floor,
-    this.isPickingRoomForNewUser = false,
+    this.pickingRoom = false,
   }) : super(key: key, previousPageTitle: previousPageTitle);
 
-  final bool isPickingRoomForNewUser;
+  final bool pickingRoom;
   final Building building;
   final Floor floor;
 
@@ -37,6 +37,7 @@ class AdminRoomsScreen extends BaseScreen<AdminRoomsController> {
       title: getTitle(context),
       building: building,
       floor: floor,
+      pickingRoom: pickingRoom,
     );
   }
 
