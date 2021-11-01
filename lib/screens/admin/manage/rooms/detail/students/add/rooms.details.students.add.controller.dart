@@ -1,28 +1,28 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+
 import 'package:bvu_dormitory/helpers/extensions/string.extensions.dart';
+import 'package:bvu_dormitory/base/base.controller.dart';
+
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
-import 'package:bvu_dormitory/repositories/auth.repository.dart';
-import 'package:bvu_dormitory/repositories/building.repository.dart';
-import 'package:bvu_dormitory/repositories/room.repository.dart';
-import 'package:bvu_dormitory/repositories/student.repository.dart';
-import 'package:bvu_dormitory/repositories/user.repository.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
-import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/user.dart';
-import 'package:flutter/services.dart';
 
-enum StudentFormFieldPickerType {
+import 'package:bvu_dormitory/repositories/auth.repository.dart';
+import 'package:bvu_dormitory/repositories/student.repository.dart';
+
+enum AppFormFieldPickerType {
   date,
   gender,
 }
 
-class StudentProfileFormField {
+class AppFormField {
   final int colStart;
   final int rowStart;
   final int colSpan;
@@ -37,12 +37,12 @@ class StudentProfileFormField {
   final List<TextInputFormatter>? formatters;
   final int maxLength;
   final IconData? icon;
-  final StudentFormFieldPickerType? pickerType;
+  final AppFormFieldPickerType? pickerType;
   final List<dynamic>? pickerData;
   final void Function(dynamic)? onPickerSelectedItemChanged;
   final dynamic pickerInitialData;
 
-  StudentProfileFormField({
+  AppFormField({
     required this.label,
     required this.controller,
     required this.colStart,
@@ -146,7 +146,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
-  List<StudentProfileFormField> get formFields => [
+  List<AppFormField> get formFields => [
         lastNameField,
         firstNameField,
         genderField,
@@ -190,7 +190,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   late final TextEditingController outDateController;
   late final TextEditingController notesController;
 
-  StudentProfileFormField get lastNameField => StudentProfileFormField(
+  AppFormField get lastNameField => AppFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_last_name,
         controller: lastNameController,
         colStart: 1,
@@ -204,12 +204,12 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         enabled: isFormEditing,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return appLocalizations!.admin_manage_student_menu_add_validation_failed_required;
+            return appLocalizations!.app_form_field_required;
           }
         },
       );
 
-  StudentProfileFormField get firstNameField => StudentProfileFormField(
+  AppFormField get firstNameField => AppFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_first_name,
         controller: firstNameController,
         colStart: 1,
@@ -222,12 +222,12 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         type: TextInputType.name,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return appLocalizations!.admin_manage_student_menu_add_validation_failed_required;
+            return appLocalizations!.app_form_field_required;
           }
         },
       );
 
-  StudentProfileFormField get genderField => StudentProfileFormField(
+  AppFormField get genderField => AppFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_gender,
         controller: genderController,
         colStart: 1,
@@ -240,15 +240,15 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         maxLength: 10,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return appLocalizations!.admin_manage_student_menu_add_validation_failed_required;
+            return appLocalizations!.app_form_field_required;
           }
         },
-        pickerType: StudentFormFieldPickerType.gender,
+        pickerType: AppFormFieldPickerType.gender,
         pickerData: genderValues,
         onPickerSelectedItemChanged: onGenderPickerSelectedIndexChanged,
       );
 
-  StudentProfileFormField get dobField => StudentProfileFormField(
+  AppFormField get dobField => AppFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_dob,
         controller: dobController,
         colStart: 1,
@@ -259,16 +259,16 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         enabled: isFormEditing,
         maxLength: 10,
         icon: FluentIcons.food_cake_24_regular,
-        pickerType: StudentFormFieldPickerType.date,
+        pickerType: AppFormFieldPickerType.date,
         onPickerSelectedItemChanged: onDateOfBirthPickerSelectedIndexChanged,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return appLocalizations!.admin_manage_student_menu_add_validation_failed_required;
+            return appLocalizations!.app_form_field_required;
           }
         },
       );
 
-  StudentProfileFormField get homeTownField => StudentProfileFormField(
+  AppFormField get homeTownField => AppFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_hometown,
         controller: homeTownController,
         colStart: 1,
@@ -280,12 +280,12 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         icon: FluentIcons.globe_24_regular,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return appLocalizations!.admin_manage_student_menu_add_validation_failed_required;
+            return appLocalizations!.app_form_field_required;
           }
         },
       );
 
-  StudentProfileFormField get idField => StudentProfileFormField(
+  AppFormField get idField => AppFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_id,
         controller: idController,
         colStart: 1,
@@ -297,12 +297,12 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         icon: FluentIcons.phone_24_regular,
         validator: (value) {
           if (value == null || value.trim().isEmpty) {
-            return appLocalizations!.admin_manage_student_menu_add_validation_failed_required;
+            return appLocalizations!.app_form_field_required;
           }
         },
       );
 
-  StudentProfileFormField get phoneField => StudentProfileFormField(
+  AppFormField get phoneField => AppFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_phone,
         controller: phoneController,
         colStart: 1,
@@ -315,7 +315,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         type: TextInputType.number,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return appLocalizations!.admin_manage_student_menu_add_validation_failed_required;
+            return appLocalizations!.app_form_field_required;
           }
 
           if (!value.isValidPhoneNumber) {
@@ -324,7 +324,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         },
       );
 
-  StudentProfileFormField get parentPhoneField => StudentProfileFormField(
+  AppFormField get parentPhoneField => AppFormField(
       label: appLocalizations!.admin_manage_student_menu_add_field_parent_phone,
       controller: parentPhoneController,
       colStart: 1,
@@ -340,7 +340,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         }
       });
 
-  StudentProfileFormField get mssvField => StudentProfileFormField(
+  AppFormField get mssvField => AppFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_mssv,
         controller: mssvController,
         colStart: 1,
@@ -351,7 +351,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         icon: FluentIcons.hat_graduation_24_regular,
       );
 
-  StudentProfileFormField get joinDateField => StudentProfileFormField(
+  AppFormField get joinDateField => AppFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_join_date,
         controller: joinDateController,
         colStart: 1,
@@ -362,16 +362,16 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         editable: false,
         maxLength: 10,
         icon: FluentIcons.calendar_arrow_down_24_regular,
-        pickerType: StudentFormFieldPickerType.date,
+        pickerType: AppFormFieldPickerType.date,
         onPickerSelectedItemChanged: onJoinDatePickerSelectedIndexChanged,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return appLocalizations!.admin_manage_student_menu_add_validation_failed_required;
+            return appLocalizations!.app_form_field_required;
           }
         },
       );
 
-  StudentProfileFormField get outDateField => StudentProfileFormField(
+  AppFormField get outDateField => AppFormField(
       label: appLocalizations!.admin_manage_student_menu_add_field_out_date,
       controller: outDateController,
       colStart: 1,
@@ -381,10 +381,10 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       editable: false,
       maxLength: 10,
       icon: FluentIcons.calendar_arrow_right_20_regular,
-      pickerType: StudentFormFieldPickerType.date,
+      pickerType: AppFormFieldPickerType.date,
       onPickerSelectedItemChanged: onOutDatePickerSelectedIndexChanged);
 
-  StudentProfileFormField get notesField => StudentProfileFormField(
+  AppFormField get notesField => AppFormField(
         label: appLocalizations!.admin_manage_student_menu_add_field_notes,
         controller: notesController,
         colStart: 1,
@@ -407,7 +407,6 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   String get gender => _gender;
   void onGenderPickerSelectedIndexChanged(dynamic index) {
     _gender = genderValues[index];
-    log("$index");
     genderField.controller.text = _gender;
     notifyListeners();
   }
@@ -444,66 +443,6 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   }
 
   submit() async {
-    addNewStudent() {
-      // check whether the given phone number is already registered
-      AuthRepository.isPhoneNumberRegistered(
-        phoneController.text.replaceFirst("0", "+84"),
-      ).then((exists) {
-        // the phonenumber is already registered => disallow adding
-        if (exists) {
-          showSnackbar(appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_exists,
-              const Duration(seconds: 3), () {
-            _continueButtonEnabled = true;
-            notifyListeners();
-          });
-        } else {
-          // the phonenumber is not registered => allow adding
-          // process adding new user
-          showLoadingDialog();
-
-          StudentRepository.setStudent(
-            getFormData()..roomId = room.id,
-          ).catchError((onError) {
-            showSnackbar(onError.toString(), const Duration(seconds: 5), () {
-              _continueButtonEnabled = true;
-              notifyListeners();
-            });
-          }).then((value) {
-            showSnackbar(appLocalizations!.admin_manage_student_menu_add_save_done, const Duration(seconds: 3), () {});
-            // adding new student to this room successfully => return to the student list screen
-            navigator.pop();
-          }).whenComplete(() {
-            _isFormEditing = true;
-            notifyListeners();
-
-            // when the future completed, hide the loading indicator
-            navigator.pop();
-          });
-        }
-      }).catchError((onError) {
-        showSnackbar(onError, const Duration(seconds: 3), () {
-          _continueButtonEnabled = true;
-          notifyListeners();
-        });
-      }).whenComplete(() {
-        _isFormEditing = true;
-        notifyListeners();
-      });
-    }
-
-    updateStudentInfo() {
-      // process updating user info
-      StudentRepository.setStudent(getFormData()..roomId = room.id).catchError((onError) {
-        showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
-      }).then((value) {
-        showSnackbar(appLocalizations!.admin_manage_student_menu_add_save_done, const Duration(seconds: 3), () {});
-      }).whenComplete(() {
-        _isFormEditing = true;
-        _continueButtonEnabled = true;
-        notifyListeners();
-      });
-    }
-
     if (formKey.currentState!.validate()) {
       // checking connectivity before process
       if (await hasConnectivity()) {
@@ -523,7 +462,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       notifyListeners();
 
       showSnackbar(
-        appLocalizations!.admin_manage_student_menu_add_validation_failed,
+        appLocalizations!.app_form_validation_error,
         const Duration(seconds: 3),
         () {
           _continueButtonEnabled = true;
@@ -533,9 +472,68 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
     }
   }
 
-  Student getFormData() {
-    log('the gender: $gender');
+  addNewStudent() {
+    // check whether the given phone number is already registered
+    AuthRepository.isPhoneNumberRegistered(
+      phoneController.text.replaceFirst("0", "+84"),
+    ).then((exists) {
+      // the phonenumber is already registered => disallow adding
+      if (exists) {
+        showSnackbar(
+            appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_exists, const Duration(seconds: 3),
+            () {
+          _continueButtonEnabled = true;
+          notifyListeners();
+        });
+      } else {
+        // the phonenumber is not registered => allow adding
+        // process adding new user
+        showLoadingDialog();
 
+        StudentRepository.setStudent(
+          getFormData()..roomId = room.id,
+        ).catchError((onError) {
+          showSnackbar(onError.toString(), const Duration(seconds: 5), () {
+            _continueButtonEnabled = true;
+            notifyListeners();
+          });
+        }).then((value) {
+          showSnackbar(appLocalizations!.app_form_changes_saved, const Duration(seconds: 3), () {});
+          // adding new student to this room successfully => return to the student list screen
+          navigator.pop();
+        }).whenComplete(() {
+          _isFormEditing = true;
+          notifyListeners();
+
+          // when the future completed, hide the loading indicator
+          navigator.pop();
+        });
+      }
+    }).catchError((onError) {
+      showSnackbar(onError, const Duration(seconds: 3), () {
+        _continueButtonEnabled = true;
+        notifyListeners();
+      });
+    }).whenComplete(() {
+      _isFormEditing = true;
+      notifyListeners();
+    });
+  }
+
+  updateStudentInfo() {
+    // process updating user info
+    StudentRepository.setStudent(getFormData()..roomId = room.id).catchError((onError) {
+      showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
+    }).then((value) {
+      showSnackbar(appLocalizations!.app_form_changes_saved, const Duration(seconds: 3), () {});
+    }).whenComplete(() {
+      _isFormEditing = true;
+      _continueButtonEnabled = true;
+      notifyListeners();
+    });
+  }
+
+  Student getFormData() {
     return Student(
       id: phoneController.text.replaceFirst("0", "+84"),
       firstName: firstNameController.text,

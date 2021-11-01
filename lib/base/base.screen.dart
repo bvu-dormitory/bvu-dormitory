@@ -52,7 +52,7 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
     return ChangeNotifierProvider(
       lazy: false,
       create: (_) {
-        log('injecting controller');
+        // log('injecting controller');
         return provideController(context);
       },
       child: Builder(

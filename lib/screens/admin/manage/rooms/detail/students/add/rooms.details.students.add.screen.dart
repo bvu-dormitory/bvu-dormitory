@@ -108,11 +108,11 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
       if (!controller.isFormEditing) {
         return AppLocalizations.of(context)!.app_action_edit;
       } else {
-        return AppLocalizations.of(context)!.admin_manage_student_menu_add_save;
+        return AppLocalizations.of(context)!.app_form_save_changes;
       }
     }
 
-    return AppLocalizations.of(context)!.admin_manage_student_menu_add_continue;
+    return AppLocalizations.of(context)!.app_form_continue;
   }
 
   _body() {
@@ -141,7 +141,7 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
         if (!controller.isFormEmpty) {
           controller.showConfirmDialog(
             title: AppLocalizations.of(context)!.app_dialog_title_warning,
-            body: Text(AppLocalizations.of(context)!.admin_manage_student_menu_add_warning_data),
+            body: Text(AppLocalizations.of(context)!.app_form_field_required),
             confirmType: DialogConfirmType.submit,
             onSubmit: () {
               controller.navigator.pop();
@@ -173,7 +173,7 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
           Container(
             margin: const EdgeInsets.only(left: 10),
             child: Text(
-              AppLocalizations.of(context)!.admin_manage_student_menu_add_guide,
+              AppLocalizations.of(context)!.app_form_guide,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -239,7 +239,7 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
     List? pickerData,
     dynamic pickerInitialData,
     void Function(dynamic)? onPickerItemChanged,
-    StudentFormFieldPickerType? pickerType,
+    AppFormFieldPickerType? pickerType,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,7 +269,7 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
               enabled: enabled,
               onTap: () {
                 if (pickerType != null) {
-                  if (pickerType == StudentFormFieldPickerType.gender) {
+                  if (pickerType == AppFormFieldPickerType.gender) {
                     showCupertinoModalPopup(
                       context: context,
                       builder: (context) {

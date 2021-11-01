@@ -53,13 +53,14 @@ abstract class BaseController extends ChangeNotifier {
     return result != ConnectivityResult.none;
   }
 
+  /// showing a loading dialog when logic is in proccess
   showLoadingDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => const AlertDialog(
-        content: LinearProgressIndicator(
-          minHeight: 2,
-        ),
+        contentPadding: EdgeInsets.all(15),
+        content: LinearProgressIndicator(minHeight: 2),
       ),
     );
   }

@@ -262,8 +262,8 @@ class AdminRoomsDetailStudentsController extends BaseController {
       showLoadingDialog();
 
       StudentRepository.setActiveState(student, value).then((value) {
-        showSnackbar(appLocalizations!.admin_manage_rooms_detail_students_toast_active_state_changed,
-            const Duration(seconds: 3), () {});
+        // showSnackbar(appLocalizations!.admin_manage_rooms_detail_students_toast_active_state_changed,
+        //     const Duration(seconds: 3), () {});
       }).catchError((onError) {
         showSnackbar(onError, const Duration(seconds: 3), () {});
       }).whenComplete(() {

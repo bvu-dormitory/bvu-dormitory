@@ -67,7 +67,7 @@ class AdminRoomsDetailStudentsScreen extends BaseScreen<AdminRoomsDetailStudents
   @override
   Widget body(BuildContext context) {
     return SafeArea(
-      child: Container(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: StreamBuilder<List<Student>>(
           stream: RoomRepository.syncStudentsInRoom(room.id!),

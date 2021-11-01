@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:bvu_dormitory/app/constants/app.styles.dart';
@@ -11,9 +12,13 @@ class AppMenuGroupItem {
   Widget? subTitle;
   IconData? icon;
   Function? onPressed;
+  bool enableContextMenu;
+  List<Widget>? contextMenuActions;
 
   AppMenuGroupItem({
     required this.title,
+    this.enableContextMenu = false,
+    this.contextMenuActions,
     this.titleStyle,
     this.subTitle,
     this.hasTrailingArrow = true,
@@ -37,21 +42,41 @@ class AppMenuGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
       children: [
         if (title != null) ...{
           Text(title!, style: AppStyles.menuGroupTextStyle),
           const SizedBox(height: 10),
         },
-        Column(
-          children: List.generate(
-            items.length,
-            (index) => _menuItem(
-              icon: items[index],
-              isFirst: index == 0,
-              isLast: index == items.length - 1,
-            ),
-          ),
-        ),
+        ...List.generate(items.length, (index) {
+          final item = items[index];
+
+          return item.enableContextMenu
+              ? CupertinoContextMenu(
+                  actions: item.contextMenuActions!,
+                  child: _menuItem(icon: item, isFirst: index == 0, isLast: index == items.length - 1),
+                  previewBuilder: (context, animation, child) {
+                    return _menuItem(icon: item, isFirst: true, isLast: true);
+                  },
+                )
+              : _menuItem(icon: item, isFirst: index == 0, isLast: index == items.length - 1);
+        }),
+        // ListView.builder(
+        //     itemCount: items.length,
+        //     shrinkWrap: true,
+        //     physics: const NeverScrollableScrollPhysics(),
+        //     itemBuilder: (context, index) {
+        //       final item = items[index];
+        //       return item.enableContextMenu
+        //           ? CupertinoContextMenu(
+        //               actions: item.contextMenuActions!,
+        //               child: _menuItem(icon: item, isFirst: index == 0, isLast: index == items.length - 1),
+        //               previewBuilder: (context, animation, child) {
+        //                 return _menuItem(icon: item, isFirst: true, isLast: true);
+        //               },
+        //             )
+        //           : _menuItem(icon: item, isFirst: index == 0, isLast: index == items.length - 1);
+        //     }),
       ],
     );
   }
@@ -78,26 +103,29 @@ class AppMenuGroup extends StatelessWidget {
             bottomRight: Radius.circular(isLast ? 10 : 0),
           ),
           border: Border.all(
-            color: Colors.grey.withOpacity(0.25),
+            color: Colors.grey.withOpacity(0.3),
             width: 0.5,
           ),
         ),
-        child: ListTile(
-          leading: icon.icon != null ? Icon(icon.icon, size: 20) : null,
-          minLeadingWidth: 10,
-          trailing:
-              icon.trailing ?? (icon.hasTrailingArrow ? const Icon(CupertinoIcons.right_chevron, size: 16) : null),
-          subtitle: icon.subTitle,
-          title: Text(
-            icon.title,
-            textAlign: TextAlign.left,
-            style: icon.titleStyle ??
-                TextStyle(
-                  color: Colors.black.withOpacity(0.75),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                  // fontSize: 20,
-                ),
+        child: Material(
+          borderRadius: BorderRadius.circular(10),
+          child: ListTile(
+            leading: icon.icon != null ? Icon(icon.icon, size: 20) : null,
+            minLeadingWidth: 10,
+            trailing:
+                icon.trailing ?? (icon.hasTrailingArrow ? const Icon(CupertinoIcons.right_chevron, size: 16) : null),
+            subtitle: icon.subTitle,
+            title: Text(
+              icon.title,
+              textAlign: TextAlign.left,
+              style: icon.titleStyle ??
+                  TextStyle(
+                    color: Colors.black.withOpacity(0.75),
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    // fontSize: 20,
+                  ),
+            ),
           ),
         ),
       ),
