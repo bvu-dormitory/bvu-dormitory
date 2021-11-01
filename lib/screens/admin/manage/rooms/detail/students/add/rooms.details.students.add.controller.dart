@@ -7,6 +7,7 @@ import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
 import 'package:bvu_dormitory/repositories/building.repository.dart';
 import 'package:bvu_dormitory/repositories/room.repository.dart';
+import 'package:bvu_dormitory/repositories/student.repository.dart';
 import 'package:bvu_dormitory/repositories/user.repository.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
@@ -86,15 +87,14 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       );
       lastNameController = TextEditingController(text: student!.lastName);
       firstNameController = TextEditingController(text: student!.firstName);
-      dobController = TextEditingController(text: getDateStringValue(student!.birthDate));
+      dobController = TextEditingController(text: student!.birthDate);
       homeTownController = TextEditingController(text: student!.hometown);
       idController = TextEditingController(text: student!.citizenIdNumber);
       phoneController = TextEditingController(text: student!.phoneNumber!.replaceFirst("+84", "0"));
       parentPhoneController = TextEditingController(text: student!.parentPhoneNumber ?? "");
       mssvController = TextEditingController(text: student!.studentIdNumber ?? "");
-      joinDateController = TextEditingController(text: getDateStringValue(student!.joinDate));
-      outDateController =
-          TextEditingController(text: student!.outDate != null ? getDateStringValue(student!.outDate!) : "");
+      joinDateController = TextEditingController(text: student!.joinDate);
+      outDateController = TextEditingController(text: student!.outDate);
       notesController = TextEditingController(text: student!.notes);
     } else {
       isViewing = false;
@@ -461,12 +461,8 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
           // process adding new user
           showLoadingDialog();
 
-          RoomRepository.addStudent(
-            building.id!,
-            floor.id!,
-            room.id!,
-            room.studentIdList ?? [],
-            getFormData(),
+          StudentRepository.setStudent(
+            getFormData()..roomId = room.id,
           ).catchError((onError) {
             showSnackbar(onError.toString(), const Duration(seconds: 5), () {
               _continueButtonEnabled = true;
@@ -497,7 +493,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
 
     updateStudentInfo() {
       // process updating user info
-      UserRepository.addStudent(getFormData()).catchError((onError) {
+      StudentRepository.setStudent(getFormData()..roomId = room.id).catchError((onError) {
         showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
       }).then((value) {
         showSnackbar(appLocalizations!.admin_manage_student_menu_add_save_done, const Duration(seconds: 3), () {});
@@ -547,8 +543,8 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       isActive: true,
       gender: gender,
       hometown: homeTownController.text,
-      birthDate: dateOfBirth!,
-      joinDate: joinDate!,
+      birthDate: getDateStringValue(dateOfBirth!),
+      joinDate: getDateStringValue(joinDate!),
       parentPhoneNumber: parentPhoneController.text,
       studentIdNumber: mssvController.text,
       citizenIdNumber: idController.text,

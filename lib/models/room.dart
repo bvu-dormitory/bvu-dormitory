@@ -3,17 +3,12 @@ import 'dart:developer';
 import 'package:bvu_dormitory/base/base.firestore.model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'building.dart';
-import 'floor.dart';
-
 class Room extends FireStoreModel {
   final String name;
-  final List<dynamic>? studentIdList;
 
   Room({
     String? id,
     required this.name,
-    required this.studentIdList,
   }) : super(id: id);
 
   static List<Room> fromFireStoreQuery(QuerySnapshot<Map<String, dynamic>> event) {
@@ -24,7 +19,6 @@ class Room extends FireStoreModel {
         return Room(
           id: e.id,
           name: doc['name'],
-          studentIdList: doc['students'],
         );
       },
     ).toList();
@@ -37,7 +31,6 @@ class Room extends FireStoreModel {
     return Room(
       id: e.id,
       name: doc['name'],
-      studentIdList: doc['students'],
     );
   }
 }

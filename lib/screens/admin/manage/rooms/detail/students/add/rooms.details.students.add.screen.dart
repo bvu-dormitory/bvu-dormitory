@@ -50,7 +50,6 @@ class AdminRoomsDetailStudentsAddScreen extends StatelessWidget {
       room: room,
       student: student,
     );
-    log("room students: ${room.studentIdList?.length ?? 0}");
 
     return ChangeNotifierProvider.value(
       value: controller,

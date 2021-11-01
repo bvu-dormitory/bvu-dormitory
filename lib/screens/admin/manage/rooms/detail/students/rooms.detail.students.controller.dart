@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/repositories/student.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -161,24 +162,22 @@ class AdminRoomsDetailStudentsController extends BaseController {
             icon: const Icon(FluentIcons.info_24_regular),
             onPressed: () async {
               navigator.pop();
-              navigator
-                  .push(CupertinoPageRoute(
-                      builder: (context) => AdminRoomsDetailStudentsAddScreen(
-                            building: building,
-                            floor: floor,
-                            room: room,
-                            student: student,
-                            previousPageTitle: title,
-                          )))
-                  .then((value) {
-                // reload data after the StudentAddScreen poped
-                notifyListeners();
-              });
+              navigator.push(
+                CupertinoPageRoute(
+                  builder: (context) => AdminRoomsDetailStudentsAddScreen(
+                    building: building,
+                    floor: floor,
+                    room: room,
+                    student: student,
+                    previousPageTitle: title,
+                  ),
+                ),
+              );
             },
           ),
           AppModalBottomSheetItem(
             label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_change_delete_profile,
+              appLocalizations!.admin_manage_rooms_detail_students_delete_profile,
               style: TextStyle(color: Colors.black.withOpacity(0.5)),
             ),
             icon: const Icon(FluentIcons.delete_24_regular),
@@ -194,17 +193,6 @@ class AdminRoomsDetailStudentsController extends BaseController {
   Future<Room> loadRoom() {
     return RoomRepository.loadRoom(building.id!, floor.id!, room.id!);
   }
-
-  // _copyPhone(String phone) {
-  //   log('copying $phone');
-  //   navigator.pop();
-
-  //   FlutterClipboard.copy(phone).then((value) {
-  //     showSnackbar(appLocalizations!.app_toast_copied, const Duration(seconds: 5), () {});
-  //   }).catchError((onError) {
-  //     showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
-  //   });
-  // }
 
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
@@ -227,16 +215,12 @@ class AdminRoomsDetailStudentsController extends BaseController {
         if (await hasConnectivity()) {
           showLoadingDialog();
 
-          Future.delayed(const Duration(seconds: 0), () {
-            RoomRepository.deleteStudent(building.id!, floor.id!, room.id!, room.studentIdList ?? [], student)
-                .then((value) {
-              showSnackbar(appLocalizations!.app_toast_deleted(student.fullName), const Duration(seconds: 5), () {});
-            }).catchError((onError) {
-              showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
-            }).whenComplete(() {
-              notifyListeners();
-              navigator.pop();
-            });
+          StudentRepository.deleteProfile(student).then((value) {
+            showSnackbar(appLocalizations!.app_toast_deleted(student.fullName), const Duration(seconds: 5), () {});
+          }).catchError((onError) {
+            showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
+          }).whenComplete(() {
+            navigator.pop();
           });
         }
 
@@ -256,35 +240,35 @@ class AdminRoomsDetailStudentsController extends BaseController {
                   )))
           .then((value) async {
         if (value != null) {
-          // log('received room: $value');
-          final destinationRoom = (value[2] as Room);
-          final destinationFloor = (value[1] as Floor);
-          final destinationBuilding = (value[0] as Building);
+          final destinationRoom = (value as Room);
 
-          RoomRepository.moveStudent(
-            oldBuildingId: building.id!,
-            oldFloorId: floor.id!,
-            oldRoomId: room.id!,
-            oldRoomStudentIdList: room.studentIdList ?? [],
-            destinationBuildingId: destinationBuilding.id!,
-            destinationFloorId: destinationFloor.id!,
-            destinationRoomId: destinationRoom.id!,
-            destinationRoomStudentIdList: destinationRoom.studentIdList ?? [],
-            studentToMove: student,
-          ).then((value) {
+          StudentRepository.changeRoom(student, destinationRoom.id!).then((value) {
             showSnackbar(appLocalizations!.admin_manage_rooms_detail_students_toast_moved(destinationRoom.name),
                 const Duration(seconds: 5), () {});
           }).catchError((onError) {
             showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
-          }).whenComplete(() {
-            notifyListeners();
-          });
+          }).whenComplete(() {});
         }
 
         navigator.pop();
       });
     } else {
       navigator.pop();
+    }
+  }
+
+  void onStudentActiveStateChanged(Student student, bool value) async {
+    if (await hasConnectivity()) {
+      showLoadingDialog();
+
+      StudentRepository.setActiveState(student, value).then((value) {
+        showSnackbar(appLocalizations!.admin_manage_rooms_detail_students_toast_active_state_changed,
+            const Duration(seconds: 3), () {});
+      }).catchError((onError) {
+        showSnackbar(onError, const Duration(seconds: 3), () {});
+      }).whenComplete(() {
+        navigator.pop();
+      });
     }
   }
 }

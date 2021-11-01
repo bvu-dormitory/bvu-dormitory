@@ -143,8 +143,7 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
           )
               .then((value) {
             if (value != null) {
-              // log('room id_: $value');
-              Navigator.of(context).pop([building, floor, value]);
+              Navigator.of(context).pop(value);
             }
           });
         },

@@ -79,6 +79,8 @@ class AppUser extends FireStoreModel {
 }
 
 class Student extends AppUser {
+  String? roomId;
+
   bool isActive;
   String gender;
   String hometown;
@@ -88,9 +90,9 @@ class Student extends AppUser {
   String citizenIdNumber;
   String? studentIdNumber;
 
-  DateTime birthDate;
-  DateTime joinDate;
-  DateTime? outDate;
+  String birthDate;
+  String joinDate;
+  String? outDate;
 
   Student({
     required String id,
@@ -102,28 +104,30 @@ class Student extends AppUser {
     required this.birthDate,
     required this.joinDate,
     required this.citizenIdNumber,
+    this.roomId,
     this.outDate,
     this.notes,
     this.studentIdNumber,
     this.parentPhoneNumber,
   }) : super(id: id, firstName: firstName, lastName: lastName, role: UserRole.student);
 
-  static fromFireStoreDocument(DocumentSnapshot snapshot) {
+  static Student fromFireStoreDocument(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
     // log('parsing...');
-    // log('active:' + data['active'].toString());
+    // log('active:' + data['active'].toString() + data['active'].runtimeType.toString());
 
     final student = Student(
       id: snapshot.id,
-      isActive: data['active'].toString() == "active" ? true : false,
+      roomId: data['room_id'],
+      isActive: data['active'] as bool,
       firstName: data['first_name'],
       lastName: data['last_name'],
       gender: data['gender'],
       hometown: data['hometown'],
-      birthDate: _getDateFromString(data['birth_date'])!,
-      joinDate: _getDateFromString(data['join_date'])!,
-      // outDate: _getDateFromString(data['out_date']),
+      birthDate: data['birth_date'],
+      joinDate: data['join_date'],
+      outDate: data['out_date'],
       notes: data['notes'],
       studentIdNumber: data['student_id'],
       citizenIdNumber: data['citizen_id'],
@@ -134,35 +138,34 @@ class Student extends AppUser {
     return student;
   }
 
-  static DateTime? _getDateFromString(String dateString) {
-    if (dateString == "null") {
-      return null;
-    }
+  // static DateTime? _getDateFromString(String dateString) {
+  //   if (dateString == "null") {
+  //     return null;
+  //   }
 
-    final splitted = dateString.split('-');
-    return DateTime(int.parse(splitted[2]), int.parse(splitted[1]), int.parse(splitted[0]));
-  }
+  //   final splitted = dateString.split('-');
+  //   return DateTime(int.parse(splitted[2]), int.parse(splitted[1]), int.parse(splitted[0]));
+  // }
 
-  String _getDateStringValue(DateTime date) {
-    return "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}";
-  }
+  // String _getDateStringValue(DateTime date) {
+  //   return "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}";
+  // }
 
   Map<String, dynamic> get json {
-    log(describeEnum(role));
-
     return {
       'role': describeEnum(role),
+      'room_id': roomId,
       'active': true,
       'first_name': firstName,
       'last_name': lastName,
       'gender': gender,
-      'birth_date': _getDateStringValue(birthDate),
+      'birth_date': birthDate,
       'hometown': hometown,
       'citizen_id': citizenIdNumber,
       'student_id': studentIdNumber,
       'parent_phone': parentPhoneNumber,
-      'join_date': _getDateStringValue(joinDate),
-      'out_date': outDate != null ? _getDateStringValue(outDate!) : "",
+      'join_date': joinDate,
+      'out_date': outDate,
       'notes': notes,
     };
   }

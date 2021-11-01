@@ -1,4 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/repositories/student.repository.dart';
@@ -11,6 +14,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
+import 'package:share/share.dart';
 
 class AdminStudentsExportsController extends BaseController {
   AdminStudentsExportsController({
@@ -45,20 +49,99 @@ class AdminStudentsExportsController extends BaseController {
     return workbook;
   }
 
+  saveAndShare(QuerySnapshot<Map<String, dynamic>> snapshot, String fileName) async {
+    var workbook = initNewWorkbook();
+    var firstSheet = workbook['Sheet1'];
+
+    // adding the top most row for showing headers
+    firstSheet.appendRow([
+      'Mã sinh viên',
+      'Đang ở',
+      'Số điện thoại',
+      'CCCD/CMND',
+      'Họ',
+      'Tên',
+      'Giới tính',
+      'Ngày sinh',
+      'Quê quán',
+      'Ngày nhập',
+      'Phụ huynh',
+      'Ghi chú',
+    ]);
+
+    // íActive cell style
+    CellStyle activeCellStyle = CellStyle(horizontalAlign: HorizontalAlign.Center, verticalAlign: VerticalAlign.Center);
+
+    for (var i = 0; i < snapshot.size; ++i) {
+      final student = Student.fromFireStoreDocument(snapshot.docs[i]);
+
+      firstSheet.appendRow([
+        student.studentIdNumber,
+        student.isActive ? '×' : '',
+        student.phoneNumber,
+        student.citizenIdNumber,
+        student.lastName,
+        student.firstName,
+        student.gender,
+        student.birthDate,
+        student.hometown,
+        student.joinDate,
+        student.parentPhoneNumber,
+        student.notes,
+      ]);
+
+      // styling
+      firstSheet.cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: i)).cellStyle = activeCellStyle;
+    }
+
+    // load the file to a bytes array
+    final fileBytes = workbook.save();
+
+    if (fileBytes == null || fileBytes.isEmpty) {
+      navigator.pop();
+
+      // saving the file to bytes returns nothing
+      showSnackbar(
+          appLocalizations!.admin_manage_student_menu_export_excel_file_corrupted, const Duration(seconds: 5), () {});
+
+      return;
+    }
+
+    // getting the internal storage path
+    Directory internalDirectory = await getApplicationDocumentsDirectory();
+    String tempPath = internalDirectory.path;
+    String filePath = '$tempPath/$fileName';
+
+    log(internalDirectory.listSync().map((e) => e.path).join('\n'));
+    log(filePath);
+
+    try {
+      File(filePath)
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(fileBytes);
+
+      // share the file
+      Share.shareFiles([filePath]).then((value) {}).catchError((onError) {
+        showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
+      });
+    } catch (e) {
+      showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+    } finally {
+      navigator.pop();
+    }
+  }
+
   void exportAllStudents() {
-    StudentRepository.getStudentAccountsList().then((value) {
+    showLoadingDialog();
+
+    StudentRepository.getStudentAccountsList().then((value) async {
       if (value.size > 0) {
-        log("${value.size}");
-
-        var workbook = initNewWorkbook();
-        var firstSheet = workbook['Sheet1'];
-
-        value.docs.forEach((element) {
-          final student = Student.fromFireStoreDocument(element);
-        });
+        saveAndShare(value, 'all_students.xlsx');
       } else {
         showSnackbar(appLocalizations!.admin_manage_student_menu_export_excel_empty, const Duration(seconds: 3), () {});
       }
+    }).catchError((onError) {
+      showSnackbar(onError.toString(), const Duration(seconds: 3), () {});
     });
   }
 

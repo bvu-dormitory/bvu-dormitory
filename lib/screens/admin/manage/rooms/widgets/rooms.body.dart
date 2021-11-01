@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -31,7 +32,7 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
       stream: controller.syncRooms(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          print(snapshot.error);
+          controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
         }
 
         if (snapshot.hasData) {
@@ -50,7 +51,7 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
         }
 
         return const Center(
-          child: Text('Error.'),
+          child: CupertinoActivityIndicator(radius: 10),
         );
       },
     );
@@ -92,27 +93,33 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
           ),
         ),
         child: ListTile(
-            trailing: const Icon(CupertinoIcons.right_chevron, size: 16),
-            // selected: true,
-            title: Text(
-              item.name,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.75),
-                fontWeight: FontWeight.w700,
-                // fontSize: 20,
-              ),
+          trailing: const Icon(CupertinoIcons.right_chevron, size: 16),
+          // selected: true,
+          title: Text(
+            item.name,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.75),
+              fontWeight: FontWeight.w700,
+              // fontSize: 20,
             ),
-            subtitle: Container(
-              margin: const EdgeInsets.only(top: 10),
-              child: Text(
-                controller.appLocalizations!.admin_manage_rooms_quantity(item.studentIdList?.length ?? 0),
-                style: TextStyle(
-                  color: Colors.black.withOpacity(0.6),
-                  // fontWeight: FontWeight.bold,
-                ),
-              ),
-            )),
+          ),
+          subtitle: Container(
+            margin: const EdgeInsets.only(top: 10),
+            child: StreamBuilder<List<Student>?>(
+              stream: RoomRepository.syncStudentsInRoom(item.id!),
+              builder: (context, snapshot) {
+                return Text(
+                  controller.appLocalizations!.admin_manage_rooms_quantity(snapshot.data?.length ?? 0),
+                  style: TextStyle(
+                    color: Colors.black.withOpacity(0.6),
+                    // fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
       ),
     );
   }

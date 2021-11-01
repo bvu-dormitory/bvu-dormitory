@@ -34,8 +34,4 @@ class UserRepository {
         .snapshots()
         .map((user) => AppUser.fromFireStoreDocument(user));
   }
-
-  static Future<void> addStudent(Student student) {
-    return instance.doc(student.id).set(student.json);
-  }
 }

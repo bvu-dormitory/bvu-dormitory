@@ -7,6 +7,7 @@ class AppMenuGroupItem {
   String title;
   TextStyle? titleStyle;
   bool hasTrailingArrow;
+  Widget? trailing;
   Widget? subTitle;
   IconData? icon;
   Function? onPressed;
@@ -18,6 +19,7 @@ class AppMenuGroupItem {
     this.hasTrailingArrow = true,
     this.icon,
     this.onPressed,
+    this.trailing,
   });
 }
 
@@ -83,7 +85,8 @@ class AppMenuGroup extends StatelessWidget {
         child: ListTile(
           leading: icon.icon != null ? Icon(icon.icon, size: 20) : null,
           minLeadingWidth: 10,
-          trailing: icon.hasTrailingArrow ? const Icon(CupertinoIcons.right_chevron, size: 16) : null,
+          trailing:
+              icon.trailing ?? (icon.hasTrailingArrow ? const Icon(CupertinoIcons.right_chevron, size: 16) : null),
           subtitle: icon.subTitle,
           title: Text(
             icon.title,
