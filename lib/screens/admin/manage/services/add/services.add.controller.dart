@@ -108,8 +108,6 @@ class AdminServicesAddController extends BaseController {
   }
 
   submit() async {
-    log('submit');
-
     if (formKey.currentState!.validate()) {
       if (await hasConnectivity()) {
         // begin adding new service

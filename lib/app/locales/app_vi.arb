@@ -2,6 +2,7 @@
     "app_name": "Kí túc xá BVU",
 
     "app_connectivity_none": "Không có kết nối mạng, vui lòng kiểm tra lại trước khi tiếp tục thao tác",
+    "app_error_timeout": "Không thể hoàn tất tác vụ, vui lòng thử lại sau.",
 
 
     "app_dialog_title_error": "Lỗi",
@@ -17,6 +18,9 @@
 
     "app_action_delete": "Xóa",
     "app_action_edit": "Chỉnh sửa",
+
+    "app_bottom_sheet_menu_actions": "Hành động",
+    "app_bottom_sheet_menu_general": "Chung",
 
 
     "app_toast_copied": "Đã sao chép vào Clipboard",
@@ -130,12 +134,15 @@
     "admin_manage_student_menu_export_excel_all": "Tất cả sinh viên",
     "admin_manage_student_menu_export_excel_active": "Danh sách đang ở lại",
     "admin_manage_student_menu_export_excel_absent": "Danh sách vắng mặt",
-    
+
 
     "admin_manage_service_empty": "Chưa có dịch vụ.",
     "admin_manage_service_service_already_exists": "Tên dịch vụ này đã tồn tại, vui lòng chọn tên khác",
     "admin_manage_service_add": "Thêm dịch vụ",
     "admin_manage_service_edit": "Sửa thông tin",
+    "admin_manage_service_menu_general": "Chung",
+    "admin_manage_service_menu_operations": "Hành động",
+    "admin_manage_service_chart": "Thống kê",
     "admin_manage_service_name": "Tên dịch vụ",
     "admin_manage_service_price": "Giá dịch vụ (trên 1 đơn vị tính)",
     "admin_manage_service_unit": "Đơn vị tính (vd: tháng, kg, m³ ...)",

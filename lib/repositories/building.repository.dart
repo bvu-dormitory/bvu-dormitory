@@ -31,7 +31,9 @@ class BuildingRepository {
         .collection('rooms')
         .orderBy('name')
         .snapshots()
-        .map((event) => Room.fromFireStoreQuery(event));
+        .map(
+          (event) => event.docs.map((e) => Room.fromFireStoreDocument(e)).toList(),
+        );
   }
 
   // Stream<Room> syncRoom(String buildingId, String floorId, String roomId) {

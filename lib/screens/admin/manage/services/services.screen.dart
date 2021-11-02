@@ -86,27 +86,27 @@ class AdminServicesScreen extends BaseScreen<AdminServicesController> {
     return AppMenuGroup(
         items: data.map((service) {
       log(service.id.toString());
+
       return AppMenuGroupItem(
         title: service.name,
-        hasTrailingArrow: false,
         titleStyle: const TextStyle(
           fontWeight: FontWeight.w500,
         ),
-        enableContextMenu: true,
-        contextMenuActions: controller.getServiceItemContextMenu(service),
+        onPressed: () => controller.onServicePressed(service),
         subTitle: Container(
-            padding: const EdgeInsets.only(top: 10),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Row(
-                  children: [
-                    Text('${service.price.toString()}đ/${service.unit}'),
-                  ],
-                ),
-              ],
-            )),
+          padding: const EdgeInsets.only(top: 10),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                children: [
+                  Text('${service.price.toString()}đ/${service.unit}'),
+                ],
+              ),
+            ],
+          ),
+        ),
       );
     }).toList());
   }

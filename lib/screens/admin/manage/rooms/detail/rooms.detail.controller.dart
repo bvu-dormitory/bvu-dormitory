@@ -13,6 +13,8 @@ import 'package:bvu_dormitory/repositories/building.repository.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/images/rooms.detail.images.screen.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 
+import 'services/rooms.detail.services.screen.dart';
+
 class AdminRoomsDetailController extends BaseController {
   BuildingRepository get _buildingRepository => BuildingRepository();
 
@@ -57,6 +59,18 @@ class AdminRoomsDetailController extends BaseController {
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_service ?? "admin_manage_service",
           icon: FluentIcons.wifi_1_24_filled,
+          onPressed: () {
+            navigator.push(
+              CupertinoPageRoute(
+                builder: (context) => AdminRoomsDetailServicesScreen(
+                  building: building,
+                  floor: floor,
+                  room: room,
+                  previousPageTitle: title,
+                ),
+              ),
+            );
+          },
         ),
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_item ?? "admin_manage_item",

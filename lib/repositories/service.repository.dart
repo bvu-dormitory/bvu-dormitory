@@ -1,5 +1,8 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/models/building.dart';
+import 'package:bvu_dormitory/models/floor.dart';
+import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/models/service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -43,5 +46,35 @@ class ServiceRepository {
 
   static Future deleteService(Service service) {
     return instance.collection(collectionPath).doc(service.id!).delete();
+  }
+
+  static Future assignToRoom(Service service, Building building, Floor floor, Room room) {
+    final serviceRef = instance.collection(collectionPath).doc(service.id);
+
+    final roomRef = instance
+        .collection('buildings')
+        .doc(building.id)
+        .collection('floors')
+        .doc(floor.id)
+        .collection('rooms')
+        .doc(room.id);
+
+    return instance.runTransaction((transaction) async {
+      final freshService = await transaction.get(serviceRef);
+      final freshRoom = await transaction.get(roomRef);
+
+      transaction.update(freshService.reference, {'rooms': (service.rooms ?? [])..add(freshRoom.reference)});
+    });
+  }
+
+  static Future removeFromRoom(Service service, Building building, Floor floor, Room room) {
+    final serviceRef = instance.collection(collectionPath).doc(service.id);
+
+    service.rooms!.removeWhere((element) => (element as DocumentReference).id == room.id);
+
+    return instance.runTransaction((transaction) async {
+      final freshService = await transaction.get(serviceRef);
+      transaction.update(freshService.reference, {'rooms': (service.rooms ?? [])});
+    });
   }
 }

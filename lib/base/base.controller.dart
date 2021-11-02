@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:connectivity/connectivity.dart';
 
@@ -146,16 +147,18 @@ abstract class BaseController extends ChangeNotifier {
   }
 
   void showBottomSheetModal(
-      String title, TextStyle? titleStyle, bool dismissable, List<AppModalBottomSheetMenuGroup> groups) {
+      String title, TextStyle? titleStyle, bool dismissible, List<AppModalBottomSheetMenuGroup> groups) {
     showCupertinoModalBottomSheet(
       context: context,
       expand: false,
+      barrierColor: Colors.black.withOpacity(0.5),
       builder: (context) {
         return SingleChildScrollView(
           child: Material(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                /// bottom sheet header
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Row(
@@ -178,6 +181,8 @@ abstract class BaseController extends ChangeNotifier {
                     ],
                   ),
                 ),
+
+                /// bottom sheet body | holding menu groups
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -198,17 +203,19 @@ abstract class BaseController extends ChangeNotifier {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
-                            child: Text(
-                              theGroup.title ?? "",
-                              style: titleStyle ??
-                                  TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black.withOpacity(0.5),
-                                  ),
+                          if (theGroup.title != null) ...{
+                            Container(
+                              padding: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
+                              child: Text(
+                                theGroup.title ?? "",
+                                style: titleStyle ??
+                                    TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black.withOpacity(0.5),
+                                    ),
+                              ),
                             ),
-                          ),
+                          },
                           ListView.builder(
                             shrinkWrap: true,
                             primary: false,

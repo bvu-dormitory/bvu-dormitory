@@ -40,9 +40,26 @@ class AppMenuGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.max,
+    return
+        // GridView.count(
+        //   shrinkWrap: true,
+        //   crossAxisCount: 1,
+        //   children: List.generate(items.length, (index) {
+        //     final item = items[index];
+
+        //     return item.enableContextMenu
+        //         ? CupertinoContextMenu(
+        //             actions: item.contextMenuActions!,
+        //             child: _menuItem(icon: item, isFirst: index == 0, isLast: index == items.length - 1),
+        //             previewBuilder: (context, animation, child) {
+        //               return _menuItem(icon: item, isFirst: true, isLast: true);
+        //             },
+        //           )
+        //         : _menuItem(icon: item, isFirst: index == 0, isLast: index == items.length - 1);
+        //   }),
+        // );
+        Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (title != null) ...{
           Text(title!, style: AppStyles.menuGroupTextStyle),
