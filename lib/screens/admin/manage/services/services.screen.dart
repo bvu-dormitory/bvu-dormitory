@@ -90,6 +90,7 @@ class AdminServicesScreen extends BaseScreen<AdminServicesController> {
         titleStyle: const TextStyle(
           fontWeight: FontWeight.w500,
         ),
+        hasTrailingArrow: false,
         onPressed: () => controller.onServicePressed(service),
         subTitle: Container(
           padding: const EdgeInsets.only(top: 10),

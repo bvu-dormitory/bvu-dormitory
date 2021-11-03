@@ -1,33 +1,38 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:spannable_grid/spannable_grid.dart';
+
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/item.dart';
 import 'package:bvu_dormitory/repositories/item.repository.dart';
 import 'package:bvu_dormitory/widgets/app.form.field.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:spannable_grid/spannable_grid.dart';
+
+import 'items.screen.dart';
 
 class AdminItemsController extends BaseController {
   AdminItemsController({
     required BuildContext context,
     required String title,
+    this.parentCategory,
   }) : super(context: context, title: title);
 
+  final ItemCategory? parentCategory;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  showCategoryAddingModal({ItemCategory? category}) {
-    final nameController = TextEditingController(text: category?.name);
+  showCategoryEditBottomSheet({required bool isAddingNew, ItemCategory? category}) {
+    final nameController = TextEditingController(text: isAddingNew ? "" : category?.name);
 
     showCupertinoModalBottomSheet(
       context: context,
       barrierColor: Colors.black.withOpacity(0.3),
-      expand: false,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 40),
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 30 + MediaQuery.of(context).viewInsets.bottom),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,12 +74,11 @@ class AdminItemsController extends BaseController {
               CupertinoButton.filled(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 borderRadius: BorderRadius.circular(50),
-                child:
-                    Text(category == null ? appLocalizations!.app_form_add : appLocalizations!.app_form_save_changes),
+                child: Text(isAddingNew ? appLocalizations!.app_form_add : appLocalizations!.app_form_save_changes),
                 onPressed: () => _handleFormSubmit(
-                  formKey,
-                  nameController.text.trim(),
-                  category,
+                  formKey: formKey,
+                  value: nameController.text.trim(),
+                  category: category,
                 ),
               ),
             ],
@@ -84,7 +88,13 @@ class AdminItemsController extends BaseController {
     );
   }
 
-  _handleFormSubmit(GlobalKey<FormState> formKey, String value, ItemCategory? category) async {
+  _handleFormSubmit({
+    required GlobalKey<FormState> formKey,
+    required String value,
+    ItemCategory? category,
+  }) async {
+    log(category?.name ?? 'no categories');
+
     if (formKey.currentState!.validate()) {
       if (await hasConnectivity()) {
         showLoadingDialog();
@@ -92,8 +102,15 @@ class AdminItemsController extends BaseController {
         try {
           // checking category existing
           final isCategoryExists = await (category == null
-              ? ItemRepository.isCategoryNameAlreadyExists(value)
-              : ItemRepository.isCategoryNameAlreadyExistsExcept(value, category.name));
+              ? ItemRepository.isCategoryNameAlreadyExists(
+                  value: value,
+                  categoryId: parentCategory?.id,
+                )
+              : ItemRepository.isCategoryNameAlreadyExistsExcept(
+                  value: value,
+                  except: category.name,
+                  categoryId: parentCategory?.id,
+                ));
 
           if (isCategoryExists) {
             navigator.pop();
@@ -103,9 +120,10 @@ class AdminItemsController extends BaseController {
           } else {
             // no same item name existing, let's add a new/update
             if (category == null) {
-              await ItemRepository.addItem(value);
+              await ItemRepository.addItem(value: value, parentCategoryId: parentCategory?.id);
             } else {
-              await ItemRepository.updateItem(category.id!, value);
+              await ItemRepository.updateItem(
+                  value: value, categoryId: category.id!, parentCategoryId: parentCategory?.id);
               navigator.pop();
             }
             navigator.pop();
@@ -113,6 +131,7 @@ class AdminItemsController extends BaseController {
         } catch (e) {
           showSnackbar(e.toString(), const Duration(seconds: 5), () {});
         } finally {
+          // turn off the loading indicator
           navigator.pop();
         }
       }
@@ -120,13 +139,13 @@ class AdminItemsController extends BaseController {
   }
 
   // bottom sheet menu item
-  onItemCategoryPressed(ItemCategory category) {
-    showBottomSheetModal(category.name, null, true, [
+  onCategoryItemContextMenuOpen(ItemCategory category) {
+    showBottomSheetMenuModal(category.name, null, true, [
       AppModalBottomSheetMenuGroup(items: [
         AppModalBottomSheetItem(
           label: Text(appLocalizations!.admin_manage_item_edit),
           icon: const Icon(FluentIcons.compose_24_regular),
-          onPressed: () => showCategoryAddingModal(category: category),
+          onPressed: () => showCategoryEditBottomSheet(category: category, isAddingNew: false),
         ),
         AppModalBottomSheetItem(
           label: Text(
@@ -146,13 +165,25 @@ class AdminItemsController extends BaseController {
 
       try {
         // checking category existing
-        await ItemRepository.delete(category);
+        await ItemRepository.delete(id: category.id!, parentCategoryId: parentCategory?.id);
         navigator.pop();
       } catch (e) {
         showSnackbar(e.toString(), const Duration(seconds: 5), () {});
       } finally {
         navigator.pop();
       }
+    }
+  }
+
+  // on item pressed => open detail page
+  onCategoryItemPressed(ItemCategory category) {
+    // allow only 2 levels
+    if (parentCategory == null) {
+      navigator.push(
+        CupertinoPageRoute(
+          builder: (context) => AdminItemsScreen(parentCategory: category, previousPageTitle: title),
+        ),
+      );
     }
   }
 }

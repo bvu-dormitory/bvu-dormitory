@@ -30,7 +30,7 @@ class AdminRoomsDetailStudentsController extends BaseController {
   Room room;
 
   void onStudentItemPressed(Student student) {
-    showBottomSheetModal(student.fullName, null, true, [
+    showBottomSheetMenuModal(student.fullName, null, true, [
       AppModalBottomSheetMenuGroup(
         title: appLocalizations!.admin_manage_contact,
         items: [

@@ -63,6 +63,7 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
             backgroundColor: AppColor.backgroundColor,
             navigationBar: _haveNavigationBar ? navigationBar(context) : null,
             child: Scaffold(
+              resizeToAvoidBottomInset: true,
               extendBody: true,
               backgroundColor: AppColor.backgroundColor,
               body: body(context),

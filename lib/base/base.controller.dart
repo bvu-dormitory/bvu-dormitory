@@ -146,7 +146,7 @@ abstract class BaseController extends ChangeNotifier {
     });
   }
 
-  void showBottomSheetModal(
+  void showBottomSheetMenuModal(
       String title, TextStyle? titleStyle, bool dismissible, List<AppModalBottomSheetMenuGroup> groups) {
     showCupertinoModalBottomSheet(
       context: context,

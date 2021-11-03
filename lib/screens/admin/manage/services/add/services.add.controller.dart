@@ -73,7 +73,7 @@ class AdminServicesAddController extends BaseController {
         controller: priceController,
         prefixIcon: const Icon(CupertinoIcons.number, size: 20),
         validator: (value) {
-          if (value == null || value.trim().length == 0) {
+          if (value == null || value.trim().isEmpty) {
             return appLocalizations!.app_form_field_required;
           }
 
@@ -93,7 +93,7 @@ class AdminServicesAddController extends BaseController {
         controller: unitController,
         prefixIcon: const Icon(FluentIcons.ruler_24_regular),
         validator: (value) {
-          if (value == null || value.trim().length == 0) {
+          if (value == null || value.trim().isEmpty) {
             return appLocalizations!.app_form_field_required;
           }
         },
@@ -101,10 +101,7 @@ class AdminServicesAddController extends BaseController {
 
   Service getFormValue() {
     return Service(
-      name: nameController.text,
-      price: int.parse(priceController.text),
-      unit: unitController.text,
-    );
+        name: nameController.text.trim(), price: int.parse(priceController.text), unit: unitController.text.trim());
   }
 
   submit() async {

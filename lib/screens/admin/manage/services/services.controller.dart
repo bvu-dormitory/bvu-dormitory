@@ -14,7 +14,7 @@ class AdminServicesController extends BaseController {
       : super(context: context, title: title);
 
   onServicePressed(Service service) {
-    showBottomSheetModal(
+    showBottomSheetMenuModal(
       service.name,
       null,
       true,

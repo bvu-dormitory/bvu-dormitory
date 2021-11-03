@@ -5,25 +5,24 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:provider/provider.dart';
 
-import 'package:bvu_dormitory/base/base.screen.dart';
-import 'package:bvu_dormitory/models/item.dart';
 import 'package:bvu_dormitory/repositories/item.repository.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
-import 'items.controller.dart';
+import 'package:bvu_dormitory/models/item.dart';
+import 'package:bvu_dormitory/base/base.screen.dart';
+import 'items.detail.controller.dart';
 
-class AdminItemsScreen extends BaseScreen<AdminItemsController> {
-  AdminItemsScreen({Key? key, String? previousPageTitle, this.parentCategory})
-      : super(key: key, previousPageTitle: previousPageTitle, haveNavigationBar: true);
+class AdminItemsDetailScreen extends BaseScreen<AdminItemsDetailController> {
+  AdminItemsDetailScreen({
+    Key? key,
+    String? previousPageTitle,
+    required this.category,
+  }) : super(key: key, previousPageTitle: previousPageTitle, haveNavigationBar: true);
 
-  final ItemCategory? parentCategory;
+  final ItemCategory category;
 
   @override
-  AdminItemsController provideController(BuildContext context) {
-    return AdminItemsController(
-      context: context,
-      title: parentCategory != null ? parentCategory!.name : AppLocalizations.of(context)!.admin_manage_item,
-      parentCategory: parentCategory,
-    );
+  AdminItemsDetailController provideController(BuildContext context) {
+    return AdminItemsDetailController(context: context, title: category.name);
   }
 
   @override
@@ -32,7 +31,7 @@ class AdminItemsScreen extends BaseScreen<AdminItemsController> {
       padding: EdgeInsets.zero,
       child: const Icon(FluentIcons.folder_add_24_regular),
       onPressed: () {
-        context.read<AdminItemsController>().showCategoryEditBottomSheet(isAddingNew: true);
+        // context.read<AdminItemsController>().showCategoryAddingModal();
       },
     );
   }
@@ -42,18 +41,16 @@ class AdminItemsScreen extends BaseScreen<AdminItemsController> {
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: _itemCategoriesList(),
+        child: _itemCategiesList(),
       ),
     );
   }
 
-  _itemCategoriesList() {
-    final controller = context.read<AdminItemsController>();
+  _itemCategiesList() {
+    final controller = context.read<AdminItemsDetailController>();
 
     return StreamBuilder<List<ItemCategory>>(
-      stream: parentCategory == null
-          ? ItemRepository.syncCategories()
-          : ItemRepository.syncItemGroupsInCategory(parentCategory!.id!),
+      stream: ItemRepository.syncItemGroupsInCategory(category.id!),
       builder: (context, snapshot) {
         // log(snapshot.toString());
 
@@ -79,21 +76,18 @@ class AdminItemsScreen extends BaseScreen<AdminItemsController> {
   }
 
   _buildItemCategoriesList(List<ItemCategory> list) {
-    final controller = context.read<AdminItemsController>();
+    final controller = context.read<AdminItemsDetailController>();
 
     return AppMenuGroup(
-      items: list
-          .map(
-            (category) => AppMenuGroupItem(
-              title: category.name,
-              titleStyle: const TextStyle(
-                fontWeight: FontWeight.w400,
-              ),
-              onPressed: () => controller.onCategoryItemPressed(category),
-              onLongPressed: () => controller.onCategoryItemContextMenuOpen(category),
-            ),
-          )
-          .toList(),
-    );
+        items: list.map((category) {
+      return AppMenuGroupItem(
+        title: category.name,
+        titleStyle: const TextStyle(
+          fontWeight: FontWeight.w400,
+        ),
+        // onPressed: () => controller.onItemCategoryPressed(category),
+        // onLongPressed: () => controller.onItemCategoryContextMenuOpen(category),
+      );
+    }).toList());
   }
 }
