@@ -13,61 +13,81 @@ class ItemRepository {
         .map((event) => event.docs.map((e) => ItemCategory.fromFireStoreDocument(e)).toList());
   }
 
-  static syncItemGroupsInCategory(String categoryId) {
+  static Stream<List<ItemGroup>> syncItemGroupsInCategory(String categoryId) {
     return instance
         .collection(collectionPath)
         .doc(categoryId)
         .collection('groups')
         .orderBy('name')
         .snapshots()
-        .map((event) => event.docs.map((e) => ItemCategory.fromFireStoreDocument(e)).toList());
+        .map((event) => event.docs.map((e) => ItemGroup.fromFireStoreDocument(e)).toList());
   }
 
-  static Future<bool> isCategoryNameAlreadyExists({required String value, String? categoryId}) async {
-    final names = await (categoryId == null
-            ? instance.collection(collectionPath).where('name', isEqualTo: value)
-            : instance.collection(collectionPath).doc(categoryId).collection('groups').where('name', isEqualTo: value))
+  //
+  //
+  // category manipulation
+  static Future<bool> isCategoryNameAlreadyExists({required String value}) async {
+    final names = await instance.collection(collectionPath).where('name', isEqualTo: value).get();
+    return names.size > 0;
+  }
+
+  static Future<bool> isCategoryNameAlreadyExistsExcept({required String value, required String except}) async {
+    final names = await instance
+        .collection(collectionPath)
+        .where(
+          'name',
+          isEqualTo: value,
+          isNotEqualTo: except,
+        )
         .get();
     return names.size > 0;
   }
 
-  static Future<bool> isCategoryNameAlreadyExistsExcept(
-      {required String value, required String except, String? categoryId}) async {
-    final names = await (categoryId == null
-            ? instance.collection(collectionPath).where(
-                  'name',
-                  isEqualTo: value,
-                  isNotEqualTo: except,
-                )
-            : instance.collection(collectionPath).doc(categoryId).collection('groups').where(
-                  'name',
-                  isEqualTo: value,
-                  isNotEqualTo: except,
-                ))
+  static Future addCategory({required String value}) {
+    return instance.collection(collectionPath).add({'name': value});
+  }
+
+  static Future updateCategory({required String value, required String categoryId}) {
+    return instance.collection(collectionPath).doc(categoryId).set({'name': value});
+  }
+
+  static Future deleteCategory({required String id}) {
+    return instance.collection(collectionPath).doc(id).delete();
+  }
+
+  //
+  //
+  // group manipulation
+  static isGroupNameAlreadyExists({required String value, required String categoryId}) async {
+    final names = await instance
+        .collection(collectionPath)
+        .doc(categoryId)
+        .collection('groups')
+        .where('name', isEqualTo: value)
         .get();
     return names.size > 0;
   }
 
-  static Future addItem({required String value, String? parentCategoryId}) {
-    return parentCategoryId == null
-        ? instance.collection(collectionPath).add({'name': value})
-        : instance.collection(collectionPath).doc(parentCategoryId).collection('groups').add({'name': value});
+  static isGroupNameAlreadyExistsExcept(
+      {required String value, required String except, required String categoryId}) async {
+    final names = await instance
+        .collection(collectionPath)
+        .doc(categoryId)
+        .collection('groups')
+        .where('name', isEqualTo: value, isNotEqualTo: except)
+        .get();
+    return names.size > 0;
   }
 
-  static Future updateItem({required String value, required String categoryId, String? parentCategoryId}) {
-    return parentCategoryId == null
-        ? instance.collection(collectionPath).doc(categoryId).set({'name': value})
-        : instance
-            .collection(collectionPath)
-            .doc(parentCategoryId)
-            .collection('groups')
-            .doc(categoryId)
-            .set({'name': value});
+  static Future addGroup({required ItemGroup value, required String parentCategoryId}) {
+    return instance.collection(collectionPath).doc(parentCategoryId).collection('groups').add(value.json);
   }
 
-  static Future delete({required String id, String? parentCategoryId}) {
-    return parentCategoryId == null
-        ? instance.collection(collectionPath).doc(id).delete()
-        : instance.collection(collectionPath).doc(parentCategoryId).collection('groups').doc(id).delete();
+  static Future updateGroup({required ItemGroup value, required String parentCategoryId}) {
+    return instance.collection(collectionPath).doc(parentCategoryId).collection('groups').doc(value.id).set(value.json);
+  }
+
+  static Future deleteGroup({required String id, required String parentCategoryId}) {
+    return instance.collection(collectionPath).doc(parentCategoryId).collection('groups').doc(id).delete();
   }
 }

@@ -154,6 +154,8 @@
     "admin_manage_item_name": "Tên danh mục tài sản",
     "admin_manage_item_already_exists": "Tên danh mục này đã tồn tại, vui lòng chọn tên khác",
     "admin_manage_item_edit": "Sửa thông tin",
+    "admin_manage_item_provder_name": "Tên nhà cung cấp",
+    "admin_manage_item_provder_phone": "Số điện thoại nhà cung cấp",
 
 
     "admin_manage_buildings_title": "Các Khu",

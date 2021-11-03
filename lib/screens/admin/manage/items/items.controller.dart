@@ -12,20 +12,18 @@ import 'package:bvu_dormitory/models/item.dart';
 import 'package:bvu_dormitory/repositories/item.repository.dart';
 import 'package:bvu_dormitory/widgets/app.form.field.dart';
 
-import 'items.screen.dart';
+import 'groups/items.groups.screen.dart';
 
 class AdminItemsController extends BaseController {
   AdminItemsController({
     required BuildContext context,
     required String title,
-    this.parentCategory,
   }) : super(context: context, title: title);
 
-  final ItemCategory? parentCategory;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  showCategoryEditBottomSheet({required bool isAddingNew, ItemCategory? category}) {
-    final nameController = TextEditingController(text: isAddingNew ? "" : category?.name);
+  showCategoryEditBottomSheet({ItemCategory? category}) {
+    final nameController = TextEditingController(text: category == null ? "" : category.name);
 
     showCupertinoModalBottomSheet(
       context: context,
@@ -74,7 +72,8 @@ class AdminItemsController extends BaseController {
               CupertinoButton.filled(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 borderRadius: BorderRadius.circular(50),
-                child: Text(isAddingNew ? appLocalizations!.app_form_add : appLocalizations!.app_form_save_changes),
+                child:
+                    Text(category == null ? appLocalizations!.app_form_add : appLocalizations!.app_form_save_changes),
                 onPressed: () => _handleFormSubmit(
                   formKey: formKey,
                   value: nameController.text.trim(),
@@ -104,12 +103,10 @@ class AdminItemsController extends BaseController {
           final isCategoryExists = await (category == null
               ? ItemRepository.isCategoryNameAlreadyExists(
                   value: value,
-                  categoryId: parentCategory?.id,
                 )
               : ItemRepository.isCategoryNameAlreadyExistsExcept(
                   value: value,
                   except: category.name,
-                  categoryId: parentCategory?.id,
                 ));
 
           if (isCategoryExists) {
@@ -120,10 +117,9 @@ class AdminItemsController extends BaseController {
           } else {
             // no same item name existing, let's add a new/update
             if (category == null) {
-              await ItemRepository.addItem(value: value, parentCategoryId: parentCategory?.id);
+              await ItemRepository.addCategory(value: value);
             } else {
-              await ItemRepository.updateItem(
-                  value: value, categoryId: category.id!, parentCategoryId: parentCategory?.id);
+              await ItemRepository.updateCategory(value: value, categoryId: category.id!);
               navigator.pop();
             }
             navigator.pop();
@@ -145,7 +141,7 @@ class AdminItemsController extends BaseController {
         AppModalBottomSheetItem(
           label: Text(appLocalizations!.admin_manage_item_edit),
           icon: const Icon(FluentIcons.compose_24_regular),
-          onPressed: () => showCategoryEditBottomSheet(category: category, isAddingNew: false),
+          onPressed: () => showCategoryEditBottomSheet(category: category),
         ),
         AppModalBottomSheetItem(
           label: Text(
@@ -165,7 +161,7 @@ class AdminItemsController extends BaseController {
 
       try {
         // checking category existing
-        await ItemRepository.delete(id: category.id!, parentCategoryId: parentCategory?.id);
+        await ItemRepository.deleteCategory(id: category.id!);
         navigator.pop();
       } catch (e) {
         showSnackbar(e.toString(), const Duration(seconds: 5), () {});
@@ -177,13 +173,9 @@ class AdminItemsController extends BaseController {
 
   // on item pressed => open detail page
   onCategoryItemPressed(ItemCategory category) {
-    // allow only 2 levels
-    if (parentCategory == null) {
-      navigator.push(
-        CupertinoPageRoute(
-          builder: (context) => AdminItemsScreen(parentCategory: category, previousPageTitle: title),
-        ),
-      );
-    }
+    navigator.push(
+      CupertinoPageRoute(
+          builder: (context) => AdminItemsGroupsScreen(parentCategory: category, previousPageTitle: title)),
+    );
   }
 }

@@ -12,17 +12,14 @@ import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 import 'items.controller.dart';
 
 class AdminItemsScreen extends BaseScreen<AdminItemsController> {
-  AdminItemsScreen({Key? key, String? previousPageTitle, this.parentCategory})
+  AdminItemsScreen({Key? key, String? previousPageTitle})
       : super(key: key, previousPageTitle: previousPageTitle, haveNavigationBar: true);
-
-  final ItemCategory? parentCategory;
 
   @override
   AdminItemsController provideController(BuildContext context) {
     return AdminItemsController(
       context: context,
-      title: parentCategory != null ? parentCategory!.name : AppLocalizations.of(context)!.admin_manage_item,
-      parentCategory: parentCategory,
+      title: AppLocalizations.of(context)!.admin_manage_item,
     );
   }
 
@@ -32,7 +29,7 @@ class AdminItemsScreen extends BaseScreen<AdminItemsController> {
       padding: EdgeInsets.zero,
       child: const Icon(FluentIcons.folder_add_24_regular),
       onPressed: () {
-        context.read<AdminItemsController>().showCategoryEditBottomSheet(isAddingNew: true);
+        context.read<AdminItemsController>().showCategoryEditBottomSheet();
       },
     );
   }
@@ -51,9 +48,7 @@ class AdminItemsScreen extends BaseScreen<AdminItemsController> {
     final controller = context.read<AdminItemsController>();
 
     return StreamBuilder<List<ItemCategory>>(
-      stream: parentCategory == null
-          ? ItemRepository.syncCategories()
-          : ItemRepository.syncItemGroupsInCategory(parentCategory!.id!),
+      stream: ItemRepository.syncCategories(),
       builder: (context, snapshot) {
         // log(snapshot.toString());
 
