@@ -1,5 +1,4 @@
 import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.screen.dart';
-import 'package:bvu_dormitory/screens/admin/manage/students/students.screen.dart';
 import 'package:bvu_dormitory/screens/shared/403/403.screen.dart';
 import 'package:bvu_dormitory/screens/shared/404/404.screen.dart';
 import 'package:bvu_dormitory/screens/shared/home/home.screen.dart';

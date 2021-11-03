@@ -100,31 +100,6 @@ class AdminRoomsDetailServicesScreen extends BaseScreen<AdminRoomsDetailServices
     );
   }
 
-  // _loadRoom(Service service) {
-  //   final controller = context.read<AdminRoomsDetailServicesController>();
-
-  //   return StreamBuilder<Room>(
-  //     stream: RoomRepository.syncRoom(building.id!, floor.id!, room.id!),
-  //     builder: (context, snapshot) {
-  //       switch (snapshot.connectionState) {
-  //         case ConnectionState.active:
-  //         case ConnectionState.done:
-  //           if (snapshot.hasData) {
-  //             return _loadRoomServiceState(service, snapshot.data!);
-  //           }
-
-  //           if (snapshot.hasError) {
-  //             controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
-  //           }
-  //           return const CupertinoActivityIndicator();
-
-  //         default:
-  //           return const CupertinoActivityIndicator();
-  //       }
-  //     },
-  //   );
-  // }
-
   _loadRoomServiceState(Service service) {
     final controller = context.read<AdminRoomsDetailServicesController>();
 

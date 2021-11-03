@@ -9,7 +9,10 @@ class BuildingRepository {
 
   /// Realtime syncing all buildings
   static Stream<List<Building>> syncAll() {
-    return instance.orderBy('order', descending: true).snapshots().map((event) => Building.fromFireStoreStream(event));
+    return instance
+        .orderBy('order', descending: true)
+        .snapshots()
+        .map((event) => event.docs.map((e) => Building.fromFireStoreDocument(e)).toList());
   }
 
   /// Realtime syncing all floor in a building

@@ -34,6 +34,7 @@ class AppFormField extends StatelessWidget {
     this.formatters,
     this.validator,
     this.picker,
+    this.errorText,
   }) : super(key: key) {
     // ensure if the field is a picker => the picker field must be passed in
     if (type == AppFormFieldType.picker) {
@@ -57,6 +58,7 @@ class AppFormField extends StatelessWidget {
   final List<TextInputFormatter>? formatters;
   final String? Function(String?)? validator;
   final AppFormPicker? picker;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +116,7 @@ class AppFormField extends StatelessWidget {
                   right: 5,
                 ),
                 prefixIcon: prefixIcon,
+                errorText: errorText,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
                   borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.5)),

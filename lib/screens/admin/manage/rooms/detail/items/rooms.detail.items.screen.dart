@@ -1,40 +1,24 @@
-import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/rooms.detail.controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:bvu_dormitory/base/base.screen.dart';
+import 'package:bvu_dormitory/base/base.controller.dart';
 
-class AdminRoomsDetailItemsScreen extends StatefulWidget {
-  const AdminRoomsDetailItemsScreen({Key? key}) : super(key: key);
+import 'rooms.detail.items.controller.dart';
 
-  @override
-  _AdminRoomsDetailItemsScreenState createState() =>
-      _AdminRoomsDetailItemsScreenState();
-}
-
-class _AdminRoomsDetailItemsScreenState
-    extends State<AdminRoomsDetailItemsScreen> {
-  late AdminRoomsDetailController controller;
+class AdminRoomsDetailItemsScreen extends BaseScreen<AdminRoomsDetailItemsController> {
+  AdminRoomsDetailItemsScreen({Key? key, String? previousPageTitle})
+      : super(key: key, previousPageTitle: previousPageTitle, haveNavigationBar: true);
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    controller = Provider.of<AdminRoomsDetailController>(context, listen: true);
+  AdminRoomsDetailItemsController provideController(BuildContext context) {
+    return AdminRoomsDetailItemsController(context: context, title: "");
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          controller.appLocalizations?.admin_manage_item ?? "admin_manage_item",
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 15,
-          ),
-        ),
-        const SizedBox(
-          height: 50,
-        ),
-      ],
-    );
+  Widget? navigationBarTrailing(BuildContext context) {}
+
+  @override
+  Widget body(BuildContext context) {
+    return SafeArea(child: Container());
   }
 }

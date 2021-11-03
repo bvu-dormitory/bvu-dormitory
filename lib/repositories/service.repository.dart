@@ -18,6 +18,7 @@ class ServiceRepository {
         .toList());
   }
 
+  // services manipulation
   static Future<bool> isServiceAlrealdyExists(String name) async {
     return (await instance.collection(collectionPath).where('name', isEqualTo: name).get()).size != 0;
   }
@@ -27,8 +28,8 @@ class ServiceRepository {
                 .collection(collectionPath)
                 .where(
                   'name',
-                  isNotEqualTo: except,
                   isEqualTo: name,
+                  isNotEqualTo: except,
                 )
                 .get())
             .size !=
@@ -48,6 +49,7 @@ class ServiceRepository {
     return instance.collection(collectionPath).doc(service.id!).delete();
   }
 
+  // room manipulation
   static Future assignToRoom(Service service, Building building, Floor floor, Room room) {
     final serviceRef = instance.collection(collectionPath).doc(service.id);
 

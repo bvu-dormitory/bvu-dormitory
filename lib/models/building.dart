@@ -28,17 +28,4 @@ class Building extends FireStoreModel {
       descriptions: data['descriptions'],
     );
   }
-
-  static List<Building> fromFireStoreStream(
-      QuerySnapshot<Map<String, dynamic>> event) {
-    return event.docs.map(
-      (event) {
-        return Building(
-          id: event.id,
-          name: event['name'],
-          descriptions: event['descriptions'],
-        );
-      },
-    ).toList();
-  }
 }

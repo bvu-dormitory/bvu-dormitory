@@ -16,6 +16,7 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
   late final bool _haveNavigationBar;
 
   /// Screen build context, have access to the controller under the [body].
+  /// TODO: make final on Production (not hot-reload) to reduce warnings
   @protected
   late BuildContext context;
 

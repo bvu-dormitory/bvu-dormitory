@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bvu_dormitory/app/constants/app.routes.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.screen.dart';
+import 'package:bvu_dormitory/screens/admin/manage/items/items.screen.dart';
 import 'package:bvu_dormitory/screens/admin/manage/services/services.screen.dart';
 import 'package:bvu_dormitory/screens/admin/manage/students/students.screen.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class AdminManageController extends BaseController {
         ManageIconItem(
           title: appLocalizations?.admin_manage_item ?? "admin_manage_item",
           iconPath: 'lib/assets/icons/idea.png',
-          screen: AppRoutes.notFound.screen,
+          screen: AdminItemsScreen(previousPageTitle: title),
         ),
         ManageIconItem(
           title: appLocalizations?.admin_manage_invoice ?? "admin_manage_invoice",

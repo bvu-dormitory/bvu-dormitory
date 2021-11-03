@@ -41,7 +41,7 @@ class AdminServicesScreen extends BaseScreen<AdminServicesController> {
 
   @override
   Widget body(BuildContext context) {
-    final controller = context.read<AdminServicesController>();
+    // final controller = context.read<AdminServicesController>();
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -85,8 +85,6 @@ class AdminServicesScreen extends BaseScreen<AdminServicesController> {
 
     return AppMenuGroup(
         items: data.map((service) {
-      log(service.id.toString());
-
       return AppMenuGroupItem(
         title: service.name,
         titleStyle: const TextStyle(

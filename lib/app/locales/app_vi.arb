@@ -41,6 +41,7 @@
     "app_form_guide": "Những trường có dấu * là bắt buộc.",
     "app_form_leaving_perform": "Đã có dữ liệu được nhập, nếu rời đi sẽ không thể khôi phục, vẫn tiếp tục rời đi ?",
     "app_form_continue": "Tiếp tục",
+    "app_form_add": "Thêm",
     "app_form_save_changes": "Lưu thay đổi", 
     "app_form_changes_saved": "Đã lưu thay đổi",
 
@@ -148,6 +149,11 @@
     "admin_manage_service_unit": "Đơn vị tính (vd: tháng, kg, m³ ...)",
     "admin_manage_service_service_added": "Đã thêm dịch vụ",
     "admin_manage_service_service_editted": "Đã cập nhật thông tin dịch vụ",
+
+
+    "admin_manage_item_name": "Tên danh mục tài sản",
+    "admin_manage_item_already_exists": "Tên danh mục này đã tồn tại, vui lòng chọn tên khác",
+    "admin_manage_item_edit": "Sửa thông tin",
 
 
     "admin_manage_buildings_title": "Các Khu",

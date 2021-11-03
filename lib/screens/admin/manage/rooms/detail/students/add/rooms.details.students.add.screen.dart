@@ -141,7 +141,7 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
         if (!controller.isFormEmpty) {
           controller.showConfirmDialog(
             title: AppLocalizations.of(context)!.app_dialog_title_warning,
-            body: Text(AppLocalizations.of(context)!.app_form_field_required),
+            body: Text(AppLocalizations.of(context)!.app_form_leaving_perform),
             confirmType: DialogConfirmType.submit,
             onSubmit: () {
               controller.navigator.pop();

@@ -34,52 +34,6 @@ class RoomRepository {
         .map((event) => event.docs.map((e) => Student.fromFireStoreDocument(e)).toList());
   }
 
-  static Future detachService(Building building, Floor floor, Room room, Service service) async {
-    final roomRef = instance
-        .collection(collectionPath)
-        .doc(building.id)
-        .collection('floors')
-        .doc(floor.id)
-        .collection('rooms')
-        .doc(room.id);
-
-    for (var i = 0; i < room.services!.length; ++i) {
-      final roomService = await (room.services![i] as DocumentReference).get();
-      if (roomService.id == service.id) {
-        return instance.runTransaction((transaction) async {
-          final freshRoomRef = await transaction.get(roomRef);
-
-          transaction.update(freshRoomRef.reference, {
-            'services': room.services!..removeAt(i),
-          });
-        }, timeout: const Duration(seconds: 10));
-      }
-    }
-
-    return Future.error('no_services_found');
-  }
-
-  static Future attachServices(Building building, Floor floor, Room room, Service service) {
-    final roomRef = instance
-        .collection(collectionPath)
-        .doc(building.id)
-        .collection('floors')
-        .doc(floor.id)
-        .collection('rooms')
-        .doc(room.id);
-
-    final serviceRef = instance.collection('services').doc(service.id);
-
-    return instance.runTransaction((transaction) async {
-      final freshRoomRef = await transaction.get(roomRef);
-      final freshServiceRef = await transaction.get(serviceRef);
-
-      transaction.update(freshRoomRef.reference, {
-        'services': (room.services ?? [])..add(freshServiceRef.reference),
-      });
-    }, timeout: const Duration(seconds: 10));
-  }
-
   static Stream<Room> syncRoom(String buildingId, String floorId, String roomId) {
     return instance
         .collection(collectionPath)
