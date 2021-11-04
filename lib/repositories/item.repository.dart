@@ -5,6 +5,9 @@ class ItemRepository {
   static final instance = FirebaseFirestore.instance;
   static const String collectionPath = "items";
 
+  //
+  //
+  // category manipulation
   static Stream<List<ItemCategory>> syncCategories() {
     return instance
         .collection(collectionPath)
@@ -13,19 +16,6 @@ class ItemRepository {
         .map((event) => event.docs.map((e) => ItemCategory.fromFireStoreDocument(e)).toList());
   }
 
-  static Stream<List<ItemGroup>> syncItemGroupsInCategory(String categoryId) {
-    return instance
-        .collection(collectionPath)
-        .doc(categoryId)
-        .collection('groups')
-        .orderBy('name')
-        .snapshots()
-        .map((event) => event.docs.map((e) => ItemGroup.fromFireStoreDocument(e)).toList());
-  }
-
-  //
-  //
-  // category manipulation
   static Future<bool> isCategoryNameAlreadyExists({required String value}) async {
     final names = await instance.collection(collectionPath).where('name', isEqualTo: value).get();
     return names.size > 0;
@@ -58,6 +48,16 @@ class ItemRepository {
   //
   //
   // group manipulation
+  static Stream<List<ItemGroup>> syncItemGroupsInCategory(String categoryId) {
+    return instance
+        .collection(collectionPath)
+        .doc(categoryId)
+        .collection('groups')
+        .orderBy('name')
+        .snapshots()
+        .map((event) => event.docs.map((e) => ItemGroup.fromFireStoreDocument(e)).toList());
+  }
+
   static isGroupNameAlreadyExists({required String value, required String categoryId}) async {
     final names = await instance
         .collection(collectionPath)
@@ -89,5 +89,75 @@ class ItemRepository {
 
   static Future deleteGroup({required String id, required String parentCategoryId}) {
     return instance.collection(collectionPath).doc(parentCategoryId).collection('groups').doc(id).delete();
+  }
+
+  //
+  //
+  // group detail manipulation
+  static Stream<List<Item>> syncItemDetailsInGroup({required String categoryId, required String groupId}) {
+    return instance
+        .collection(collectionPath)
+        .doc(categoryId)
+        .collection('groups')
+        .doc(groupId)
+        .collection('item-details')
+        .snapshots()
+        .map((event) => event.docs.map((e) => Item.fromFireStoreDocument(e)).toList());
+  }
+
+  static isItemCodeAlreadyExists({required String value, required String categoryId, required String groupId}) async {
+    final names = await instance.collectionGroup('item-details').where('code', isEqualTo: value).get();
+    return names.size > 0;
+  }
+
+  static isItemCodeAlreadyExistsExcept(
+      {required String value, required String except, required String categoryId, required String groupId}) async {
+    final names =
+        await instance.collectionGroup('item-details').where('code', isEqualTo: value, isNotEqualTo: except).get();
+    return names.size > 0;
+  }
+
+  static Future addItem({
+    required Item value,
+    required String parentCategoryId,
+    required String parentGroupId,
+  }) {
+    return instance
+        .collection(collectionPath)
+        .doc(parentCategoryId)
+        .collection('groups')
+        .doc(parentGroupId)
+        .collection('item-details')
+        .add(value.json);
+  }
+
+  static Future updateItem({
+    required Item value,
+    required String parentCategoryId,
+    required String parentGroupId,
+  }) {
+    return instance
+        .collection(collectionPath)
+        .doc(parentCategoryId)
+        .collection('groups')
+        .doc(parentGroupId)
+        .collection('item-details')
+        .doc(value.id)
+        .set(value.json);
+  }
+
+  static Future deleteItem({
+    required String id,
+    required String parentCategoryId,
+    required String parentGroupId,
+  }) {
+    return instance
+        .collection(collectionPath)
+        .doc(parentCategoryId)
+        .collection('groups')
+        .doc(parentGroupId)
+        .collection('item-details')
+        .doc(id)
+        .delete();
   }
 }

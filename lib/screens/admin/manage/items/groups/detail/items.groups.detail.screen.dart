@@ -1,37 +1,46 @@
+import 'dart:developer';
+
+import 'package:bvu_dormitory/models/item.dart';
+import 'package:bvu_dormitory/repositories/item.repository.dart';
+import 'package:bvu_dormitory/widgets/app_menu_group.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:provider/provider.dart';
 
-import 'package:bvu_dormitory/repositories/item.repository.dart';
-import 'package:bvu_dormitory/widgets/app_menu_group.dart';
-import 'package:bvu_dormitory/models/item.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
-import 'items.groups.controller.dart';
+import 'items.groups.detail.controller.dart';
 
-class AdminItemsGroupsScreen extends BaseScreen<AdminItemsGroupsController> {
-  AdminItemsGroupsScreen({
+class AdminItemsGroupsDetailScreen extends BaseScreen<AdminItemsGroupsDetailController> {
+  AdminItemsGroupsDetailScreen({
     Key? key,
+    required this.category,
+    required this.group,
     String? previousPageTitle,
-    required this.parentCategory,
   }) : super(key: key, previousPageTitle: previousPageTitle);
 
-  final ItemCategory parentCategory;
+  final ItemCategory category;
+  final ItemGroup group;
 
   @override
-  AdminItemsGroupsController provideController(BuildContext context) {
-    return AdminItemsGroupsController(context: context, title: parentCategory.name, parentCategory: parentCategory);
+  AdminItemsGroupsDetailController provideController(BuildContext context) {
+    return AdminItemsGroupsDetailController(
+      context: context,
+      title: group.name,
+      parentCategory: category,
+      parentGroup: group,
+    );
   }
 
   @override
   Widget? navigationBarTrailing(BuildContext context) {
     return CupertinoButton(
       padding: EdgeInsets.zero,
-      child: const Icon(FluentIcons.folder_add_24_regular),
+      child: const Icon(FluentIcons.channel_add_24_regular),
       onPressed: () {
-        context.read<AdminItemsGroupsController>().showGroupEditBottomSheet();
+        context.read<AdminItemsGroupsDetailController>().showItemEditBottomSheet();
       },
     );
   }
@@ -41,18 +50,18 @@ class AdminItemsGroupsScreen extends BaseScreen<AdminItemsGroupsController> {
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: _itemGroupsList(),
+        child: _itemDetailList(),
       ),
     );
   }
 
-  _itemGroupsList() {
-    final controller = context.read<AdminItemsGroupsController>();
+  _itemDetailList() {
+    final controller = context.read<AdminItemsGroupsDetailController>();
 
-    return StreamBuilder<List<ItemGroup>>(
-      stream: ItemRepository.syncItemGroupsInCategory(parentCategory.id!),
+    return StreamBuilder<List<Item>>(
+      stream: ItemRepository.syncItemDetailsInGroup(categoryId: category.id!, groupId: group.id!),
       builder: (context, snapshot) {
-        // log(snapshot.toString());
+        log(snapshot.toString());
 
         switch (snapshot.connectionState) {
           case ConnectionState.active:
@@ -75,22 +84,22 @@ class AdminItemsGroupsScreen extends BaseScreen<AdminItemsGroupsController> {
     );
   }
 
-  _buildItemGroupsList(List<ItemGroup> list) {
-    final controller = context.read<AdminItemsGroupsController>();
+  _buildItemGroupsList(List<Item> list) {
+    final controller = context.read<AdminItemsGroupsDetailController>();
 
     return AppMenuGroup(
-        items: list.map((group) {
+        items: list.map((item) {
       return AppMenuGroupItem(
-        title: group.name,
+        title: item.code,
         titleStyle: const TextStyle(
           fontWeight: FontWeight.w500,
         ),
         subTitle: Container(
           padding: const EdgeInsets.only(top: 10),
-          child: Text(group.providerName),
+          child: Text(item.purchaseDate),
         ),
-        onPressed: () => controller.onGroupItemPressed(group),
-        onLongPressed: () => controller.onGroupItemContextMenuOpen(group),
+        onPressed: () => controller.onItemPressed(group),
+        onLongPressed: () => controller.onItemContextMenuOpen(item),
       );
     }).toList());
   }

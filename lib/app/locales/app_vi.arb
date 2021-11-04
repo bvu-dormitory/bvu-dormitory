@@ -151,11 +151,17 @@
     "admin_manage_service_service_editted": "Đã cập nhật thông tin dịch vụ",
 
 
-    "admin_manage_item_name": "Tên danh mục tài sản",
-    "admin_manage_item_already_exists": "Tên danh mục này đã tồn tại, vui lòng chọn tên khác",
+    "admin_manage_item_category_name": "Tên danh mục tài sản",
+    "admin_manage_item_category_already_exists": "Tên danh mục này đã tồn tại, vui lòng chọn tên khác",
     "admin_manage_item_edit": "Sửa thông tin",
     "admin_manage_item_provder_name": "Tên nhà cung cấp",
     "admin_manage_item_provder_phone": "Số điện thoại nhà cung cấp",
+    "admin_manage_item_detail_code": "Mã tài sản",
+    "admin_manage_item_detail_date": "Ngày nhập",
+    "admin_manage_item_detail_notes": "Ghi chú",
+    "admin_manage_item_detail_price": "Đơn giá (vnđ)",
+    "admin_manage_item_detail_detach": "Gỡ khỏi phòng",
+
 
 
     "admin_manage_buildings_title": "Các Khu",

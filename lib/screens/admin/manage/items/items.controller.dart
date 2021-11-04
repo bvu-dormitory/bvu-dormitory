@@ -49,7 +49,7 @@ class AdminItemsController extends BaseController {
                         column: 1,
                         row: 1,
                         child: AppFormField(
-                          label: appLocalizations!.admin_manage_item_name,
+                          label: appLocalizations!.admin_manage_item_category_name,
                           maxLength: 30,
                           required: true,
                           context: context,
@@ -112,7 +112,7 @@ class AdminItemsController extends BaseController {
           if (isCategoryExists) {
             navigator.pop();
             Future.delayed(const Duration(seconds: 0), () {
-              showErrorDialog(appLocalizations!.admin_manage_item_already_exists);
+              showErrorDialog(appLocalizations!.admin_manage_item_category_already_exists);
             });
           } else {
             // no same item name existing, let's add a new/update
@@ -125,6 +125,7 @@ class AdminItemsController extends BaseController {
             navigator.pop();
           }
         } catch (e) {
+          navigator.pop();
           showSnackbar(e.toString(), const Duration(seconds: 5), () {});
         } finally {
           // turn off the loading indicator

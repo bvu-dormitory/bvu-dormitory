@@ -47,26 +47,40 @@ class ItemGroup extends FireStoreModel {
 
 // for showing a particular item in a ItemGroup
 class Item extends FireStoreModel {
-  final String name;
-  final Float price;
-  final DateTime purchaseDate;
-  final bool inUse;
+  final String code;
+  final String price;
+  final String purchaseDate;
+  // final bool inUse;
+  final String? notes;
+  final String? roomId;
 
   Item({
     String? id,
-    required this.name,
+    this.roomId,
+    required this.code,
     required this.price,
     required this.purchaseDate,
-    required this.inUse,
+    // required this.inUse,
+    this.notes,
   }) : super(id: id);
 
   factory Item.fromFireStoreDocument(DocumentSnapshot e) {
     return Item(
       id: e.id,
-      name: e['name'],
+      code: e['code'],
       price: e['price'],
-      purchaseDate: e['purchase_date'],
-      inUse: e['using'],
+      purchaseDate: e['date'],
+      // inUse: e['using'],
+      notes: e['notes'],
+      roomId: e['room_id'],
     );
   }
+
+  Map<String, dynamic> get json => {
+        'code': code,
+        'price': price,
+        'date': purchaseDate,
+        'notes': notes,
+        'room_id': roomId,
+      };
 }
