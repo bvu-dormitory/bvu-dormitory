@@ -61,7 +61,7 @@ class AdminItemsGroupsDetailScreen extends BaseScreen<AdminItemsGroupsDetailCont
     return StreamBuilder<List<Item>>(
       stream: ItemRepository.syncItemDetailsInGroup(categoryId: category.id!, groupId: group.id!),
       builder: (context, snapshot) {
-        log(snapshot.toString());
+        // log(snapshot.toString());
 
         switch (snapshot.connectionState) {
           case ConnectionState.active:

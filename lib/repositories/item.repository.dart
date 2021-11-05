@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/models/item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -93,7 +95,7 @@ class ItemRepository {
 
   //
   //
-  // group detail manipulation
+  // item detail manipulation
   static Stream<List<Item>> syncItemDetailsInGroup({required String categoryId, required String groupId}) {
     return instance
         .collection(collectionPath)
@@ -105,15 +107,24 @@ class ItemRepository {
         .map((event) => event.docs.map((e) => Item.fromFireStoreDocument(e)).toList());
   }
 
-  static isItemCodeAlreadyExists({required String value, required String categoryId, required String groupId}) async {
-    final names = await instance.collectionGroup('item-details').where('code', isEqualTo: value).get();
+  static isItemCodeAlreadyExists({
+    required String code,
+    // required String categoryId,
+    // required String groupId,
+  }) async {
+    log('checking item code duplication...');
+    final names = await instance.collectionGroup('item-details').where('code', isEqualTo: code).get();
     return names.size > 0;
   }
 
-  static isItemCodeAlreadyExistsExcept(
-      {required String value, required String except, required String categoryId, required String groupId}) async {
+  static isItemCodeAlreadyExistsExcept({
+    required String code,
+    required String except,
+    // required String categoryId,
+    // required String groupId,
+  }) async {
     final names =
-        await instance.collectionGroup('item-details').where('code', isEqualTo: value, isNotEqualTo: except).get();
+        await instance.collectionGroup('item-details').where('code', isEqualTo: code, isNotEqualTo: except).get();
     return names.size > 0;
   }
 

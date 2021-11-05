@@ -1,17 +1,18 @@
 import 'dart:developer';
 
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:bvu_dormitory/base/base.controller.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:spannable_grid/spannable_grid.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:bvu_dormitory/models/item.dart';
 import 'package:bvu_dormitory/repositories/item.repository.dart';
 import 'package:bvu_dormitory/widgets/app.form.field.dart';
 import 'package:bvu_dormitory/widgets/app.form.picker.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
-import 'package:bvu_dormitory/base/base.controller.dart';
-import 'package:flutter/services.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:spannable_grid/spannable_grid.dart';
 
 class AdminItemsGroupsDetailController extends BaseController {
   AdminItemsGroupsDetailController({
@@ -194,17 +195,20 @@ class AdminItemsGroupsDetailController extends BaseController {
 
         try {
           // checking category existing
-          final isGroupExists = await (item == null
+          final isItemCodeExists = await (item == null
               ? ItemRepository.isItemCodeAlreadyExists(
-                  value: formData.code, categoryId: parentCategory.id!, groupId: parentGroup.id!)
+                  code: formData.code,
+                  // categoryId: parentCategory.id!,
+                  // groupId: parentGroup.id!,
+                )
               : ItemRepository.isItemCodeAlreadyExistsExcept(
-                  value: formData.code,
+                  code: formData.code,
                   except: item.code,
-                  categoryId: parentCategory.id!,
-                  groupId: parentGroup.id!,
+                  // categoryId: parentCategory.id!,
+                  // groupId: parentGroup.id!,
                 ));
 
-          if (isGroupExists) {
+          if (isItemCodeExists) {
             navigator.pop();
             Future.delayed(const Duration(seconds: 0), () {
               showErrorDialog(appLocalizations!.admin_manage_item_category_already_exists);
@@ -232,6 +236,9 @@ class AdminItemsGroupsDetailController extends BaseController {
           // }
           // navigator.pop();
         } catch (e) {
+          print(e);
+          // log(e.toString());
+
           navigator.pop();
           showSnackbar(e.toString(), const Duration(seconds: 10), () {});
         } finally {
@@ -262,13 +269,13 @@ class AdminItemsGroupsDetailController extends BaseController {
             style: const TextStyle(color: Colors.red),
           ),
           icon: const Icon(FluentIcons.delete_24_regular, color: Colors.red),
-          onPressed: () => _deleteGroup(item),
+          onPressed: () => _deleteItem(item),
         ),
       ]),
     ]);
   }
 
-  _deleteGroup(Item item) async {
+  _deleteItem(Item item) async {
     if (await hasConnectivity()) {
       showLoadingDialog();
 
