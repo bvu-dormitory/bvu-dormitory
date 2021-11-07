@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bvu_dormitory/models/item.dart';
+import 'package:bvu_dormitory/models/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemRepository {
@@ -103,26 +104,18 @@ class ItemRepository {
         .collection('groups')
         .doc(groupId)
         .collection('item-details')
+        .orderBy('code')
         .snapshots()
         .map((event) => event.docs.map((e) => Item.fromFireStoreDocument(e)).toList());
   }
 
-  static isItemCodeAlreadyExists({
-    required String code,
-    // required String categoryId,
-    // required String groupId,
-  }) async {
+  static isItemCodeAlreadyExists({required String code}) async {
     log('checking item code duplication...');
     final names = await instance.collectionGroup('item-details').where('code', isEqualTo: code).get();
     return names.size > 0;
   }
 
-  static isItemCodeAlreadyExistsExcept({
-    required String code,
-    required String except,
-    // required String categoryId,
-    // required String groupId,
-  }) async {
+  static isItemCodeAlreadyExistsExcept({required String code, required String except}) async {
     final names =
         await instance.collectionGroup('item-details').where('code', isEqualTo: code, isNotEqualTo: except).get();
     return names.size > 0;

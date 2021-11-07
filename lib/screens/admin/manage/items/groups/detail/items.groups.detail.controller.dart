@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/models/room.dart';
+import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.screen.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:spannable_grid/spannable_grid.dart';
 
@@ -30,6 +33,20 @@ class AdminItemsGroupsDetailController extends BaseController {
   final priceController = TextEditingController();
   final dateController = TextEditingController();
   final notesController = TextEditingController();
+
+  String getDateStringValue(DateTime date) {
+    return "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}";
+  }
+
+  Item _getFormData() {
+    return Item(
+      code: codeController.text.trim(),
+      price: priceController.text.trim(),
+      purchaseDate: dateController.text.trim(),
+      // inUse: false,
+      notes: notesController.text.trim(),
+    );
+  }
 
   showItemEditBottomSheet({Item? item}) {
     codeController.text = item?.code ?? "";
@@ -62,7 +79,7 @@ class AdminItemsGroupsDetailController extends BaseController {
                         row: 1,
                         child: AppFormField(
                           label: appLocalizations!.admin_manage_item_detail_code,
-                          maxLength: 30,
+                          maxLength: 15,
                           required: true,
                           context: context,
                           showSuffixCopyButton: true,
@@ -118,11 +135,16 @@ class AdminItemsGroupsDetailController extends BaseController {
                           maxLength: 30,
                           context: context,
                           showSuffixCopyButton: true,
+                          required: true,
                           prefixIcon: const Icon(CupertinoIcons.number, size: 20),
                           type: AppFormFieldType.normal,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.number,
                           controller: priceController,
                           validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return appLocalizations!.app_form_field_required;
+                            }
+
                             if (value != null && value.trim().isNotEmpty) {
                               final parsedValue = int.tryParse(value);
                               if (parsedValue == null || parsedValue <= 0) {
@@ -169,18 +191,113 @@ class AdminItemsGroupsDetailController extends BaseController {
     );
   }
 
-  String getDateStringValue(DateTime date) {
-    return "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}";
+  _showDuplicationBottomSheet({required Item item, bool multipleTimes = false}) {
+    showCupertinoModalBottomSheet(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.3),
+      builder: (context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 30 + MediaQuery.of(context).viewInsets.bottom),
+          child: Material(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// header
+                Container(
+                  child: Row(
+                    children: [
+                      Text("${appLocalizations!.admin_manage_item_detail_duplicate} - ${item.code}",
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(20),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 0.5,
+                        color: Colors.grey.withOpacity(0.6),
+                      ),
+                    ),
+                  ),
+                ),
+
+                /// body
+                SpannableGrid(
+                  columns: 1,
+                  rows: 5,
+                  rowHeight: 100,
+                  cells: [
+                    SpannableGridCellData(id: 1, column: 1, row: 1),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
-  Item _getFormData() {
-    return Item(
-      code: codeController.text,
-      price: priceController.text,
-      purchaseDate: dateController.text,
-      // inUse: false,
-      notes: notesController.text,
-    );
+  // bottom sheet menu item
+  onItemContextMenuOpen(Item item) {
+    showBottomSheetMenuModal(item.code, null, true, [
+      /// duplication
+      /// 1x
+      /// nx
+      AppModalBottomSheetMenuGroup(
+        title: appLocalizations!.admin_manage_item_detail_duplicate,
+        items: [
+          AppModalBottomSheetItem(
+            label: Text(appLocalizations!.admin_manage_item_detail_duplicate_one,
+                style: TextStyle(color: Colors.black.withOpacity(0.6))),
+            icon: const Icon(FluentIcons.multiplier_1x_24_regular, size: 30),
+            onPressed: () => _showDuplicationBottomSheet(item: item),
+          ),
+          AppModalBottomSheetItem(
+            label: Text(appLocalizations!.admin_manage_item_detail_duplicate_multiple,
+                style: TextStyle(color: Colors.black.withOpacity(0.6))),
+            icon: const Icon(FluentIcons.multiplier_5x_24_regular, size: 30),
+            onPressed: () => _showDuplicationBottomSheet(item: item, multipleTimes: true),
+          ),
+        ],
+      ),
+
+      /// (assign to)/(detach from) room
+      /// edit info
+      /// delete
+      AppModalBottomSheetMenuGroup(
+        title: appLocalizations!.app_bottom_sheet_menu_actions,
+        items: [
+          AppModalBottomSheetItem(
+            label: Text(
+              item.roomId != null
+                  ? appLocalizations!.admin_manage_item_detail_detach
+                  : appLocalizations!.admin_manage_item_detail_attach,
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+            icon: Icon(item.roomId != null ? Ionicons.log_out_outline : Ionicons.log_in_outline, size: 28),
+            onPressed: () => item.roomId == null
+                ? _assignOrDetechFromRoom(item: item)
+                : _assignOrDetechFromRoom(item: item, detaching: true),
+          ),
+          AppModalBottomSheetItem(
+            label:
+                Text(appLocalizations!.admin_manage_item_edit, style: TextStyle(color: Colors.black.withOpacity(0.6))),
+            icon: const Icon(FluentIcons.compose_24_regular),
+            onPressed: () => showItemEditBottomSheet(item: item),
+          ),
+          AppModalBottomSheetItem(
+            label: Text(
+              appLocalizations!.app_action_delete,
+              style: const TextStyle(color: Colors.red),
+            ),
+            icon: const Icon(FluentIcons.delete_24_regular, color: Colors.red),
+            onPressed: () => _deleteItem(item),
+          ),
+        ],
+      ),
+    ]);
   }
 
   _handleFormSubmit({
@@ -198,18 +315,13 @@ class AdminItemsGroupsDetailController extends BaseController {
           final isItemCodeExists = await (item == null
               ? ItemRepository.isItemCodeAlreadyExists(
                   code: formData.code,
-                  // categoryId: parentCategory.id!,
-                  // groupId: parentGroup.id!,
                 )
               : ItemRepository.isItemCodeAlreadyExistsExcept(
                   code: formData.code,
                   except: item.code,
-                  // categoryId: parentCategory.id!,
-                  // groupId: parentGroup.id!,
                 ));
 
           if (isItemCodeExists) {
-            navigator.pop();
             Future.delayed(const Duration(seconds: 0), () {
               showErrorDialog(appLocalizations!.admin_manage_item_category_already_exists);
             });
@@ -225,20 +337,7 @@ class AdminItemsGroupsDetailController extends BaseController {
             }
             navigator.pop();
           }
-
-          // if (item == null) {
-          //   await ItemRepository.addItem(
-          //       value: formData, parentCategoryId: parentCategory.id!, parentGroupId: parentGroup.id!);
-          // } else {
-          //   await ItemRepository.updateItem(
-          //       value: formData..id = item.id, parentCategoryId: parentCategory.id!, parentGroupId: parentGroup.id!);
-          //   navigator.pop();
-          // }
-          // navigator.pop();
         } catch (e) {
-          print(e);
-          // log(e.toString());
-
           navigator.pop();
           showSnackbar(e.toString(), const Duration(seconds: 10), () {});
         } finally {
@@ -247,32 +346,6 @@ class AdminItemsGroupsDetailController extends BaseController {
         }
       }
     }
-  }
-
-  // bottom sheet menu item
-  onItemContextMenuOpen(Item item) {
-    showBottomSheetMenuModal(item.code, null, true, [
-      AppModalBottomSheetMenuGroup(items: [
-        AppModalBottomSheetItem(
-          label: Text(appLocalizations!.admin_manage_item_edit),
-          icon: const Icon(FluentIcons.compose_24_regular),
-          onPressed: () => showItemEditBottomSheet(item: item),
-        ),
-        AppModalBottomSheetItem(
-          label: Text(appLocalizations!.admin_manage_item_detail_detach),
-          icon: const Icon(CupertinoIcons.zoom_out),
-          // onPressed: () => showItemEditBottomSheet(item: item),
-        ),
-        AppModalBottomSheetItem(
-          label: Text(
-            appLocalizations!.app_action_delete,
-            style: const TextStyle(color: Colors.red),
-          ),
-          icon: const Icon(FluentIcons.delete_24_regular, color: Colors.red),
-          onPressed: () => _deleteItem(item),
-        ),
-      ]),
-    ]);
   }
 
   _deleteItem(Item item) async {
@@ -292,16 +365,53 @@ class AdminItemsGroupsDetailController extends BaseController {
     }
   }
 
-  // on item pressed => open detail page
-  onItemPressed(ItemGroup group) {
-    // navigator.push(
-    //   CupertinoPageRoute(
-    //     builder: (context) => AdminItemsGroupsDetailScreen(
-    //       category: parentCategory,
-    //       group: group,
-    //       previousPageTitle: title,
-    //     ),
-    //   ),
-    // );
+  /// assign item to a room
+  _assignOrDetechFromRoom({required Item item, bool detaching = false}) async {
+    if (!detaching) {
+      navigator
+          .push(
+        CupertinoPageRoute(
+          builder: (context) => AdminBuildingsScreen(
+            previousPageTitle: title,
+            pickingRoom: true,
+          ),
+        ),
+      )
+          .then(
+        (value) async {
+          /// attaching to a room
+          if (value != null) {
+            final theRoom = value as Room;
+            log(theRoom.reference.toString());
+            showLoadingDialog();
+
+            try {
+              await ItemRepository.updateItem(
+                parentCategoryId: parentCategory.id!,
+                parentGroupId: parentGroup.id!,
+                value: item..roomId = theRoom.reference,
+              );
+            } catch (e) {
+              showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+            } finally {
+              navigator.pop();
+            }
+          }
+        },
+      );
+    } else {
+      /// detaching from a room
+      try {
+        await ItemRepository.updateItem(
+          parentCategoryId: parentCategory.id!,
+          parentGroupId: parentGroup.id!,
+          value: item..roomId = null,
+        );
+      } catch (e) {
+        showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+      } finally {
+        navigator.pop();
+      }
+    }
   }
 }

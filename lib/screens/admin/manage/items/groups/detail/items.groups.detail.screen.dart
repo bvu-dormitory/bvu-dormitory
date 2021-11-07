@@ -1,13 +1,17 @@
 import 'dart:developer';
 
 import 'package:bvu_dormitory/models/item.dart';
+import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/repositories/item.repository.dart';
+import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:bvu_dormitory/base/base.screen.dart';
@@ -90,17 +94,50 @@ class AdminItemsGroupsDetailScreen extends BaseScreen<AdminItemsGroupsDetailCont
     return AppMenuGroup(
         items: list.map((item) {
       return AppMenuGroupItem(
-        title: item.code,
+        title: "${item.code} ",
         titleStyle: const TextStyle(
           fontWeight: FontWeight.w500,
         ),
+        hasTrailingArrow: false,
         subTitle: Container(
           padding: const EdgeInsets.only(top: 10),
-          child: Text(item.purchaseDate),
+          child: Row(
+            children: [
+              _getRoomName(item.roomId),
+              const SizedBox(width: 25),
+              Text(item.purchaseDate),
+              const SizedBox(width: 25),
+              Text("${NumberFormat('#,###').format(int.parse(item.price))}đ"),
+            ],
+          ),
         ),
-        onPressed: () => controller.onItemPressed(group),
-        onLongPressed: () => controller.onItemContextMenuOpen(item),
+        onPressed: () => controller.onItemContextMenuOpen(item),
+        // onLongPressed: () => controller.onItemContextMenuOpen(item),
       );
     }).toList());
+  }
+
+  _getRoomName(DocumentReference? roomRef) {
+    if (roomRef == null) {
+      return const Text('  ? ');
+    }
+
+    return FutureBuilder<Room>(
+      future: RoomRepository.loadRoomFromRef(roomRef),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+          case ConnectionState.active:
+            if (snapshot.hasData) {
+              return Text(snapshot.data!.name);
+            }
+
+            return const Text('  ? ');
+
+          default:
+            return const CupertinoActivityIndicator(radius: 5);
+        }
+      },
+    );
   }
 }

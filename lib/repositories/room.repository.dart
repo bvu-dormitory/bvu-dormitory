@@ -26,6 +26,11 @@ class RoomRepository {
     return Room.fromFireStoreDocument(theRoomDoc);
   }
 
+  static Future<Room> loadRoomFromRef(DocumentReference roomRef) async {
+    final theRoom = await roomRef.get();
+    return Room.fromFireStoreDocument(theRoom);
+  }
+
   static Stream<List<Student>> syncStudentsInRoom(String roomId) {
     return instance
         .collection('users')

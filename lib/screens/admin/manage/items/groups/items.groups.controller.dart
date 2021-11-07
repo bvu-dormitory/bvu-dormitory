@@ -56,7 +56,7 @@ class AdminItemsGroupsController extends BaseController {
                         column: 1,
                         row: 1,
                         child: AppFormField(
-                          label: appLocalizations!.admin_manage_item_category_name,
+                          label: appLocalizations!.admin_manage_item_provider_type,
                           maxLength: 30,
                           required: true,
                           context: context,

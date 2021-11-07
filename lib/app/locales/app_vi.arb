@@ -154,6 +154,7 @@
     "admin_manage_item_category_name": "Tên danh mục tài sản",
     "admin_manage_item_category_already_exists": "Tên danh mục này đã tồn tại, vui lòng chọn tên khác",
     "admin_manage_item_edit": "Sửa thông tin",
+    "admin_manage_item_provider_type": "Tên loại tài sản",
     "admin_manage_item_provder_name": "Tên nhà cung cấp",
     "admin_manage_item_provder_phone": "Số điện thoại nhà cung cấp",
     "admin_manage_item_detail_code": "Mã tài sản",
@@ -161,6 +162,10 @@
     "admin_manage_item_detail_notes": "Ghi chú",
     "admin_manage_item_detail_price": "Đơn giá (vnđ)",
     "admin_manage_item_detail_detach": "Gỡ khỏi phòng",
+    "admin_manage_item_detail_attach": "Gán phòng",
+    "admin_manage_item_detail_duplicate": "Nhân bản",
+    "admin_manage_item_detail_duplicate_one": "1 lần",
+    "admin_manage_item_detail_duplicate_multiple": "Nhiều lần",
 
 
 

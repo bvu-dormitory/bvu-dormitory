@@ -52,7 +52,7 @@ class Item extends FireStoreModel {
   final String purchaseDate;
   // final bool inUse;
   final String? notes;
-  final String? roomId;
+  DocumentReference? roomId;
 
   Item({
     String? id,
@@ -72,7 +72,7 @@ class Item extends FireStoreModel {
       purchaseDate: e['date'],
       // inUse: e['using'],
       notes: e['notes'],
-      roomId: e['room_id'],
+      roomId: e['room'],
     );
   }
 
@@ -81,6 +81,6 @@ class Item extends FireStoreModel {
         'price': price,
         'date': purchaseDate,
         'notes': notes,
-        'room_id': roomId,
+        'room': roomId,
       };
 }
