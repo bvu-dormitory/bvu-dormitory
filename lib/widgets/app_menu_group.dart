@@ -1,4 +1,3 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:bvu_dormitory/app/constants/app.styles.dart';
@@ -34,10 +33,12 @@ class AppMenuGroup extends StatelessWidget {
   const AppMenuGroup({
     Key? key,
     this.title,
+    this.titleStyle,
     required this.items,
   }) : super(key: key);
 
   final String? title;
+  final TextStyle? titleStyle;
   final List<AppMenuGroupItem> items;
 
   @override
@@ -46,7 +47,7 @@ class AppMenuGroup extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (title != null) ...{
-          Text(title!, style: AppStyles.menuGroupTextStyle),
+          Text(title!, style: titleStyle ?? AppStyles.menuGroupTextStyle),
           const SizedBox(height: 10),
         },
         ...List.generate(items.length, (index) {

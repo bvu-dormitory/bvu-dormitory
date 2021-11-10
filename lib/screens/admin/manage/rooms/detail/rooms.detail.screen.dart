@@ -1,9 +1,3 @@
-import 'dart:developer';
-
-import 'package:bvu_dormitory/repositories/building.repository.dart';
-import 'package:bvu_dormitory/repositories/room.repository.dart';
-import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/students/add/rooms.details.students.add.screen.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +12,8 @@ import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 
 class AdminRoomsDetailScreen extends BaseScreen<AdminRoomsDetailController> {
-  AdminRoomsDetailScreen({Key? key, required String previousPageTitle, required this.building, required this.floor, required this.room})
+  AdminRoomsDetailScreen(
+      {Key? key, required String previousPageTitle, required this.building, required this.floor, required this.room})
       : super(key: key, previousPageTitle: previousPageTitle);
 
   final Building building;

@@ -18,8 +18,7 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
   NewsFeedController provideController(BuildContext context) {
     return NewsFeedController(
         context: context,
-        title: AppLocalizations.of(context)?.home_screen_navbar_item_newsfeed ??
-            "home_screen_navbar_item_newsfeed");
+        title: AppLocalizations.of(context)?.home_screen_navbar_item_newsfeed ?? "home_screen_navbar_item_newsfeed");
   }
 
   @override
@@ -79,8 +78,7 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
     return CupertinoButton(
       padding: EdgeInsets.zero,
       child: Container(
-        padding:
-            const EdgeInsets.only(top: 7, bottom: 7, left: 7.5, right: 7.5),
+        padding: const EdgeInsets.only(top: 7, bottom: 7, left: 7.5, right: 7.5),
         // margin: const EdgeInsets.only(right: 15),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.15),
@@ -110,16 +108,14 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              AppLocalizations.of(context)?.newsfeed_compose_button ??
-                  "newsfeed_compose_button",
+              AppLocalizations.of(context)?.newsfeed_compose_button ?? "newsfeed_compose_button",
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
               ),
             ),
             const SizedBox(width: 10),
-            const Icon(FluentIcons.compose_24_regular,
-                color: Colors.white, size: 20)
+            const Icon(FluentIcons.compose_24_regular, color: Colors.white, size: 20)
           ],
         ),
       ),
@@ -128,7 +124,7 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
   }
 
   _body(BuildContext context) {
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       padding: EdgeInsets.all(20),
       child: Text('data'),
     );

@@ -1,20 +1,19 @@
-import 'dart:developer';
-
-import 'package:bvu_dormitory/base/base.screen.dart';
-import 'package:bvu_dormitory/repositories/auth.repository.dart';
-import 'package:bvu_dormitory/screens/shared/login/login.screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/screens/admin/manage/manage.controller.dart';
 import 'package:bvu_dormitory/screens/admin/manage/widgets/manage.menu.dart';
 import 'package:bvu_dormitory/repositories/user.repository.dart';
+import 'package:bvu_dormitory/base/base.screen.dart';
+import 'package:bvu_dormitory/repositories/auth.repository.dart';
+import 'package:bvu_dormitory/screens/shared/login/login.screen.dart';
 
 class AdminManageScreen extends BaseScreen<AdminManageController> {
   AdminManageScreen({Key? key}) : super(key: key, haveNavigationBar: false);
@@ -78,7 +77,7 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
                       fontWeight: FontWeight.w800,
                       shadows: [
                         Shadow(
-                          color: Colors.black.withOpacity(0.25),
+                          color: Colors.black.withOpacity(0.15),
                           blurRadius: 20,
                           offset: const Offset(2, 2),
                         ),
@@ -94,22 +93,23 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
                 CupertinoButton(
                   padding: EdgeInsets.zero,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.85),
-                      borderRadius: BorderRadius.circular(6),
+                      color: Colors.white.withOpacity(0.95),
+                      borderRadius: BorderRadius.circular(50),
                     ),
-                    child: Text(
-                      AppLocalizations.of(context)!.admin_manage_sign_out,
-                      style: const TextStyle(color: Colors.black),
-                    ),
+                    child: const Icon(FluentIcons.power_24_regular),
+                    //  Text(
+                    //   AppLocalizations.of(context)!.admin_manage_sign_out,
+                    //   style: const TextStyle(color: Colors.black),
+                    // ),
                   ),
                   onPressed: () {
                     AuthRepository.signOut().then(
                       (value) => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
+                          builder: (context) => const LoginScreen(),
                         ),
                       ),
                     );
@@ -134,9 +134,9 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
             collapseMode: CollapseMode.pin,
             background: Stack(
               children: [
-                Container(
+                const SizedBox(
                   width: double.infinity,
-                  child: const Image(
+                  child: Image(
                     image: AssetImage('lib/assets/2805830.jpg'),
                     fit: BoxFit.cover,
                     alignment: Alignment.topLeft,

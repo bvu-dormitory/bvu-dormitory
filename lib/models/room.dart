@@ -23,4 +23,10 @@ class Room extends FireStoreModel {
       reference: e.reference,
     );
   }
+
+  @override
+  Map<String, dynamic> get json => {
+        'name': name,
+        'reference': reference,
+      };
 }

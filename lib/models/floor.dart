@@ -9,15 +9,15 @@ class Floor extends FireStoreModel {
     required this.order,
   }) : super(id: id);
 
-  static List<Floor> fromFireStoreStream(
-      QuerySnapshot<Map<String, dynamic>> event) {
-    return event.docs
-        .map(
-          (e) => Floor(
-            id: e.id,
-            order: e['order'],
-          ),
-        )
-        .toList();
+  factory Floor.fromFireStoreDocument(DocumentSnapshot<Object?> snapshot) {
+    return Floor(
+      id: snapshot.id,
+      order: snapshot['order'],
+    );
   }
+
+  @override
+  Map<String, dynamic> get json => {
+        'order': order,
+      };
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 
 import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.controller.dart';

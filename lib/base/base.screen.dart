@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:flutter/cupertino.dart';

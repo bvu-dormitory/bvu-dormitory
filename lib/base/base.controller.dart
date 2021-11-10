@@ -161,6 +161,7 @@ abstract class BaseController extends ChangeNotifier {
                 /// bottom sheet header
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  color: const Color.fromARGB(255, 240, 240, 240),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

@@ -1,11 +1,12 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/screens/admin/manage/manage.screen.dart';
 import 'package:bvu_dormitory/screens/shared/messages/messages.screen.dart';
 import 'package:bvu_dormitory/screens/shared/newsfeed/newsfeed.screen.dart';
-import 'package:bvu_dormitory/screens/shared/profile/profile.screen.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class HomeBottomNavItem {
   String title;

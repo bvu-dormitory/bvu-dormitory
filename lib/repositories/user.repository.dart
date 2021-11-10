@@ -1,4 +1,3 @@
-import 'package:bvu_dormitory/base/base.firestore.repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

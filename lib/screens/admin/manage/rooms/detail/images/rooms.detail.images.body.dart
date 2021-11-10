@@ -1,4 +1,3 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 
@@ -15,8 +14,7 @@ class AdminRoomsDetailImagesBody extends StatefulWidget {
   State<StatefulWidget> createState() => _AdminRoomsDetailImagesBodyState();
 }
 
-class _AdminRoomsDetailImagesBodyState
-    extends State<AdminRoomsDetailImagesBody> {
+class _AdminRoomsDetailImagesBodyState extends State<AdminRoomsDetailImagesBody> {
   late AdminRoomsDetailImagesController controller;
 
   @override
@@ -30,8 +28,7 @@ class _AdminRoomsDetailImagesBodyState
     return Column(
       children: [
         Text(
-          AppLocalizations.of(context)
-                  ?.admin_manage_rooms_detail_images_maximum ??
+          AppLocalizations.of(context)?.admin_manage_rooms_detail_images_maximum ??
               "admin_manage_rooms_detail_images_maximum",
           style: AppStyles.menuGroupTextStyle,
         ),
@@ -40,29 +37,29 @@ class _AdminRoomsDetailImagesBodyState
     );
   }
 
-  _gridImages(BuildContext context) {
-    // return
-    //  Consumer(builder: (context, controller, child) {
-    //   return GridView.builder(
-    //   gridDelegate:
-    //       const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-    //       itemCount: controller.,
-    //   itemBuilder: (context, index) {
-    //     return _gridImageItem(index);
-    //   },
-    // );
-    // },);
-  }
+  // _gridImages(BuildContext context) {
+  //   return
+  //    Consumer(builder: (context, controller, child) {
+  //     return GridView.builder(
+  //     gridDelegate:
+  //         const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+  //         itemCount: controller.,
+  //     itemBuilder: (context, index) {
+  //       return _gridImageItem(index);
+  //     },
+  //   );
+  //   },);
+  // }
 
-  _gridImageItem(int index) {
-    return CupertinoContextMenu(
-      actions: [
-        CupertinoActionSheetAction(
-          onPressed: () {},
-          child: Text('Xóa'),
-        ),
-      ],
-      child: const Image(image: AssetImage('lib/assets/2805830.jpg')),
-    );
-  }
+  // _gridImageItem(int index) {
+  //   return CupertinoContextMenu(
+  //     actions: [
+  //       CupertinoActionSheetAction(
+  //         onPressed: () {},
+  //         child: Text('Xóa'),
+  //       ),
+  //     ],
+  //     child: const Image(image: AssetImage('lib/assets/2805830.jpg')),
+  //   );
+  // }
 }

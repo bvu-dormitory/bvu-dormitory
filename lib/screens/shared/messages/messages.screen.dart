@@ -15,8 +15,7 @@ class MessagesScreen extends BaseScreen<MessageController> {
   MessageController provideController(BuildContext context) {
     return MessageController(
       context: context,
-      title: AppLocalizations.of(context)?.home_screen_navbar_item_chat ??
-          "home_screen_navbar_item_chat",
+      title: AppLocalizations.of(context)?.home_screen_navbar_item_chat ?? "home_screen_navbar_item_chat",
     );
   }
 
@@ -80,8 +79,7 @@ class MessagesScreen extends BaseScreen<MessageController> {
     return CupertinoButton(
       padding: EdgeInsets.zero,
       child: Container(
-        padding:
-            const EdgeInsets.only(top: 7, bottom: 7, left: 7.5, right: 7.5),
+        padding: const EdgeInsets.only(top: 7, bottom: 7, left: 7.5, right: 7.5),
         // margin: const EdgeInsets.only(right: 15),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.15),
@@ -111,16 +109,14 @@ class MessagesScreen extends BaseScreen<MessageController> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              AppLocalizations.of(context)?.message_compose_button ??
-                  "message_compose_button",
+              AppLocalizations.of(context)?.message_compose_button ?? "message_compose_button",
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
               ),
             ),
             const SizedBox(width: 10),
-            const Icon(FluentIcons.compose_24_regular,
-                color: Colors.white, size: 20)
+            const Icon(FluentIcons.compose_24_regular, color: Colors.white, size: 20)
           ],
         ),
       ),
@@ -129,7 +125,7 @@ class MessagesScreen extends BaseScreen<MessageController> {
   }
 
   _body(BuildContext context) {
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       padding: EdgeInsets.all(20),
       child: Text('data'),
     );

@@ -145,7 +145,8 @@ class AdminItemsGroupsDetailController extends BaseController {
                               return appLocalizations!.app_form_field_required;
                             }
 
-                            if (value != null && value.trim().isNotEmpty) {
+                            // value not null
+                            if (value.trim().isNotEmpty) {
                               final parsedValue = int.tryParse(value);
                               if (parsedValue == null || parsedValue <= 0) {
                                 return appLocalizations!.app_form_field_value_invalid;
@@ -309,6 +310,9 @@ class AdminItemsGroupsDetailController extends BaseController {
         showLoadingDialog();
 
         final formData = _getFormData();
+        formData.id = item?.id;
+        formData.roomId = item?.roomId;
+        formData.reference = item?.reference;
 
         try {
           // checking category existing
@@ -332,7 +336,7 @@ class AdminItemsGroupsDetailController extends BaseController {
                   value: formData, parentCategoryId: parentCategory.id!, parentGroupId: parentGroup.id!);
             } else {
               await ItemRepository.updateItem(
-                  value: formData..id = item.id, parentCategoryId: parentCategory.id!, parentGroupId: parentGroup.id!);
+                  value: formData, parentCategoryId: parentCategory.id!, parentGroupId: parentGroup.id!);
               navigator.pop();
             }
             navigator.pop();
@@ -391,6 +395,7 @@ class AdminItemsGroupsDetailController extends BaseController {
                 parentGroupId: parentGroup.id!,
                 value: item..roomId = theRoom.reference,
               );
+              navigator.pop();
             } catch (e) {
               showSnackbar(e.toString(), const Duration(seconds: 5), () {});
             } finally {

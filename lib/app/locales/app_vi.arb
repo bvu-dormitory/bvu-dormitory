@@ -162,7 +162,7 @@
     "admin_manage_item_detail_notes": "Ghi chú",
     "admin_manage_item_detail_price": "Đơn giá (vnđ)",
     "admin_manage_item_detail_detach": "Gỡ khỏi phòng",
-    "admin_manage_item_detail_attach": "Gán phòng",
+    "admin_manage_item_detail_attach": "Gán vào phòng",
     "admin_manage_item_detail_duplicate": "Nhân bản",
     "admin_manage_item_detail_duplicate_one": "1 lần",
     "admin_manage_item_detail_duplicate_multiple": "Nhiều lần",

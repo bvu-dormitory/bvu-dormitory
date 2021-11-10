@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bvu_dormitory/base/base.firestore.model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -18,7 +16,7 @@ extension UserRoleExtension on UserRole {
         }
       case UserRole.student:
         {
-          return "Nữ";
+          return "student";
         }
     }
   }
@@ -76,6 +74,14 @@ class AppUser extends FireStoreModel {
       photoURL: data['photo_url'],
     );
   }
+
+  @override
+  Map<String, dynamic> get json => {
+        'first_name': firstName,
+        'last_name': lastName,
+        'role': role.name,
+        'photo_url': photoURL,
+      };
 }
 
 class Student extends AppUser {
@@ -151,22 +157,21 @@ class Student extends AppUser {
   //   return "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}";
   // }
 
-  Map<String, dynamic> get json {
-    return {
-      'role': describeEnum(role),
-      'room_id': roomId,
-      'active': true,
-      'first_name': firstName,
-      'last_name': lastName,
-      'gender': gender,
-      'birth_date': birthDate,
-      'hometown': hometown,
-      'citizen_id': citizenIdNumber,
-      'student_id': studentIdNumber,
-      'parent_phone': parentPhoneNumber,
-      'join_date': joinDate,
-      'out_date': outDate,
-      'notes': notes,
-    };
-  }
+  @override
+  Map<String, dynamic> get json => {
+        'role': describeEnum(role),
+        'room_id': roomId,
+        'active': true,
+        'first_name': firstName,
+        'last_name': lastName,
+        'gender': gender,
+        'birth_date': birthDate,
+        'hometown': hometown,
+        'citizen_id': citizenIdNumber,
+        'student_id': studentIdNumber,
+        'parent_phone': parentPhoneNumber,
+        'join_date': joinDate,
+        'out_date': outDate,
+        'notes': notes,
+      };
 }

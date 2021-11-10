@@ -1,13 +1,11 @@
-import 'dart:developer';
-
-import 'package:bvu_dormitory/models/floor.dart';
-import 'package:bvu_dormitory/screens/admin/manage/rooms/rooms.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:bvu_dormitory/models/floor.dart';
+import 'package:bvu_dormitory/screens/admin/manage/rooms/rooms.screen.dart';
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.controller.dart';
 
@@ -119,7 +117,7 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
   }
 
   _buildingItemFloor(Building building, Floor floor) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: CupertinoButton(
         padding: const EdgeInsets.only(

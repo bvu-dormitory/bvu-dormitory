@@ -22,7 +22,7 @@ class BuildingRepository {
         .collection('floors')
         .orderBy('order')
         .snapshots()
-        .map((event) => Floor.fromFireStoreStream(event));
+        .map((event) => event.docs.map((e) => Floor.fromFireStoreDocument(e)).toList());
   }
 
   /// Realtime syncing all rooms in a floor

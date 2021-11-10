@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:bvu_dormitory/base/base.firestore.model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -12,6 +10,11 @@ class ItemCategory extends FireStoreModel {
   factory ItemCategory.fromFireStoreDocument(DocumentSnapshot e) {
     return ItemCategory(id: e.id, name: e['name']);
   }
+
+  @override
+  Map<String, dynamic> get json => {
+        'name': name,
+      };
 }
 
 // for showing a group of items in the same category, such as: light bulb - type a, light bulb - type b...
@@ -38,6 +41,7 @@ class ItemGroup extends FireStoreModel {
     );
   }
 
+  @override
   Map<String, dynamic> get json => {
         'name': name,
         'provider_name': providerName,
@@ -57,16 +61,18 @@ class Item extends FireStoreModel {
   Item({
     String? id,
     this.roomId,
+    DocumentReference? reference,
     required this.code,
     required this.price,
     required this.purchaseDate,
     // required this.inUse,
     this.notes,
-  }) : super(id: id);
+  }) : super(id: id, reference: reference);
 
   factory Item.fromFireStoreDocument(DocumentSnapshot e) {
     return Item(
       id: e.id,
+      reference: e.reference,
       code: e['code'],
       price: e['price'],
       purchaseDate: e['date'],
@@ -76,11 +82,13 @@ class Item extends FireStoreModel {
     );
   }
 
+  @override
   Map<String, dynamic> get json => {
         'code': code,
         'price': price,
         'date': purchaseDate,
         'notes': notes,
         'room': roomId,
+        'reference': reference,
       };
 }

@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:bvu_dormitory/models/item.dart';
-import 'package:bvu_dormitory/models/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemRepository {
@@ -163,5 +162,27 @@ class ItemRepository {
         .collection('item-details')
         .doc(id)
         .delete();
+  }
+
+  static Stream<List<Item>> syncItemsInRoom({required DocumentReference roomRef}) {
+    return instance
+        .collectionGroup('item-details')
+        .where('room', isEqualTo: roomRef)
+        .snapshots()
+        .map((event) => event.docs.map((e) => Item.fromFireStoreDocument(e)).toList());
+  }
+
+  static Future<ItemGroup> syncParentGroupOfItem({required DocumentReference itemRef}) async {
+    final theParentGroupDoc = await itemRef.get();
+    return ItemGroup.fromFireStoreDocument(theParentGroupDoc);
+  }
+
+  static Future detachFromRoom(Item theItem) async {
+    theItem.roomId = null;
+
+    return instance.runTransaction((transaction) async {
+      final freshItem = await transaction.get(theItem.reference!);
+      transaction.set(freshItem.reference, theItem.json);
+    }, timeout: const Duration(seconds: 10));
   }
 }

@@ -11,6 +11,7 @@ class Building extends FireStoreModel {
     required this.descriptions,
   }) : super(id: id);
 
+  @override
   Map<String, dynamic> get json {
     return {
       'id': id,
@@ -20,12 +21,10 @@ class Building extends FireStoreModel {
   }
 
   factory Building.fromFireStoreDocument(DocumentSnapshot snapshot) {
-    Map data = snapshot.data() as Map<dynamic, dynamic>;
-
     return Building(
       id: snapshot.id,
-      name: data['name'],
-      descriptions: data['descriptions'],
+      name: snapshot['name'],
+      descriptions: snapshot['descriptions'],
     );
   }
 }

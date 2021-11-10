@@ -1,8 +1,3 @@
-import 'dart:developer';
-
-import 'package:bvu_dormitory/app/constants/app.colors.dart';
-import 'package:bvu_dormitory/base/base.controller.dart';
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,14 +6,16 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:spannable_grid/spannable_grid.dart';
 
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/models/user.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
+import 'package:bvu_dormitory/base/base.controller.dart';
 
-import 'package:bvu_dormitory/base/base.screen.dart';
 import 'rooms.details.students.add.controller.dart';
 
 class AdminRoomsDetailStudentsAddScreen extends StatelessWidget {

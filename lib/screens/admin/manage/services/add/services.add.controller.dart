@@ -1,15 +1,12 @@
-import 'dart:developer';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-// imporlutter/cupertino.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/service.dart';
 import 'package:bvu_dormitory/repositories/service.repository.dart';
 import 'package:bvu_dormitory/widgets/app.form.field.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class AdminServicesAddController extends BaseController {
   AdminServicesAddController({
@@ -58,7 +55,7 @@ class AdminServicesAddController extends BaseController {
         controller: nameController,
         prefixIcon: const Icon(FluentIcons.text_field_24_regular),
         validator: (value) {
-          if (value == null || value.trim().length == 0) {
+          if (value == null || value.trim().isEmpty) {
             return appLocalizations!.app_form_field_required;
           }
         },

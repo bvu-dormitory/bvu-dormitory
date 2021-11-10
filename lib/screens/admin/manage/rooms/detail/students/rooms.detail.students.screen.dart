@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +13,7 @@ import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/models/user.dart';
-
-import 'package:bvu_dormitory/repositories/building.repository.dart';
+import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 
 class AdminRoomsDetailStudentsScreen extends BaseScreen<AdminRoomsDetailStudentsController> {

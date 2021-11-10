@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +21,11 @@ class AdminItemsGroupsScreen extends BaseScreen<AdminItemsGroupsController> {
 
   @override
   AdminItemsGroupsController provideController(BuildContext context) {
-    return AdminItemsGroupsController(context: context, title: parentCategory.name, parentCategory: parentCategory);
+    return AdminItemsGroupsController(
+      context: context,
+      title: parentCategory.name,
+      parentCategory: parentCategory,
+    );
   }
 
   @override
