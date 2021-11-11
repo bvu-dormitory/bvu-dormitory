@@ -1,5 +1,3 @@
-import 'package:bvu_dormitory/models/user.dart';
-import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/rooms.detail.screen.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/rooms.controller.dart';
+import 'package:bvu_dormitory/models/user.dart';
+import 'package:bvu_dormitory/repositories/room.repository.dart';
 
 class AdminRoomsBody extends StatefulWidget {
   const AdminRoomsBody({Key? key}) : super(key: key);
@@ -29,7 +29,7 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Room>>(
-      stream: controller.syncRooms(),
+      stream: RoomRepository.syncRooms(floor: controller.floor),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
@@ -107,7 +107,7 @@ class _AdminRoomsBodyState extends State<AdminRoomsBody> {
           subtitle: Container(
             margin: const EdgeInsets.only(top: 10),
             child: StreamBuilder<List<Student>?>(
-              stream: RoomRepository.syncStudentsInRoom(item.id!),
+              stream: RoomRepository.syncStudentsInRoom(item),
               builder: (context, snapshot) {
                 return Text(
                   controller.appLocalizations!.admin_manage_rooms_quantity(snapshot.data?.length ?? 0),

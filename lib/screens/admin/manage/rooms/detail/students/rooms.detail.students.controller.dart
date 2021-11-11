@@ -190,10 +190,6 @@ class AdminRoomsDetailStudentsController extends BaseController {
     ]);
   }
 
-  Future<Room> loadRoom() {
-    return RoomRepository.loadRoom(building.id!, floor.id!, room.id!);
-  }
-
   Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -242,7 +238,7 @@ class AdminRoomsDetailStudentsController extends BaseController {
         if (value != null) {
           final destinationRoom = (value as Room);
 
-          StudentRepository.changeRoom(student, destinationRoom.id!).then((value) {
+          StudentRepository.setStudent(student..room = destinationRoom.reference).then((value) {
             showSnackbar(appLocalizations!.admin_manage_rooms_detail_students_toast_moved(destinationRoom.name),
                 const Duration(seconds: 5), () {});
           }).catchError((onError) {

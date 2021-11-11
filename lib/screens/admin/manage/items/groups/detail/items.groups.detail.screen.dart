@@ -49,9 +49,11 @@ class AdminItemsGroupsDetailScreen extends BaseScreen<AdminItemsGroupsDetailCont
   @override
   Widget body(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: _itemDetailList(),
+      child: Scrollbar(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: _itemDetailList(),
+        ),
       ),
     );
   }

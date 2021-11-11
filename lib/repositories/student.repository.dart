@@ -42,10 +42,6 @@ class StudentRepository {
     return instance.collection(collectionPath).doc(student.id).set(student.json);
   }
 
-  static Future changeRoom(Student student, String destinationRoomId) {
-    return setStudent(student..roomId = destinationRoomId);
-  }
-
   static Future deleteProfile(Student student) {
     return instance.collection(collectionPath).doc(student.id).delete();
   }

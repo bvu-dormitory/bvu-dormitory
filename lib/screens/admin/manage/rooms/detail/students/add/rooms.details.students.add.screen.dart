@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/widgets/app.form.field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -115,16 +116,18 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
   _body() {
     return WillPopScope(
       child: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Form(
-            key: controller.formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-              child: _formFields(context),
+        child: Scrollbar(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              key: controller.formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+                child: _formFields(context),
+              ),
             ),
           ),
         ),
@@ -185,279 +188,9 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
           rows: 12,
           spacing: 10.0,
           rowHeight: 115,
-          cells: List.generate(
-            controller.formFields.length,
-            (index) {
-              final field = controller.formFields[index];
-
-              return SpannableGridCellData(
-                id: field.label,
-                column: field.colStart,
-                row: field.rowStart,
-                columnSpan: field.colSpan,
-                child: _field(
-                  action: index < controller.formFields.length - 1 ? TextInputAction.next : TextInputAction.done,
-                  fieldController: field.controller,
-                  editable: field.editable,
-                  required: field.required,
-                  type: field.type,
-                  title: field.label,
-                  validator: field.validator,
-                  formatters: field.formatters,
-                  maxLength: field.maxLength,
-                  icon: field.icon,
-                  pickerType: field.pickerType,
-                  pickerData: field.pickerData,
-                  enabled: field.enabled,
-                  pickerInitialData: field.pickerInitialData,
-                  onPickerItemChanged: field.onPickerSelectedItemChanged,
-                ),
-              );
-            },
-          ),
+          cells: List.generate(controller.formFields.length, (index) => controller.formFields[index]),
         ),
       ],
     );
-  }
-
-  _field({
-    required TextEditingController fieldController,
-    required String title,
-    required TextInputType type,
-    required TextInputAction action,
-    bool enabled = true,
-    bool required = false,
-    bool editable = true,
-    int maxLines = 1,
-    IconData? icon,
-    List<TextInputFormatter>? formatters,
-    String? Function(String?)? validator,
-    required int maxLength,
-    List? pickerData,
-    dynamic pickerInitialData,
-    void Function(dynamic)? onPickerItemChanged,
-    AppFormFieldPickerType? pickerType,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.blueGrey,
-                // fontWeight: FontWeight.w500,
-              ),
-            ),
-            if (required) ...{
-              const SizedBox(width: 5),
-              const Icon(FluentIcons.star_24_filled, size: 7, color: Colors.red),
-            },
-          ],
-        ),
-        const SizedBox(height: 5),
-        Stack(
-          children: [
-            TextFormField(
-              controller: fieldController,
-              enabled: enabled,
-              onTap: () {
-                if (pickerType != null) {
-                  if (pickerType == AppFormFieldPickerType.gender) {
-                    showCupertinoModalPopup(
-                      context: context,
-                      builder: (context) {
-                        return _genderPicker(onPickerItemChanged!);
-                      },
-                    );
-                  } else {
-                    showCupertinoModalPopup(
-                      context: context,
-                      builder: (context) {
-                        return _datePicker(
-                          initialValue: pickerInitialData,
-                          onPickerItemChange: onPickerItemChanged!,
-                        );
-                      },
-                    );
-                  }
-                }
-              },
-              readOnly: !editable,
-              keyboardType: type,
-              textInputAction: action,
-              maxLines: maxLines,
-              maxLength: maxLength,
-              validator: validator,
-              inputFormatters: formatters,
-              style: !enabled ? const TextStyle(color: Colors.grey) : null,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: EdgeInsets.only(
-                  top: maxLines > 1 ? 15 : 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 5,
-                ),
-                prefixIcon: icon != null ? Icon(icon) : null,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.5)),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.5)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(width: 2, color: Colors.blue.withOpacity(0.5)),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(width: 2, color: Colors.red.withOpacity(0.5)),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(width: 2, color: Colors.orange.shade900.withOpacity(0.25)),
-                ),
-              ),
-            ),
-            Positioned(
-              right: 0,
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: const Icon(Ionicons.ios_copy_outline),
-                onPressed: () {
-                  _copyFieldInfo(fieldController.text);
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  _genderPicker(void Function(int) onPickerItemChanged) {
-    final controller = context.read<AdminRoomsDetailStudentsAddController>();
-
-    return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-      height: 150,
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CupertinoButton(
-                onPressed: () => Navigator.pop(context),
-                padding: EdgeInsets.zero,
-                child: Text(
-                  AppLocalizations.of(context)!.app_dialog_action_cancel,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-              CupertinoButton(
-                onPressed: () => Navigator.pop(context),
-                padding: EdgeInsets.zero,
-                child: Text(
-                  AppLocalizations.of(context)!.app_dialog_action_ok,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: CupertinoPicker(
-              itemExtent: 30,
-              onSelectedItemChanged: onPickerItemChanged,
-              children: List.generate(
-                controller.genderValues.length,
-                (index) => Text(controller.genderValues[index]),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _datePicker({
-    DateTime? initialValue,
-    required void Function(dynamic) onPickerItemChange,
-  }) {
-    var value = null;
-
-    return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-      height: 200,
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CupertinoButton(
-                onPressed: () {
-                  onPickerItemChange(null);
-                },
-                padding: EdgeInsets.zero,
-                child: Text(
-                  AppLocalizations.of(context)!.app_action_delete,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-              CupertinoButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  onPickerItemChange(value);
-                },
-                padding: EdgeInsets.zero,
-                child: Text(
-                  AppLocalizations.of(context)!.app_dialog_action_ok,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: CupertinoDatePicker(
-              // initialDateTime: initialValue,
-              onDateTimeChanged: (val) {
-                value = val;
-              },
-              mode: CupertinoDatePickerMode.date,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _copyFieldInfo(String fieldValue) {
-    FlutterClipboard.copy(fieldValue).then((value) {
-      controller.showSnackbar(AppLocalizations.of(context)!.app_toast_copied, const Duration(seconds: 5), () {});
-    }).catchError((onError) {
-      controller.showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
-    });
   }
 }

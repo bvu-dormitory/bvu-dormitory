@@ -1,4 +1,5 @@
 import 'package:bvu_dormitory/base/base.controller.dart';
+import 'package:bvu_dormitory/models/invoice.dart';
 import 'package:flutter/material.dart';
 
 class AdminRoomsDetailInvoicesController extends BaseController {
@@ -6,4 +7,8 @@ class AdminRoomsDetailInvoicesController extends BaseController {
     required BuildContext context,
     required String title,
   }) : super(context: context, title: title);
+
+  onInvoiceItemPressed(Invoice invoice) {}
+
+  onInvoicdItemContextMenuOpen(Invoice invoice) {}
 }

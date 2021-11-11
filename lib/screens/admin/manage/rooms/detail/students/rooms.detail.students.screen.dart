@@ -63,57 +63,59 @@ class AdminRoomsDetailStudentsScreen extends BaseScreen<AdminRoomsDetailStudents
   @override
   Widget body(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: StreamBuilder<List<Student>>(
-          stream: RoomRepository.syncStudentsInRoom(room.id!),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.active:
-              case ConnectionState.done:
-                if (snapshot.hasError) {
-                  context
-                      .read<AdminRoomsDetailStudentsController>()
-                      .showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
-                }
+      child: Scrollbar(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: StreamBuilder<List<Student>>(
+            stream: RoomRepository.syncStudentsInRoom(room),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  if (snapshot.hasError) {
+                    context
+                        .read<AdminRoomsDetailStudentsController>()
+                        .showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
+                  }
 
-                if (snapshot.hasData) {
-                  return AppMenuGroup(
-                      items: snapshot.data!.map(
-                    (student) {
-                      return AppMenuGroupItem(
-                        title: student.fullName,
-                        titleStyle: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                        ),
-                        subTitle: Text(student.id!),
-                        trailing: CupertinoSwitch(
-                          value: student.isActive,
-                          onChanged: (value) => context
-                              .read<AdminRoomsDetailStudentsController>()
-                              .onStudentActiveStateChanged(student, value),
-                        ),
-                        onPressed: () =>
-                            context.read<AdminRoomsDetailStudentsController>().onStudentItemPressed(student),
-                      );
-                    },
-                  ).toList());
-                } else {
-                  return SafeArea(
-                    child: Text(AppLocalizations.of(context)!.admin_manage_rooms_detail_students_empty),
-                  );
-                }
+                  if (snapshot.hasData) {
+                    return AppMenuGroup(
+                        items: snapshot.data!.map(
+                      (student) {
+                        return AppMenuGroupItem(
+                          title: student.fullName,
+                          titleStyle: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
+                          subTitle: Text(student.id!),
+                          trailing: CupertinoSwitch(
+                            value: student.isActive,
+                            onChanged: (value) => context
+                                .read<AdminRoomsDetailStudentsController>()
+                                .onStudentActiveStateChanged(student, value),
+                          ),
+                          onPressed: () =>
+                              context.read<AdminRoomsDetailStudentsController>().onStudentItemPressed(student),
+                        );
+                      },
+                    ).toList());
+                  } else {
+                    return SafeArea(
+                      child: Text(AppLocalizations.of(context)!.admin_manage_rooms_detail_students_empty),
+                    );
+                  }
 
-              default:
-                return const SafeArea(
-                  child: Center(
-                    child: CupertinoActivityIndicator(
-                      radius: 10,
+                default:
+                  return const SafeArea(
+                    child: Center(
+                      child: CupertinoActivityIndicator(
+                        radius: 10,
+                      ),
                     ),
-                  ),
-                );
-            }
-          },
+                  );
+              }
+            },
+          ),
         ),
       ),
     );

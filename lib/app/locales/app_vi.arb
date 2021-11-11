@@ -170,6 +170,10 @@
 
 
     "admin_manage_buildings_title": "Các Khu",
+    "admin_manage_buildings_add_title": "Tên Khu",
+    "admin_manage_buildings_add_descriptions": "Mô tả",
+    "admin_manage_buildings_add_error_existed": "Tên Khu đã tồn tại, vui lòng nhập tên khác",
+
     "admin_manage_rooms_title": "Các Phòng",
     "admin_manage_rooms_quantity": "Đang ở: {quantity}",
     "@admin_manage_rooms_quantity": {
@@ -254,7 +258,16 @@
     "admin_manage_student_menu_add_field_hometown": "Quê quán",
     "admin_manage_student_menu_add_datepicker_guide": "Cuộn để chọn ngày sinh",
     "admin_manage_student_menu_add_validation_failed_phone_exists": "Số điện thoại này đã được đăng kí với người dùng khác, vui lòng kiểm tra lại",
-    "admin_manage_student_menu_add_validation_failed_phone_invalid": "Số điện thoại không hợp lệ"
+    "admin_manage_student_menu_add_validation_failed_phone_invalid": "Số điện thoại không hợp lệ",
 
 
+    "admin_manage_invoice_month": "Tháng {month}",
+    "admin_manage_invoice_add": "Thêm Hóa đơn",
+    "@admin_manage_invoice_month": {
+        "placeholders": {
+            "month": {
+                "type": "int"
+            }
+        }
+    }
 }

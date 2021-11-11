@@ -39,9 +39,11 @@ class AdminRoomsDetailScreen extends BaseScreen<AdminRoomsDetailController> {
   @override
   Widget body(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: _body(),
+      child: Scrollbar(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: _body(),
+        ),
       ),
     );
   }

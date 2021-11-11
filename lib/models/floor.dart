@@ -7,12 +7,14 @@ class Floor extends FireStoreModel {
   Floor({
     String? id,
     required this.order,
-  }) : super(id: id);
+    DocumentReference? reference,
+  }) : super(id: id, reference: reference);
 
   factory Floor.fromFireStoreDocument(DocumentSnapshot<Object?> snapshot) {
     return Floor(
       id: snapshot.id,
       order: snapshot['order'],
+      reference: snapshot.reference,
     );
   }
 

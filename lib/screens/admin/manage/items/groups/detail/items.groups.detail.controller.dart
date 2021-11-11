@@ -1,17 +1,17 @@
 import 'dart:developer';
 
-import 'package:bvu_dormitory/models/room.dart';
-import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.screen.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:bvu_dormitory/base/base.controller.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:spannable_grid/spannable_grid.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:spannable_grid/spannable_grid.dart';
+
+import 'package:bvu_dormitory/base/base.controller.dart';
+import 'package:bvu_dormitory/models/room.dart';
+import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.screen.dart';
 import 'package:bvu_dormitory/models/item.dart';
 import 'package:bvu_dormitory/repositories/item.repository.dart';
 import 'package:bvu_dormitory/widgets/app.form.field.dart';
@@ -271,22 +271,22 @@ class AdminItemsGroupsDetailController extends BaseController {
         title: appLocalizations!.app_bottom_sheet_menu_actions,
         items: [
           AppModalBottomSheetItem(
+            label:
+                Text(appLocalizations!.admin_manage_item_edit, style: TextStyle(color: Colors.black.withOpacity(0.6))),
+            icon: const Icon(FluentIcons.compose_24_regular),
+            onPressed: () => showItemEditBottomSheet(item: item),
+          ),
+          AppModalBottomSheetItem(
             label: Text(
               item.roomId != null
                   ? appLocalizations!.admin_manage_item_detail_detach
                   : appLocalizations!.admin_manage_item_detail_attach,
               style: TextStyle(color: Colors.black.withOpacity(0.6)),
             ),
-            icon: Icon(item.roomId != null ? Ionicons.log_out_outline : Ionicons.log_in_outline, size: 28),
+            icon: Icon(item.roomId != null ? SimpleLineIcons.logout : SimpleLineIcons.login, size: 22),
             onPressed: () => item.roomId == null
                 ? _assignOrDetechFromRoom(item: item)
                 : _assignOrDetechFromRoom(item: item, detaching: true),
-          ),
-          AppModalBottomSheetItem(
-            label:
-                Text(appLocalizations!.admin_manage_item_edit, style: TextStyle(color: Colors.black.withOpacity(0.6))),
-            icon: const Icon(FluentIcons.compose_24_regular),
-            onPressed: () => showItemEditBottomSheet(item: item),
           ),
           AppModalBottomSheetItem(
             label: Text(

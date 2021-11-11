@@ -51,10 +51,37 @@ class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
 
   @override
   Widget body(BuildContext context) {
-    return const SafeArea(
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
-        child: AdminBuildingsBody(),
+    return SafeArea(
+      child: Stack(
+        fit: StackFit.expand,
+        children: const [
+          Scrollbar(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(20),
+              child: AdminBuildingsBody(),
+            ),
+          ),
+          // Positioned(
+          //   right: 20,
+          //   bottom: 20,
+          //   child: CupertinoButton(
+          //     padding: const EdgeInsets.all(0),
+          //     borderRadius: BorderRadius.circular(50),
+          //     child: Container(
+          //       child: const Icon(FluentIcons.folder_add_24_regular, color: Colors.blue),
+          //       padding: const EdgeInsets.all(15),
+          //       decoration: BoxDecoration(
+          //         color: Colors.white,
+          //         shape: BoxShape.circle,
+          //         border: Border.all(color: Colors.grey.withOpacity(0.15)),
+          //       ),
+          //     ),
+          //     onPressed: () {
+          //       context.read<AdminBuildingsController>().showCategoryEditBottomSheet();
+          //     },
+          //   ),
+          // ),
+        ],
       ),
     );
   }

@@ -42,9 +42,11 @@ class AdminRoomsDetailItemsScreen extends BaseScreen<AdminRoomsDetailItemsContro
   @override
   Widget body(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: _itemsList(),
+      child: Scrollbar(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: _itemsList(),
+        ),
       ),
     );
   }
@@ -86,29 +88,9 @@ class AdminRoomsDetailItemsScreen extends BaseScreen<AdminRoomsDetailItemsContro
       return (o as Item).reference!.parent.parent!;
     });
 
-    // log('groups:');
-    // print(groupedItems);
-    groupedItems.entries.map((e) {
-      return AppMenuGroup(
-        title: e.key.path,
-        items: List.generate(e.value.length, (index) {
-          final theItem = list[index];
-
-          return AppMenuGroupItem(
-            title: theItem.code,
-            titleStyle: const TextStyle(fontWeight: FontWeight.w500),
-            hasTrailingArrow: false,
-            subTitle: Container(
-              padding: const EdgeInsets.only(top: 10),
-              child: Text(theItem.price),
-            ),
-          );
-        }),
-      );
-    }).toList();
-
     return ListView.builder(
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: groupedItems.length,
       itemBuilder: (context, index) {
         final items = groupedItems.values.toList()[index];
@@ -136,7 +118,7 @@ class AdminRoomsDetailItemsScreen extends BaseScreen<AdminRoomsDetailItemsContro
                         return AppMenuGroupItem(
                           title: theItem.code,
                           titleStyle: const TextStyle(fontWeight: FontWeight.w500),
-                          // icon: FluentIcons.number_symbol_24_regular,
+                          icon: FluentIcons.number_symbol_16_regular,
                           subTitle: Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: Row(

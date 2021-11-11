@@ -85,7 +85,7 @@ class AppUser extends FireStoreModel {
 }
 
 class Student extends AppUser {
-  String? roomId;
+  DocumentReference? room;
 
   bool isActive;
   String gender;
@@ -110,7 +110,7 @@ class Student extends AppUser {
     required this.birthDate,
     required this.joinDate,
     required this.citizenIdNumber,
-    this.roomId,
+    this.room,
     this.outDate,
     this.notes,
     this.studentIdNumber,
@@ -125,7 +125,7 @@ class Student extends AppUser {
 
     final student = Student(
       id: snapshot.id,
-      roomId: data['room_id'],
+      room: data['room'],
       isActive: data['active'] as bool,
       firstName: data['first_name'],
       lastName: data['last_name'],
@@ -160,7 +160,7 @@ class Student extends AppUser {
   @override
   Map<String, dynamic> get json => {
         'role': describeEnum(role),
-        'room_id': roomId,
+        'room': room,
         'active': true,
         'first_name': firstName,
         'last_name': lastName,

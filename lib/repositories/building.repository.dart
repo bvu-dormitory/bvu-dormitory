@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
-import 'package:bvu_dormitory/models/room.dart';
 
 class BuildingRepository {
-  static final instance = FirebaseFirestore.instance.collection('buildings');
+  static final instance = FirebaseFirestore.instance;
+  static const String collectionPath = 'buildings';
 
   /// Realtime syncing all buildings
   static Stream<List<Building>> syncAll() {
     return instance
-        .orderBy('order', descending: true)
+        .collection(collectionPath)
         .snapshots()
         .map((event) => event.docs.map((e) => Building.fromFireStoreDocument(e)).toList());
   }
@@ -18,6 +18,7 @@ class BuildingRepository {
   /// Realtime syncing all floor in a building
   static Stream<List<Floor>> syncAllFloors(String buildingId) {
     return instance
+        .collection(collectionPath)
         .doc(buildingId)
         .collection('floors')
         .orderBy('order')
@@ -25,29 +26,26 @@ class BuildingRepository {
         .map((event) => event.docs.map((e) => Floor.fromFireStoreDocument(e)).toList());
   }
 
-  /// Realtime syncing all rooms in a floor
-  static Stream<List<Room>> syncAllRooms(String buildingId, String floorId) {
-    return instance
-        .doc(buildingId)
-        .collection('floors')
-        .doc(floorId)
-        .collection('rooms')
-        .orderBy('name')
-        .snapshots()
-        .map(
-          (event) => event.docs.map((e) => Room.fromFireStoreDocument(e)).toList(),
-        );
+  static Future<bool> isBuildingNameAlreadyExists({required String value}) async {
+    final buildings = await instance.collection(collectionPath).where('name', isEqualTo: value).get();
+    return buildings.size > 0;
   }
 
-  // Stream<Room> syncRoom(String buildingId, String floorId, String roomId) {
-  //   return self
-  //       .doc(buildingId)
-  //       .collection('floors')
-  //       .doc(floorId)
-  //       .collection('rooms')
-  //       .doc(roomId)
-  //       .snapshots()
-  //       .map((event) => Room.fromFireStoreDocument(event));
-  // }
+  static Future<bool> isBuildingNameAlreadyExistsExcept({required String value, required String except}) async {
+    final buildings =
+        await instance.collection(collectionPath).where('name', isEqualTo: value, isNotEqualTo: except).get();
+    return buildings.size > 0;
+  }
 
+  static Future addBuilding({required Building value}) {
+    return instance.collection(collectionPath).add(value.json);
+  }
+
+  static Future updateBuilding({required Building value}) {
+    return instance.collection(collectionPath).doc(value.id!).set(value.json);
+  }
+
+  // static void changeFloorOrder({String buildingId, int oldOrder, int newOrder}) {
+
+  // }
 }

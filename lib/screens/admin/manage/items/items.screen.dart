@@ -37,9 +37,11 @@ class AdminItemsScreen extends BaseScreen<AdminItemsController> {
   @override
   Widget body(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: _itemCategoriesList(),
+      child: Scrollbar(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: _itemCategoriesList(),
+        ),
       ),
     );
   }

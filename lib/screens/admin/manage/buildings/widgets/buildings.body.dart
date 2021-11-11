@@ -1,123 +1,146 @@
+import 'dart:developer';
+
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:bvu_dormitory/models/floor.dart';
+import 'package:bvu_dormitory/repositories/building.repository.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/rooms.screen.dart';
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/screens/admin/manage/buildings/buildings.controller.dart';
 
-class AdminBuildingsBody extends StatefulWidget {
+class AdminBuildingsBody extends StatelessWidget {
   const AdminBuildingsBody({Key? key}) : super(key: key);
-
-  @override
-  _AdminBuildingsBodyState createState() => _AdminBuildingsBodyState();
-}
-
-class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
-  late AdminBuildingsController controller;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    controller = Provider.of<AdminBuildingsController>(context, listen: true);
-  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Building>>(
-      stream: controller.syncBuildings(),
+      stream: BuildingRepository.syncAll(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Building> buildings = snapshot.data!;
+          context.read<AdminBuildingsController>().expansionStates = List.filled(buildings.length, true);
 
-          return CupertinoScrollbar(
-            // isAlwaysShown: true,
-            scrollbarOrientation: ScrollbarOrientation.right,
-            child: ListView.builder(
-              // physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              primary: false,
-              itemCount: buildings.length,
-              itemBuilder: (context, index) => _buildingItem(buildings[index], buildings.length, index),
-            ),
+          return Consumer<AdminBuildingsController>(
+            builder: (context, controller, child) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: ExpansionPanelList(
+                  elevation: 0,
+                  expandedHeaderPadding: const EdgeInsets.symmetric(vertical: 0),
+                  animationDuration: const Duration(milliseconds: 540),
+                  expansionCallback: (panelIndex, isExpanded) {
+                    controller.updateExpansionStateAt(panelIndex, !controller.expansionStates[panelIndex]);
+                  },
+                  children: List.generate(buildings.length, (index) {
+                    final theBuilding = buildings[index];
+
+                    // each panel represents for a Building
+                    return ExpansionPanel(
+                      isExpanded: controller.expansionStates[index],
+                      canTapOnHeader: true,
+                      headerBuilder: (context, isExpanded) {
+                        return GestureDetector(
+                          onLongPress: () {
+                            controller.showBottomSheetMenuModal('title', null, true, []);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.admin_manage_building + ' ' + theBuilding.name,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Colors.black.withOpacity(0.7),
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  theBuilding.descriptions,
+                                  style: TextStyle(
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      // floors of a Building
+                      body: StreamBuilder<List<Floor>>(
+                        stream: BuildingRepository.syncAllFloors(theBuilding.id!),
+                        builder: (context, snapshot) => Column(
+                          children: List.generate(snapshot.data?.length ?? 0, (index) {
+                            return _buildingItemFloor(
+                              context: context,
+                              building: theBuilding,
+                              floor: snapshot.data!.elementAt(index),
+                              isSuffixItem: index == (snapshot.data?.length ?? 0),
+                            );
+                          }),
+                        ),
+
+                        // ListView.builder(
+                        //   shrinkWrap: true,
+                        //   physics: const NeverScrollableScrollPhysics(),
+                        //   itemCount: (snapshot.data?.length ?? 0),
+                        //   itemBuilder: (context, index) {
+                        //     return _buildingItemFloor(
+                        //       context: context,
+                        //       building: theBuilding,
+                        //       floor: snapshot.data?.elementAt(index),
+                        //       isSuffixItem: index == (snapshot.data?.length ?? 0),
+                        //     );
+                        //   },
+                        // ),
+
+                        //  ReorderableListView.builder(
+                        //   onReorder: (oldIndex, newIndex) {
+                        //     final theFloors = snapshot.data!;
+                        //     controller.onFloorOrderChanged(
+                        //         buildingId: theBuilding.id!, oldOrder: oldIndex, newOrder: newIndex);
+                        //   },
+                        //   shrinkWrap: true,
+                        //   physics: const NeverScrollableScrollPhysics(),
+                        //   itemCount: snapshot.data?.length ?? 0,
+                        //   itemBuilder: (context, index) {
+                        //     return _buildingItemFloor(context, theBuilding, snapshot.data!.elementAt(index));
+                        //   },
+                        // ),
+                      ),
+                    );
+                  }),
+                ),
+              );
+            },
           );
         }
 
         return const Center(
-          child: Text(
-            'Có lỗi trong quá trình xử lý thông tin.',
-            textAlign: TextAlign.center,
-          ),
+          child: CupertinoActivityIndicator(radius: 10),
         );
       },
     );
   }
 
-  _buildingItem(Building item, int total, int index) {
-    return StreamBuilder<List<Floor>>(
-      stream: controller.syncFloors(item.id!),
-      builder: (context, snapshot) => ClipRRect(
-        borderRadius: index == 0
-            ? const BorderRadius.vertical(top: Radius.circular(10))
-            : index == total - 1
-                ? const BorderRadius.vertical(bottom: Radius.circular(10))
-                : const BorderRadius.all(Radius.zero),
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 2),
-          decoration: BoxDecoration(
-            borderRadius: index == 0
-                ? const BorderRadius.vertical(top: Radius.circular(10))
-                : index == total - 1
-                    ? const BorderRadius.vertical(bottom: Radius.circular(10))
-                    : const BorderRadius.all(Radius.zero),
-          ),
-          child: Theme(
-            data: ThemeData(
-              dividerColor: Colors.transparent,
-            ),
-            child: ExpansionTile(
-              backgroundColor: Colors.white,
-              collapsedBackgroundColor: Colors.white,
-              onExpansionChanged: (value) {},
-              childrenPadding: const EdgeInsets.only(bottom: 10),
-              initiallyExpanded: false,
-              textColor: Colors.blue,
-              title: Text(
-                "${controller.appLocalizations?.admin_manage_building} ${item.name}",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Colors.black.withOpacity(0.75),
-                  fontWeight: FontWeight.w700,
-                  // fontSize: 20,
-                ),
-              ),
-              subtitle: Text(
-                item.descriptions,
-                style: TextStyle(
-                  color: Colors.black.withOpacity(0.6),
-                ),
-              ),
-              children: _buildingItemFloors(item, snapshot),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  _buildingItemFloor({
+    required BuildContext context,
+    required Building building,
+    required Floor floor,
+    bool isSuffixItem = false,
+  }) {
+    final controller = context.read<AdminBuildingsController>();
 
-  List<Widget> _buildingItemFloors(Building building, AsyncSnapshot<List<Floor>> snapshot) {
-    return snapshot.hasData
-        ? List.generate(snapshot.data!.length, (index) => _buildingItemFloor(building, snapshot.data!.elementAt(index)))
-        : [
-            const Text('Empty'),
-          ];
-  }
-
-  _buildingItemFloor(Building building, Floor floor) {
     return SizedBox(
+      key: Key("${isSuffixItem ? building.id : floor.id}"),
       width: double.infinity,
       child: CupertinoButton(
         padding: const EdgeInsets.only(
@@ -150,11 +173,16 @@ class _AdminBuildingsBodyState extends State<AdminBuildingsBody> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "${controller.appLocalizations?.admin_manage_floor} ${floor.order}",
+              !isSuffixItem ? "${controller.appLocalizations?.admin_manage_floor} ${floor.order}" : '+',
             ),
-            const Icon(
-              CupertinoIcons.chevron_right,
-              size: 16,
+            Row(
+              children: const [
+                Icon(
+                  CupertinoIcons.chevron_right,
+                  size: 16,
+                ),
+                SizedBox(width: 5),
+              ],
             ),
           ],
         ),

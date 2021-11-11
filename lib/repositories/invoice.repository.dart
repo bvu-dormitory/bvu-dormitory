@@ -11,4 +11,18 @@ class InvoiceRepository {
         .snapshots()
         .map((event) => event.docs.map((e) => Invoice.fromFireStoreDocument(e)).toList());
   }
+
+  static Stream<List<Invoice>> syncInvoicesInRoom(
+      {required String buildingId, required String floorId, required String roomId}) {
+    return instance
+        .collection('buildings')
+        .doc(buildingId)
+        .collection('floors')
+        .doc(floorId)
+        .collection('rooms')
+        .doc(roomId)
+        .collection('invoices')
+        .snapshots()
+        .map((event) => event.docs.map((e) => Invoice.fromFireStoreDocument(e)).toList());
+  }
 }

@@ -7,14 +7,14 @@ class Building extends FireStoreModel {
 
   Building({
     String? id,
+    DocumentReference? reference,
     required this.name,
     required this.descriptions,
-  }) : super(id: id);
+  }) : super(id: id, reference: reference);
 
   @override
   Map<String, dynamic> get json {
     return {
-      'id': id,
       'name': name,
       'descriptions': descriptions,
     };
@@ -24,6 +24,7 @@ class Building extends FireStoreModel {
     return Building(
       id: snapshot.id,
       name: snapshot['name'],
+      reference: snapshot.reference,
       descriptions: snapshot['descriptions'],
     );
   }

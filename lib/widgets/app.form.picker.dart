@@ -11,9 +11,12 @@ enum AppFormPickerFieldType {
 class AppFormPicker extends StatelessWidget {
   final AppFormPickerFieldType type;
   final List<dynamic>? dataList;
-  final dynamic initialValue;
   final void Function(dynamic) onSelectedItemChanged; // callback for parent
+
+  final dynamic initialValue;
   dynamic currentValue;
+  late CupertinoDatePicker datePicker;
+  late CupertinoPicker customPicker;
 
   AppFormPicker({
     Key? key,
@@ -21,19 +24,32 @@ class AppFormPicker extends StatelessWidget {
     this.initialValue,
     required this.type,
     required this.onSelectedItemChanged,
-  }) : super(key: key);
+  }) : super(key: key) {
+    /// date picker
+    if (type == AppFormPickerFieldType.date) {
+      datePicker = CupertinoDatePicker(
+        initialDateTime: initialValue,
+        onDateTimeChanged: (value) {
+          currentValue = value;
+        },
+        mode: CupertinoDatePickerMode.date,
+      );
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    switch (type) {
-      case AppFormPickerFieldType.date:
-
-      default:
-        return _datePicker(context);
+    /// custom picker
+    else {
+      customPicker = CupertinoPicker(
+        itemExtent: 40,
+        onSelectedItemChanged: (value) {
+          currentValue = value;
+        },
+        children: dataList!.map((e) => Text(e.toString())).toList(),
+      );
     }
   }
 
-  _datePicker(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
       height: 200,
@@ -44,7 +60,7 @@ class AppFormPicker extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              /// delete value button
+              /// value removing button => clear current value
               CupertinoButton(
                 onPressed: () {
                   onSelectedItemChanged(null);
@@ -59,7 +75,7 @@ class AppFormPicker extends StatelessWidget {
                 ),
               ),
 
-              /// ok button
+              /// ok button => return lastest selected value
               CupertinoButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -77,13 +93,7 @@ class AppFormPicker extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Expanded(
-            child: CupertinoDatePicker(
-              initialDateTime: initialValue,
-              onDateTimeChanged: (value) {
-                currentValue = value;
-              },
-              mode: CupertinoDatePickerMode.date,
-            ),
+            child: type == AppFormPickerFieldType.date ? datePicker : customPicker,
           ),
         ],
       ),

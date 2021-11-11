@@ -1,14 +1,14 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/widgets/app.form.field.dart';
+import 'package:bvu_dormitory/widgets/app.form.picker.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-
 import 'package:bvu_dormitory/helpers/extensions/string.extensions.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
-
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
@@ -16,53 +16,7 @@ import 'package:bvu_dormitory/models/user.dart';
 
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
 import 'package:bvu_dormitory/repositories/student.repository.dart';
-
-enum AppFormFieldPickerType {
-  date,
-  gender,
-}
-
-class AppFormField {
-  final int colStart;
-  final int rowStart;
-  final int colSpan;
-  final TextEditingController controller;
-  final bool required;
-  final String label;
-  final bool editable;
-  final bool enabled;
-  final void Function()? onTap;
-  final String? Function(String?)? validator;
-  final TextInputType type;
-  final List<TextInputFormatter>? formatters;
-  final int maxLength;
-  final IconData? icon;
-  final AppFormFieldPickerType? pickerType;
-  final List<dynamic>? pickerData;
-  final void Function(dynamic)? onPickerSelectedItemChanged;
-  final dynamic pickerInitialData;
-
-  AppFormField({
-    required this.label,
-    required this.controller,
-    required this.colStart,
-    this.colSpan = 1,
-    required this.rowStart,
-    this.type = TextInputType.text,
-    this.required = false,
-    this.editable = true,
-    this.validator,
-    this.icon,
-    required this.maxLength,
-    this.enabled = true,
-    this.formatters,
-    this.onTap,
-    this.pickerData,
-    this.pickerType,
-    this.pickerInitialData,
-    this.onPickerSelectedItemChanged,
-  });
-}
+import 'package:spannable_grid/spannable_grid.dart';
 
 class AdminRoomsDetailStudentsAddController extends BaseController {
   AdminRoomsDetailStudentsAddController({
@@ -146,7 +100,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
-  List<AppFormField> get formFields => [
+  List<SpannableGridCellData> get formFields => [
         lastNameField,
         firstNameField,
         genderField,
@@ -190,215 +144,271 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   late final TextEditingController outDateController;
   late final TextEditingController notesController;
 
-  AppFormField get lastNameField => AppFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_last_name,
-        controller: lastNameController,
-        colStart: 1,
-        rowStart: 1,
-        colSpan: 4,
-        required: true,
-        type: TextInputType.name,
-        maxLength: 30,
-        icon: FluentIcons.text_field_24_regular,
-        formatters: [],
-        enabled: isFormEditing,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return appLocalizations!.app_form_field_required;
-          }
-        },
+  SpannableGridCellData get lastNameField => SpannableGridCellData(
+        id: 1,
+        column: 1,
+        row: 1,
+        columnSpan: 4,
+        child: AppFormField(
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_last_name,
+          controller: lastNameController,
+          required: true,
+          keyboardType: TextInputType.name,
+          maxLength: 30,
+          prefixIcon: const Icon(FluentIcons.text_field_24_regular),
+          enabled: isFormEditing,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return appLocalizations!.app_form_field_required;
+            }
+          },
+        ),
       );
 
-  AppFormField get firstNameField => AppFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_first_name,
-        controller: firstNameController,
-        colStart: 1,
-        rowStart: 2,
-        colSpan: 4,
-        maxLength: 20,
-        required: true,
-        enabled: isFormEditing,
-        icon: FluentIcons.text_field_24_regular,
-        type: TextInputType.name,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return appLocalizations!.app_form_field_required;
-          }
-        },
+  SpannableGridCellData get firstNameField => SpannableGridCellData(
+        id: 2,
+        column: 1,
+        row: 2,
+        columnSpan: 4,
+        child: AppFormField(
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_first_name,
+          controller: firstNameController,
+          maxLength: 20,
+          required: true,
+          enabled: isFormEditing,
+          prefixIcon: const Icon(FluentIcons.text_field_24_regular),
+          keyboardType: TextInputType.name,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return appLocalizations!.app_form_field_required;
+            }
+          },
+        ),
       );
 
-  AppFormField get genderField => AppFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_gender,
-        controller: genderController,
-        colStart: 1,
-        rowStart: 3,
-        colSpan: 4,
-        required: true,
-        editable: false,
-        enabled: isFormEditing,
-        icon: FluentIcons.people_24_regular,
-        maxLength: 10,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return appLocalizations!.app_form_field_required;
-          }
-        },
-        pickerType: AppFormFieldPickerType.gender,
-        pickerData: genderValues,
-        onPickerSelectedItemChanged: onGenderPickerSelectedIndexChanged,
+  SpannableGridCellData get genderField => SpannableGridCellData(
+        id: 3,
+        column: 1,
+        row: 3,
+        columnSpan: 4,
+        child: AppFormField(
+          type: AppFormFieldType.picker,
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_gender,
+          controller: genderController,
+          required: true,
+          editable: false,
+          enabled: isFormEditing,
+          prefixIcon: const Icon(FluentIcons.people_24_regular),
+          maxLength: 10,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return appLocalizations!.app_form_field_required;
+            }
+          },
+          picker: AppFormPicker(
+            type: AppFormPickerFieldType.custom,
+            dataList: genderValues,
+            onSelectedItemChanged: onGenderPickerSelectedIndexChanged,
+          ),
+        ),
       );
 
-  AppFormField get dobField => AppFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_dob,
-        controller: dobController,
-        colStart: 1,
-        rowStart: 4,
-        colSpan: 4,
-        required: true,
-        editable: false,
-        enabled: isFormEditing,
-        maxLength: 10,
-        icon: FluentIcons.food_cake_24_regular,
-        pickerType: AppFormFieldPickerType.date,
-        onPickerSelectedItemChanged: onDateOfBirthPickerSelectedIndexChanged,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return appLocalizations!.app_form_field_required;
-          }
-        },
+  SpannableGridCellData get dobField => SpannableGridCellData(
+        id: 5,
+        column: 1,
+        row: 4,
+        columnSpan: 4,
+        child: AppFormField(
+          type: AppFormFieldType.picker,
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_dob,
+          controller: dobController,
+          required: true,
+          editable: false,
+          enabled: isFormEditing,
+          maxLength: 10,
+          prefixIcon: const Icon(FluentIcons.food_cake_24_regular),
+          picker: AppFormPicker(
+            type: AppFormPickerFieldType.date,
+            onSelectedItemChanged: onDateOfBirthPickerSelectedIndexChanged,
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return appLocalizations!.app_form_field_required;
+            }
+          },
+        ),
       );
 
-  AppFormField get homeTownField => AppFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_hometown,
-        controller: homeTownController,
-        colStart: 1,
-        rowStart: 5,
-        colSpan: 4,
-        required: true,
-        enabled: isFormEditing,
-        maxLength: 100,
-        icon: FluentIcons.globe_24_regular,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return appLocalizations!.app_form_field_required;
-          }
-        },
+  SpannableGridCellData get homeTownField => SpannableGridCellData(
+        id: 6,
+        column: 1,
+        row: 5,
+        columnSpan: 4,
+        child: AppFormField(
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_hometown,
+          controller: homeTownController,
+          required: true,
+          enabled: isFormEditing,
+          maxLength: 100,
+          prefixIcon: const Icon(FluentIcons.globe_24_regular),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return appLocalizations!.app_form_field_required;
+            }
+          },
+        ),
       );
 
-  AppFormField get idField => AppFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_id,
-        controller: idController,
-        colStart: 1,
-        rowStart: 6,
-        colSpan: 4,
-        required: true,
-        enabled: isFormEditing,
-        maxLength: 20,
-        icon: FluentIcons.phone_24_regular,
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return appLocalizations!.app_form_field_required;
-          }
-        },
+  SpannableGridCellData get idField => SpannableGridCellData(
+        id: 7,
+        column: 1,
+        row: 6,
+        columnSpan: 4,
+        child: AppFormField(
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_id,
+          controller: idController,
+          required: true,
+          enabled: isFormEditing,
+          maxLength: 20,
+          prefixIcon: const Icon(FluentIcons.phone_24_regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return appLocalizations!.app_form_field_required;
+            }
+          },
+        ),
       );
 
-  AppFormField get phoneField => AppFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_phone,
-        controller: phoneController,
-        colStart: 1,
-        rowStart: 7,
-        colSpan: 4,
-        required: true,
-        enabled: student == null,
-        maxLength: 10,
-        icon: FluentIcons.call_24_regular,
-        type: TextInputType.number,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return appLocalizations!.app_form_field_required;
-          }
+  SpannableGridCellData get phoneField => SpannableGridCellData(
+        id: 8,
+        column: 1,
+        row: 7,
+        columnSpan: 4,
+        child: AppFormField(
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_phone,
+          controller: phoneController,
+          required: true,
+          enabled: student == null,
+          maxLength: 10,
+          prefixIcon: const Icon(FluentIcons.call_24_regular),
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return appLocalizations!.app_form_field_required;
+            }
 
-          if (!value.isValidPhoneNumber) {
-            return appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_invalid;
-          }
-        },
+            if (!value.isValidPhoneNumber) {
+              return appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_invalid;
+            }
+          },
+        ),
       );
 
-  AppFormField get parentPhoneField => AppFormField(
-      label: appLocalizations!.admin_manage_student_menu_add_field_parent_phone,
-      controller: parentPhoneController,
-      colStart: 1,
-      rowStart: 8,
-      colSpan: 4,
-      enabled: isFormEditing,
-      maxLength: 10,
-      icon: FluentIcons.call_transfer_20_regular,
-      type: TextInputType.number,
-      validator: (value) {
-        if ((value != null && value.isNotEmpty) && !value.isValidPhoneNumber) {
-          return appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_invalid;
-        }
-      });
-
-  AppFormField get mssvField => AppFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_mssv,
-        controller: mssvController,
-        colStart: 1,
-        rowStart: 9,
-        colSpan: 4,
-        maxLength: 15,
-        enabled: isFormEditing,
-        icon: FluentIcons.hat_graduation_24_regular,
+  SpannableGridCellData get parentPhoneField => SpannableGridCellData(
+        id: 9,
+        column: 1,
+        row: 8,
+        columnSpan: 4,
+        child: AppFormField(
+            context: context,
+            label: appLocalizations!.admin_manage_student_menu_add_field_parent_phone,
+            controller: parentPhoneController,
+            enabled: isFormEditing,
+            maxLength: 10,
+            prefixIcon: const Icon(FluentIcons.call_transfer_20_regular),
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if ((value != null && value.isNotEmpty) && !value.isValidPhoneNumber) {
+                return appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_invalid;
+              }
+            }),
       );
 
-  AppFormField get joinDateField => AppFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_join_date,
-        controller: joinDateController,
-        colStart: 1,
-        rowStart: 10,
-        enabled: isFormEditing,
-        colSpan: 4,
-        required: true,
-        editable: false,
-        maxLength: 10,
-        icon: FluentIcons.calendar_arrow_down_24_regular,
-        pickerType: AppFormFieldPickerType.date,
-        onPickerSelectedItemChanged: onJoinDatePickerSelectedIndexChanged,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return appLocalizations!.app_form_field_required;
-          }
-        },
+  SpannableGridCellData get mssvField => SpannableGridCellData(
+        id: 10,
+        column: 1,
+        row: 9,
+        columnSpan: 4,
+        child: AppFormField(
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_mssv,
+          controller: mssvController,
+          maxLength: 15,
+          enabled: isFormEditing,
+          prefixIcon: const Icon(FluentIcons.hat_graduation_24_regular),
+        ),
       );
 
-  AppFormField get outDateField => AppFormField(
-      label: appLocalizations!.admin_manage_student_menu_add_field_out_date,
-      controller: outDateController,
-      colStart: 1,
-      rowStart: 11,
-      colSpan: 4,
-      enabled: isFormEditing,
-      editable: false,
-      maxLength: 10,
-      icon: FluentIcons.calendar_arrow_right_20_regular,
-      pickerType: AppFormFieldPickerType.date,
-      onPickerSelectedItemChanged: onOutDatePickerSelectedIndexChanged);
-
-  AppFormField get notesField => AppFormField(
-        label: appLocalizations!.admin_manage_student_menu_add_field_notes,
-        controller: notesController,
-        colStart: 1,
-        rowStart: 12,
-        colSpan: 4,
-        maxLength: 255,
-        enabled: isFormEditing,
-        icon: FluentIcons.comment_24_regular,
+  SpannableGridCellData get joinDateField => SpannableGridCellData(
+        id: 11,
+        column: 1,
+        row: 10,
+        columnSpan: 4,
+        child: AppFormField(
+          type: AppFormFieldType.picker,
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_join_date,
+          controller: joinDateController,
+          required: true,
+          enabled: isFormEditing,
+          editable: false,
+          maxLength: 10,
+          prefixIcon: const Icon(FluentIcons.calendar_arrow_down_24_regular),
+          picker: AppFormPicker(
+            type: AppFormPickerFieldType.date,
+            onSelectedItemChanged: onJoinDatePickerSelectedIndexChanged,
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return appLocalizations!.app_form_field_required;
+            }
+          },
+        ),
       );
 
-  ///
-  ///
-  ///
-  ///
+  SpannableGridCellData get outDateField => SpannableGridCellData(
+        id: 12,
+        column: 1,
+        row: 11,
+        columnSpan: 4,
+        child: AppFormField(
+          type: AppFormFieldType.picker,
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_out_date,
+          controller: outDateController,
+          enabled: isFormEditing,
+          editable: false,
+          maxLength: 10,
+          prefixIcon: const Icon(FluentIcons.calendar_arrow_right_20_regular),
+          picker: AppFormPicker(
+            type: AppFormPickerFieldType.date,
+            onSelectedItemChanged: onOutDatePickerSelectedIndexChanged,
+          ),
+        ),
+      );
+
+  SpannableGridCellData get notesField => SpannableGridCellData(
+        id: 13,
+        column: 1,
+        row: 12,
+        columnSpan: 4,
+        child: AppFormField(
+          context: context,
+          label: appLocalizations!.admin_manage_student_menu_add_field_notes,
+          controller: notesController,
+          maxLength: 255,
+          enabled: isFormEditing,
+          prefixIcon: const Icon(FluentIcons.comment_24_regular),
+        ),
+      );
+
   /// Available gender names
   late final List<String> genderValues;
 
@@ -407,7 +417,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   String get gender => _gender;
   void onGenderPickerSelectedIndexChanged(dynamic index) {
     _gender = genderValues[index];
-    genderField.controller.text = _gender;
+    genderController.text = _gender;
     notifyListeners();
   }
 
@@ -416,7 +426,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   DateTime? get dateOfBirth => _dateOfBirth;
   void onDateOfBirthPickerSelectedIndexChanged(dynamic date) {
     _dateOfBirth = date;
-    dobField.controller.text = date == null ? "" : getDateStringValue(date);
+    dobController.text = date == null ? "" : getDateStringValue(date);
     notifyListeners();
   }
 
@@ -425,7 +435,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   DateTime? get joinDate => _joinDate;
   void onJoinDatePickerSelectedIndexChanged(dynamic date) {
     _joinDate = date;
-    joinDateField.controller.text = date == null ? "" : getDateStringValue(date);
+    joinDateController.text = date == null ? "" : getDateStringValue(date);
     notifyListeners();
   }
 
@@ -434,7 +444,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   DateTime? get outDate => _outDate;
   void onOutDatePickerSelectedIndexChanged(dynamic date) {
     _outDate = date;
-    outDateField.controller.text = date == null ? "" : getDateStringValue(date);
+    outDateController.text = date == null ? "" : getDateStringValue(date);
     notifyListeners();
   }
 
@@ -491,7 +501,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         showLoadingDialog();
 
         StudentRepository.setStudent(
-          getFormData()..roomId = room.id,
+          getFormData()..room = room.reference,
         ).catchError((onError) {
           showSnackbar(onError.toString(), const Duration(seconds: 5), () {
             _continueButtonEnabled = true;
@@ -522,7 +532,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
 
   updateStudentInfo() {
     // process updating user info
-    StudentRepository.setStudent(getFormData()..roomId = room.id).catchError((onError) {
+    StudentRepository.setStudent(getFormData()..room = room.reference).catchError((onError) {
       showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
     }).then((value) {
       showSnackbar(appLocalizations!.app_form_changes_saved, const Duration(seconds: 3), () {});

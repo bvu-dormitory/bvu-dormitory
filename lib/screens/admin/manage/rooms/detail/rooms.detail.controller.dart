@@ -12,6 +12,8 @@ import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/images/rooms.det
 import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/students/rooms.detail.students.screen.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 
+import 'invoices/add/rooms.detail.invoices.add.screen.dart';
+import 'invoices/rooms.detail.invoices.screen.dart';
 import 'services/rooms.detail.services.screen.dart';
 
 class AdminRoomsDetailController extends BaseController {
@@ -26,14 +28,6 @@ class AdminRoomsDetailController extends BaseController {
     required this.floor,
     required this.room,
   }) : super(context: context, title: title);
-
-  // Stream<List<Room>> syncRooms() {
-  //   return _buildingRepository.syncAllRooms(building.id!, floor.id!);
-  // }
-
-  // Stream<Room> syncRoom() {
-  //   return _buildingRepository.syncRoom(building.id!, floor.id!, room.id!);
-  // }
 
   /// Info menu
   List<AppMenuGroupItem> get infoMenuItems => [
@@ -113,10 +107,30 @@ class AdminRoomsDetailController extends BaseController {
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_add ?? "admin_manage_rooms_detail_invoice_add",
           icon: FluentIcons.receipt_add_24_filled,
+          onPressed: () {
+            navigator.push(CupertinoPageRoute(
+              builder: (context) => AdminRoomsDetailInvoicesAddScreen(
+                previousPageTitle: title,
+                building: building,
+                floor: floor,
+                room: room,
+              ),
+            ));
+          },
         ),
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_list ?? "admin_manage_rooms_detail_invoice_list",
           icon: FluentIcons.checkbox_person_24_filled,
+          onPressed: () {
+            navigator.push(CupertinoPageRoute(
+              builder: (context) => AdminRoomsDetailInvoicesScreen(
+                previousPageTitle: title,
+                building: building,
+                floor: floor,
+                room: room,
+              ),
+            ));
+          },
         ),
       ];
 
