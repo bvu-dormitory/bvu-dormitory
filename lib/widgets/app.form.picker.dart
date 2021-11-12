@@ -64,6 +64,7 @@ class AppFormPicker extends StatelessWidget {
               CupertinoButton(
                 onPressed: () {
                   onSelectedItemChanged(null);
+                  Navigator.of(context).pop();
                 },
                 padding: EdgeInsets.zero,
                 child: Text(

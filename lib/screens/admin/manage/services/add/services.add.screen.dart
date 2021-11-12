@@ -98,7 +98,7 @@ class AdminServicesAddScreen extends BaseScreen<AdminServicesAddController> {
       // showGrid: true,
       editingOnLongPress: false,
       columns: 1,
-      rows: 4,
+      rows: controller.formFields.length,
       spacing: 10.0,
       rowHeight: 115,
       cells: List.generate(controller.formFields.length, (index) {

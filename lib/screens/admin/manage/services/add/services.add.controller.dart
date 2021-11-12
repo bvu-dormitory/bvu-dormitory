@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:bvu_dormitory/widgets/app.form.picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +21,12 @@ class AdminServicesAddController extends BaseController {
       nameController = TextEditingController(text: service!.name);
       priceController = TextEditingController(text: service!.price.toString());
       unitController = TextEditingController(text: service!.unit);
+      typeController = TextEditingController(text: service!.type.name);
     } else {
       nameController = TextEditingController();
       priceController = TextEditingController();
       unitController = TextEditingController();
+      typeController = TextEditingController();
     }
   }
 
@@ -32,6 +37,7 @@ class AdminServicesAddController extends BaseController {
         nameField,
         priceField,
         unitField,
+        typeField,
       ];
 
   bool get isFormEmpty => formControllers.every((element) => element.text.isEmpty);
@@ -39,11 +45,13 @@ class AdminServicesAddController extends BaseController {
         nameController,
         priceController,
         unitController,
+        typeController,
       ];
 
   late final TextEditingController nameController;
   late final TextEditingController priceController;
   late final TextEditingController unitController;
+  late final TextEditingController typeController;
 
   AppFormField get nameField => AppFormField(
         label: appLocalizations!.admin_manage_service_name,
@@ -95,10 +103,39 @@ class AdminServicesAddController extends BaseController {
           }
         },
       );
+  AppFormField get typeField => AppFormField(
+        label: appLocalizations!.admin_manage_service_type,
+        maxLength: 20,
+        required: true,
+        context: context,
+        type: AppFormFieldType.picker,
+        picker: AppFormPicker(
+          type: AppFormPickerFieldType.custom,
+          dataList: ServiceType.values.map((e) => e.name).toList(),
+          onSelectedItemChanged: (value) {
+            typeController.text = value == null ? "" : ServiceType.values[value].name;
+          },
+        ),
+        keyboardType: TextInputType.text,
+        controller: typeController,
+        prefixIcon: const Icon(FluentIcons.ruler_24_regular),
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return appLocalizations!.app_form_field_required;
+          }
+        },
+      );
 
   Service getFormValue() {
     return Service(
-        name: nameController.text.trim(), price: int.parse(priceController.text), unit: unitController.text.trim());
+      name: nameController.text.trim(),
+      price: int.parse(priceController.text),
+      unit: unitController.text.trim(),
+      type: ServiceType.values.firstWhere(
+        (element) => element.name == typeController.text.trim(),
+        orElse: () => ServiceType.seperated,
+      ),
+    );
   }
 
   submit() async {

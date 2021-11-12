@@ -147,6 +147,7 @@
     "admin_manage_service_name": "Tên dịch vụ",
     "admin_manage_service_price": "Giá dịch vụ (trên 1 đơn vị tính)",
     "admin_manage_service_unit": "Đơn vị tính (vd: tháng, kg, m³ ...)",
+    "admin_manage_service_type": "Kiểu dịch vụ",
     "admin_manage_service_service_added": "Đã thêm dịch vụ",
     "admin_manage_service_service_editted": "Đã cập nhật thông tin dịch vụ",
 
@@ -263,6 +264,17 @@
 
     "admin_manage_invoice_month": "Tháng {month}",
     "admin_manage_invoice_add": "Thêm Hóa đơn",
+    "admin_manage_invoice_export": "Xuất phiếu",
+    "admin_manage_invoice_print": "In phiếu",
+    "admin_manage_invoice_time": "Thời gian",
+    "admin_manage_invoice_send": "Gửi tới phòng",
+    "admin_manage_invoice_old_index": "Chỉ số cũ",
+    "admin_manage_invoice_new_index": "Chỉ số mới",
+    "admin_manage_invoice_cost_room": "Tiền phòng",
+    "admin_manage_invoice_cost_discount": "Giảm giá",
+    "admin_manage_invoice_cost_services": "Các dịch vụ",
+    "admin_manage_invoice_cost_total": "Tổng tiền",
+    "admin_manage_invoice_cost_subtotal": "Thành tiền",
     "@admin_manage_invoice_month": {
         "placeholders": {
             "month": {

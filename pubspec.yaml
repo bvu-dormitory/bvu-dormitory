@@ -38,13 +38,13 @@ dependencies:
   
   spannable_grid: ^0.2.1
   expandable: ^5.0.1
-  flutter_cupertino_date_picker: ^1.0.26+2
 
   animated_text_kit: ^4.2.1
   fl_chart: ^0.40.2
   modal_bottom_sheet: ^2.0.0
   fluttertoast: ^8.0.8
   carousel_slider: ^4.0.0
+  dotted_border: ^2.0.0+1
 
   flutter_localizations:
     sdk: flutter

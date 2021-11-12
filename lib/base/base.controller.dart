@@ -153,94 +153,96 @@ abstract class BaseController extends ChangeNotifier {
       expand: false,
       barrierColor: Colors.black.withOpacity(0.5),
       builder: (context) {
-        return SingleChildScrollView(
-          child: Material(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// bottom sheet header
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  color: const Color.fromARGB(255, 240, 240, 240),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        title,
-                        style: titleStyle ??
-                            const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                      CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          child: const Icon(AntDesign.close, size: 20),
-                          onPressed: () {
-                            navigator.pop();
-                          }),
-                    ],
+        return Scrollbar(
+          child: SingleChildScrollView(
+            child: Material(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// bottom sheet header
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    color: const Color.fromARGB(255, 240, 240, 240),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          title,
+                          style: titleStyle ??
+                              const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                        CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            child: const Icon(AntDesign.close, size: 20),
+                            onPressed: () {
+                              navigator.pop();
+                            }),
+                      ],
+                    ),
                   ),
-                ),
 
-                /// bottom sheet body | holding menu groups
-                ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  primary: true,
-                  itemCount: groups.length,
-                  itemBuilder: (context, index) {
-                    final theGroup = groups[index];
+                  /// bottom sheet body | holding menu groups
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    primary: true,
+                    itemCount: groups.length,
+                    itemBuilder: (context, index) {
+                      final theGroup = groups[index];
 
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                            width: 0.5,
-                            color: Colors.grey.withOpacity(0.5),
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              width: 0.5,
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
                           ),
                         ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (theGroup.title != null) ...{
-                            Container(
-                              padding: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
-                              child: Text(
-                                theGroup.title ?? "",
-                                style: titleStyle ??
-                                    TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black.withOpacity(0.5),
-                                    ),
-                              ),
-                            ),
-                          },
-                          ListView.builder(
-                            shrinkWrap: true,
-                            primary: false,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: theGroup.items.length,
-                            itemBuilder: (context, index) {
-                              final theItem = theGroup.items[index];
-                              return CupertinoButton(
-                                padding: EdgeInsets.zero,
-                                child: ListTile(
-                                  title: theItem.label,
-                                  minLeadingWidth: 15,
-                                  leading: theItem.icon,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (theGroup.title != null) ...{
+                              Container(
+                                padding: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
+                                child: Text(
+                                  theGroup.title ?? "",
+                                  style: titleStyle ??
+                                      TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black.withOpacity(0.5),
+                                      ),
                                 ),
-                                onPressed: theItem.onPressed,
-                              );
+                              ),
                             },
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
+                            ListView.builder(
+                              shrinkWrap: true,
+                              primary: false,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: theGroup.items.length,
+                              itemBuilder: (context, index) {
+                                final theItem = theGroup.items[index];
+                                return CupertinoButton(
+                                  padding: EdgeInsets.zero,
+                                  child: ListTile(
+                                    title: theItem.label,
+                                    minLeadingWidth: 15,
+                                    leading: theItem.icon,
+                                  ),
+                                  onPressed: theItem.onPressed,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );

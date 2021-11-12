@@ -1,17 +1,40 @@
 import 'package:bvu_dormitory/base/base.firestore.model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+
+enum ServiceType {
+  continous,
+  seperated,
+}
+
+extension ServiceTypeName on ServiceType {
+  String get name {
+    switch (this) {
+      case ServiceType.continous:
+        return "Tịnh tiến";
+
+      case ServiceType.seperated:
+        return "Riêng lẻ";
+
+      default:
+        return "";
+    }
+  }
+}
 
 class Service extends FireStoreModel {
   final String name;
   final String unit;
   final int price;
   final List<dynamic>? rooms;
+  final ServiceType type;
 
   Service({
     String? id,
     required this.name,
     required this.price,
     required this.unit,
+    required this.type,
     this.rooms,
   }) : super(id: id);
 
@@ -27,6 +50,10 @@ class Service extends FireStoreModel {
       price: data['price'],
       unit: data['unit'],
       rooms: data['rooms'],
+      type: ServiceType.values.firstWhere(
+        (element) => element.name == data['type'],
+        orElse: () => ServiceType.seperated,
+      ),
     );
   }
 
@@ -36,5 +63,6 @@ class Service extends FireStoreModel {
         'price': price,
         'unit': unit,
         'rooms': rooms,
+        'type': type.name,
       };
 }

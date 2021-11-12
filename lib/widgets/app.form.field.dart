@@ -97,7 +97,7 @@ class AppFormField extends StatelessWidget {
                   );
                 }
               },
-              readOnly: !editable,
+              readOnly: type == AppFormFieldType.picker ? editable : false,
               keyboardType: keyboardType,
               textInputAction: keyboardAction,
               maxLines: maxLines,
@@ -138,6 +138,7 @@ class AppFormField extends StatelessWidget {
                 ),
               ),
             ),
+
             // show the copy button
             if (showSuffixCopyButton) ...{
               Positioned(
