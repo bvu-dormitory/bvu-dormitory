@@ -1,5 +1,11 @@
 import 'package:bvu_dormitory/base/base.firestore.model.dart';
+import 'package:bvu_dormitory/models/service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+// class InvoiceService extends Service {
+//   InvoiceService() : super();
+
+// }
 
 class Invoice extends FireStoreModel {
   Invoice({
@@ -17,6 +23,8 @@ class Invoice extends FireStoreModel {
   final int date;
   final int month;
   final int year;
+
+  // final List<
 
   @override
   Map<String, dynamic> get json => {

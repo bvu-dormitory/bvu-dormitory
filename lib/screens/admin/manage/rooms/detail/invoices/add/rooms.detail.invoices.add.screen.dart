@@ -1,5 +1,5 @@
-import 'package:bvu_dormitory/models/service.dart';
-import 'package:bvu_dormitory/repositories/service.repository.dart';
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:dotted_border/dotted_border.dart';
 
+import 'package:bvu_dormitory/models/service.dart';
+import 'package:bvu_dormitory/repositories/service.repository.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
@@ -80,7 +82,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                   // invoide body
                   Expanded(
                     child: Scrollbar(
-                      isAlwaysShown: true,
+                      thickness: 1,
                       child: SingleChildScrollView(
                         child: _invoiceBody(),
                       ),
@@ -150,6 +152,38 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
                 ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    _invoiceNotesSection() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.admin_manage_invoice_notes,
+            style: const TextStyle(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            maxLines: 5,
+            controller: controller.notesController,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+            decoration: InputDecoration(
+              // isCollapsed: true,
+              contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 0, bottom: 10),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
               ),
             ),
           ),
@@ -231,6 +265,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
 
       _invoiceServiceItem(Service service) {
         final disCountController = TextEditingController();
+        log('rebuilding service field...');
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +276,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
               children: [
                 Text(
                   service.name,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: TextStyle(fontWeight: FontWeight.w700, color: Colors.black.withOpacity(0.6)),
                 ),
                 Text(
                   "${service.price}/${service.unit}",
@@ -252,6 +287,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
             const SizedBox(height: 5),
             if (service.type == ServiceType.continous) ...{
               _invoiceContinousService(service),
+              const SizedBox(height: 10),
             },
 
             // discount
@@ -388,6 +424,12 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
           ),
           const SizedBox(height: 25),
           _invoiceServicesCostSection(),
+          Container(
+            height: 1,
+            color: Colors.grey.withOpacity(0.3),
+          ),
+          const SizedBox(height: 20),
+          _invoiceNotesSection(),
         ],
       ),
     );

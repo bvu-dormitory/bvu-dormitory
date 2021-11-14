@@ -8,6 +8,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
     required String title,
   }) : super(context: context, title: title) {
     dateController = TextEditingController(text: getDateStringFromDate(DateTime.now()));
+    notesController = TextEditingController(text: "");
   }
 
   double totalCost = 2654000;
@@ -20,8 +21,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
     notifyListeners();
   }
 
-  TextEditingController roomCostController = TextEditingController(text: "0");
-  TextEditingController roomCostDiscountController = TextEditingController(text: "0");
+  late TextEditingController notesController;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 

@@ -270,6 +270,7 @@
     "admin_manage_invoice_send": "Gửi tới phòng",
     "admin_manage_invoice_old_index": "Chỉ số cũ",
     "admin_manage_invoice_new_index": "Chỉ số mới",
+    "admin_manage_invoice_notes": "Ghi chú",
     "admin_manage_invoice_cost_room": "Tiền phòng",
     "admin_manage_invoice_cost_discount": "Giảm giá",
     "admin_manage_invoice_cost_services": "Các dịch vụ",
