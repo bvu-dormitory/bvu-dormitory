@@ -72,7 +72,7 @@ class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoices
     final controller = context.read<AdminRoomsDetailInvoicesController>();
 
     return StreamBuilder<List<Invoice>>(
-      stream: InvoiceRepository.syncInvoicesInRoom(buildingId: building.id!, floorId: floor.id!, roomId: room.id!),
+      stream: InvoiceRepository.syncInvoicesInRoom(roomRef: room.reference!),
       builder: (context, snapshot) {
         // log(snapshot.toString());
 
@@ -119,7 +119,7 @@ class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoices
                     padding: const EdgeInsets.only(top: 10),
                     child: Row(
                       children: [
-                        Text(NumberFormat('#,###').format(invoice.cost) + 'đ'),
+                        Text(NumberFormat('#,###').format('12345') + 'đ'),
                       ],
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -15,6 +16,7 @@ import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
+import 'package:tuple/tuple.dart';
 import 'rooms.detail.invoices.add.controller.dart';
 
 class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoicesAddController> {
@@ -33,7 +35,12 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
   @override
   AdminRoomsDetailInvoicesAddController provideController(BuildContext context) {
     return AdminRoomsDetailInvoicesAddController(
-        context: context, title: AppLocalizations.of(context)!.admin_manage_invoice_add);
+      context: context,
+      title: AppLocalizations.of(context)!.admin_manage_invoice_add,
+      building: building,
+      floor: floor,
+      room: room,
+    );
   }
 
   @override
@@ -47,10 +54,11 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
       // bottom: false,
       child: GestureDetector(
         onTap: () {
-          FocusScopeNode().requestFocus(FocusNode());
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Form(
           key: controller.formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: _invoicePanel(),
         ),
       ),
@@ -134,16 +142,22 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                     );
                   },
                 );
-                // DatePicker.showDatePicker(context, maxDateTime: DateTime.now(), dateFormat: 'MMMM-yyyy');
               },
               controller: controller.dateController,
               readOnly: true,
               textAlign: TextAlign.right,
+              maxLength: 10,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return AppLocalizations.of(context)!.app_form_field_required;
+                }
+              },
               decoration: const InputDecoration(
+                counterText: '',
                 isCollapsed: true,
                 contentPadding: EdgeInsets.only(bottom: 10),
                 focusedBorder: OutlineInputBorder(
@@ -170,6 +184,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
           const SizedBox(height: 10),
           TextFormField(
             maxLines: 5,
+            maxLength: 255,
             controller: controller.notesController,
             textAlign: TextAlign.left,
             style: const TextStyle(
@@ -192,7 +207,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
     }
 
     _invoiceServicesCostSection() {
-      _invoiceContinousService(Service service) {
+      _invoiceContinousService(Service service, int index) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -209,11 +224,12 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                   ),
                 ),
                 Text(
-                  '0',
+                  service.newIndex?.toString() ?? "0",
                   style: const TextStyle(
                     color: Colors.grey,
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.italic,
+                    fontSize: 14,
                   ),
                 ),
               ],
@@ -228,29 +244,46 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                     color: Colors.grey,
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.italic,
+                    fontSize: 14,
                   ),
                 ),
                 const SizedBox(width: 30),
                 Expanded(
                   child: TextFormField(
-                    // controller: disCountController,
+                    controller: controller.serviceControllers[index].item3,
                     textAlign: TextAlign.right,
+                    maxLength: 9,
+                    keyboardType: TextInputType.number,
                     style: const TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.italic,
                     ),
+                    onChanged: (value) {
+                      controller.notifyListeners();
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     decoration: const InputDecoration(
+                      counterText: '',
                       suffixStyle: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.italic,
                       ),
+                      errorStyle: TextStyle(textBaseline: TextBaseline.ideographic),
                       isCollapsed: true,
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.transparent),
                       ),
                       enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.transparent),
                       ),
                       contentPadding: EdgeInsets.symmetric(vertical: 0),
@@ -263,10 +296,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
         );
       }
 
-      _invoiceServiceItem(Service service) {
-        final disCountController = TextEditingController();
-        log('rebuilding service field...');
-
+      _invoiceServiceItem(Service service, int index) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -279,14 +309,16 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                   style: TextStyle(fontWeight: FontWeight.w700, color: Colors.black.withOpacity(0.6)),
                 ),
                 Text(
-                  "${service.price}/${service.unit}",
+                  "${NumberFormat('#,###').format(service.price)}đ/${service.unit}",
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
               ],
             ),
+
+            // newIndex for the continous services
             const SizedBox(height: 5),
             if (service.type == ServiceType.continous) ...{
-              _invoiceContinousService(service),
+              _invoiceContinousService(service, index),
               const SizedBox(height: 10),
             },
 
@@ -304,14 +336,26 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                 const SizedBox(width: 30),
                 Expanded(
                   child: TextFormField(
-                    controller: disCountController,
+                    controller: controller.serviceControllers[index].item2,
                     textAlign: TextAlign.right,
+                    maxLength: 10,
                     style: const TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.italic,
+                      fontSize: 14,
                     ),
+                    onChanged: (value) {
+                      // this must be called to update the "subtotal Text; Total cost" below
+                      controller.notifyListeners();
+                    },
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      ThousandsSeparatorInputFormatter(),
+                    ],
                     decoration: const InputDecoration(
+                      counterText: '',
                       suffixText: 'đ',
                       suffixStyle: TextStyle(
                         color: Colors.grey,
@@ -345,12 +389,18 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                   ),
                 ),
                 const SizedBox(width: 30),
-                Text(
-                  "${service.price - (int.tryParse(disCountController.text) ?? 0)} đ",
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.italic,
+                Flexible(
+                  child: Consumer<AdminRoomsDetailInvoicesAddController>(
+                    builder: (_, controller, __) {
+                      return Text(
+                        controller.getServiceSubtotal(service, index),
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -375,13 +425,31 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
               }
 
               if (snapshot.hasData) {
+                controller.serviceControllers = [];
+
+                // filtering services in the room (that enabled)
+                final roomAvailableServices = snapshot.data!
+                    .where(
+                      (element) => (element.rooms ?? []).contains(room.reference),
+                    )
+                    .toList();
+
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: snapshot.data!.length,
+                  itemCount: roomAvailableServices.length,
                   itemBuilder: (context, index) {
-                    final theService = snapshot.data![index];
-                    return _invoiceServiceItem(theService);
+                    final theService = roomAvailableServices[index];
+
+                    controller.serviceControllers.add(
+                      Tuple3(
+                        theService,
+                        TextEditingController(),
+                        theService.type == ServiceType.seperated ? null : TextEditingController(),
+                      ),
+                    );
+
+                    return _invoiceServiceItem(theService, index);
                   },
                 );
               } else {
@@ -522,6 +590,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
   }
 
   _invoiceButtons() {
+    final controller = context.read<AdminRoomsDetailInvoicesAddController>();
     const radius = 50.0;
 
     return Row(
@@ -576,7 +645,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                 ),
               ],
             ),
-            onPressed: () {},
+            onPressed: controller.submit,
           ),
         ),
       ],

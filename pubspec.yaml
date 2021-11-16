@@ -31,6 +31,7 @@ dependencies:
     sdk: flutter
   
   collection: ^1.15.0
+  tuple: ^2.0.0
 
   cupertino_icons: ^1.0.2
   fluentui_system_icons: ^1.1.143

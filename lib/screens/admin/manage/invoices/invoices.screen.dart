@@ -86,7 +86,7 @@ class AdminInvoicesScreen extends BaseScreen<AdminInvoicesController> {
       items: list
           .map(
             (category) => AppMenuGroupItem(
-              title: category.date.toString(),
+              title: category.createdDate.toString(),
               titleStyle: const TextStyle(
                 fontWeight: FontWeight.w400,
               ),

@@ -10,39 +10,50 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Invoice extends FireStoreModel {
   Invoice({
     String? id,
-    required this.cost,
-    required this.done,
-    required this.date,
+    DocumentReference? reference,
+    required this.createdDate,
     required this.month,
     required this.year,
-  }) : super(id: id);
+    required this.room,
+    required this.services,
+  }) : super(id: id, reference: reference);
 
-  final int cost;
-  final bool done;
-
-  final int date;
-  final int month;
   final int year;
-
-  // final List<
+  final int month;
+  final String createdDate;
+  final DocumentReference room;
+  final List<Service> services;
 
   @override
   Map<String, dynamic> get json => {
-        'cost': cost,
-        'done': done,
-        'date': date,
+        'created_date': createdDate,
         'month': month,
         'year': year,
+        'room': room,
       };
 
   factory Invoice.fromFireStoreDocument(DocumentSnapshot<Object?> snapshot) {
     return Invoice(
       id: snapshot.id,
-      done: snapshot['done'],
-      cost: snapshot['cost'],
-      date: snapshot['date'],
+      services: snapshot['services'].map((Map<String, dynamic> s) => Service.fromMap(s)),
+      reference: snapshot.reference,
+      createdDate: snapshot['date'],
       month: snapshot['month'],
       year: snapshot['year'],
+      room: snapshot['room'],
     );
+  }
+
+  int get total {
+    return services.map((e) {
+      if (e.type == ServiceType.seperated) {
+        return e.price - (e.discounts ?? 0);
+      }
+
+      final oldIndex = e.oldIndex ?? 0;
+      final newIndex = e.newIndex ?? 0;
+
+      return e.price * (newIndex - oldIndex) - (e.discounts ?? 0);
+    }).reduce((value, element) => value + element);
   }
 }
