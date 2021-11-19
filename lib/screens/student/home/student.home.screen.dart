@@ -1,5 +1,7 @@
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fadein/flutter_fadein.dart';
 
 import 'package:provider/provider.dart';
 
@@ -25,6 +27,8 @@ class StudentHomeScreen extends BaseScreen<StudentHomeController> {
       tabBar: CupertinoTabBar(
         // backgroundColor: Colors.transparent,
         iconSize: 22,
+        currentIndex: 0,
+        activeColor: AppColor.mainColor,
         items: List.generate(controller.navItemsList.length, (index) {
           return _bottomNavBarItem(controller, index);
         }),
@@ -37,9 +41,9 @@ class StudentHomeScreen extends BaseScreen<StudentHomeController> {
 
   BottomNavigationBarItem _bottomNavBarItem(StudentHomeController controller, int index) {
     return BottomNavigationBarItem(
-      // label: controller.navItemDataList[index].title,
+      // label: controller.navItemsList[index].title,
       title: Container(
-        padding: const EdgeInsets.only(top: 3),
+        padding: const EdgeInsets.only(bottom: 2),
         child: Text(
           controller.navItemsList[index].title,
           style: const TextStyle(
@@ -52,7 +56,7 @@ class StudentHomeScreen extends BaseScreen<StudentHomeController> {
         children: [
           Positioned(
             child: Icon(controller.navItemsList[index].icon),
-            top: 10,
+            top: 7,
           )
         ],
       ),
@@ -61,7 +65,7 @@ class StudentHomeScreen extends BaseScreen<StudentHomeController> {
         children: [
           Positioned(
             child: Icon(controller.navItemsList[index].activeIcon),
-            top: 10,
+            top: 7,
           )
         ],
       ),

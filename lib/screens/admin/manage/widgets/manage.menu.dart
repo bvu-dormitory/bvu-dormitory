@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:provider/provider.dart';
 
@@ -75,6 +76,7 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
                 color: Colors.blueGrey.withOpacity(1),
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.montserrat().fontFamily,
               ),
             ),
           ],

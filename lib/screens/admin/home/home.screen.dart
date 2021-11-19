@@ -72,7 +72,7 @@ class AdminHomeScreen extends BaseScreen<AdminHomeController> {
     return BottomNavigationBarItem(
       // label: controller.navItemDataList[index].title,
       title: Container(
-        padding: const EdgeInsets.only(top: 3),
+        padding: const EdgeInsets.only(bottom: 2),
         child: Text(
           controller.navItemDataList[index].title,
           style: const TextStyle(
@@ -85,7 +85,7 @@ class AdminHomeScreen extends BaseScreen<AdminHomeController> {
         children: [
           Positioned(
             child: Icon(controller.navItemDataList[index].icon),
-            top: 10,
+            top: 7,
           )
         ],
       ),
@@ -94,7 +94,7 @@ class AdminHomeScreen extends BaseScreen<AdminHomeController> {
         children: [
           Positioned(
             child: Icon(controller.navItemDataList[index].activeIcon),
-            top: 10,
+            top: 7,
           )
         ],
       ),

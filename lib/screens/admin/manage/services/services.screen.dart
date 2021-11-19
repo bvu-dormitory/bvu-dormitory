@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:bvu_dormitory/models/service.dart';
@@ -97,7 +98,7 @@ class AdminServicesScreen extends BaseScreen<AdminServicesController> {
             children: [
               Row(
                 children: [
-                  Text('${service.price.toString()}đ/${service.unit}'),
+                  Text('${NumberFormat('#,###').format(service.price)}đ/${service.unit}'),
                 ],
               ),
             ],

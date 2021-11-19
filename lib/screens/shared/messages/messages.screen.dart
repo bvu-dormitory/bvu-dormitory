@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,16 +61,9 @@ class MessagesScreen extends BaseScreen<MessageController> {
         ],
       ),
       flexibleSpace: Container(
-        height: 105,
+        height: 110,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.topRight,
-            colors: [
-              Colors.blue.withOpacity(0.75),
-              Colors.lightBlue.withOpacity(0.5),
-            ],
-          ),
+          gradient: AppColor.mainAppBarGradientColor,
         ),
       ),
     );

@@ -1,5 +1,5 @@
 {
-    "app_name": "Kí túc xá BVU",
+    "app_name": "BVU Dormitory",
 
     "app_connectivity_none": "Không có kết nối mạng, vui lòng kiểm tra lại trước khi tiếp tục thao tác",
     "app_error_timeout": "Không thể hoàn tất tác vụ, vui lòng thử lại sau.",
@@ -99,15 +99,7 @@
 
 
 
-    "admin_manage_welcome": "Xin chào, {name}.",
-    "@admin_manage_welcome": {
-        "placeholders": {
-            "name": {
-                "type": "String"
-            }
-        }
-    
-    },
+    "admin_manage_welcome": "Xin chào,",
     "admin_manage_sign_out": "Đăng xuất",
     "admin_manage_building": "Khu",
     "admin_manage_floor": "Tầng",

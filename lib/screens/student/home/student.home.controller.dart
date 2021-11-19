@@ -32,11 +32,11 @@ class StudentHomeController extends BaseController {
   int get currentNavBarIndex => _currentNavBarIndex;
   set currentNavBarIndex(int index) {
     _currentNavBarIndex = index;
-    pageController.jumpToPage(index);
+    // pageController.jumpToPage(index);
     notifyListeners();
   }
 
-  PageController pageController = PageController(initialPage: 0);
+  // PageController pageController = PageController(initialPage: 0);
 
   List<HomeBottomNavItem> get navItemsList => [
         HomeBottomNavItem(
@@ -53,8 +53,8 @@ class StudentHomeController extends BaseController {
         ),
         HomeBottomNavItem(
           title: appLocalizations!.home_screen_navbar_item_chat,
-          icon: CupertinoIcons.chat_bubble,
-          activeIcon: CupertinoIcons.chat_bubble_fill,
+          icon: FluentIcons.chat_24_regular,
+          activeIcon: FluentIcons.chat_24_filled,
           screen: MessagesScreen(),
         ),
         HomeBottomNavItem(

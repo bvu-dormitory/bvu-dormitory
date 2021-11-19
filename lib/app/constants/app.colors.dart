@@ -12,4 +12,14 @@ class AppColor {
 
   static get textColor => Colors.grey;
   static get textColorDark => Colors.white;
+
+  static get mainColor => Colors.blue.shade800;
+  static LinearGradient get mainAppBarGradientColor => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Colors.blue.shade900,
+          Colors.purple.shade800,
+        ],
+      );
 }
