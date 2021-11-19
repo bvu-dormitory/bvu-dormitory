@@ -1,15 +1,23 @@
-import 'package:bvu_dormitory/base/base.controller.dart';
+import 'package:bvu_dormitory/screens/shared/profile/profile.screen.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:bvu_dormitory/base/base.controller.dart';
+import 'package:bvu_dormitory/screens/shared/messages/messages.screen.dart';
+import 'package:bvu_dormitory/screens/shared/newsfeed/newsfeed.screen.dart';
+import 'package:bvu_dormitory/screens/student/room/student.room.screen.dart';
+
 class HomeBottomNavItem {
   String title;
-  Icon icon;
-  Icon? activeIcon;
+  IconData icon;
+  IconData? activeIcon;
+  Widget screen;
 
   HomeBottomNavItem({
     required this.title,
     required this.icon,
+    required this.screen,
     this.activeIcon,
   });
 }
@@ -24,36 +32,36 @@ class StudentHomeController extends BaseController {
   int get currentNavBarIndex => _currentNavBarIndex;
   set currentNavBarIndex(int index) {
     _currentNavBarIndex = index;
+    pageController.jumpToPage(index);
     notifyListeners();
   }
 
-  List<HomeBottomNavItem> get navItemDataList => [
+  PageController pageController = PageController(initialPage: 0);
+
+  List<HomeBottomNavItem> get navItemsList => [
         HomeBottomNavItem(
-          title:
-              appLocalizations?.home_screen_navbar_item_newsfeed ?? "Bảng tin",
-          icon: const Icon(CupertinoIcons.news),
-          activeIcon: const Icon(CupertinoIcons.news_solid),
+          title: appLocalizations!.home_screen_navbar_item_room,
+          icon: FluentIcons.home_24_regular,
+          screen: StudentRoomScreen(),
+          activeIcon: FluentIcons.home_24_filled,
         ),
         HomeBottomNavItem(
-          title: appLocalizations?.home_screen_navbar_item_chat ?? "Tin nhắn",
-          icon: const Icon(CupertinoIcons.chat_bubble),
-          activeIcon: const Icon(CupertinoIcons.chat_bubble_fill),
+          title: appLocalizations!.home_screen_navbar_item_newsfeed,
+          icon: FluentIcons.news_24_regular,
+          activeIcon: FluentIcons.news_24_filled,
+          screen: NewsFeedScreen(),
         ),
         HomeBottomNavItem(
-          title: appLocalizations?.home_screen_navbar_item_room ?? "Phòng",
-          icon: const Icon(CupertinoIcons.home),
-          // activeIcon: Icon(CupertinoIcons.home),
+          title: appLocalizations!.home_screen_navbar_item_chat,
+          icon: CupertinoIcons.chat_bubble,
+          activeIcon: CupertinoIcons.chat_bubble_fill,
+          screen: MessagesScreen(),
         ),
         HomeBottomNavItem(
-          title: appLocalizations?.home_screen_navbar_item_notifications ??
-              "Thông báo",
-          icon: const Icon(CupertinoIcons.bell),
-          activeIcon: const Icon(CupertinoIcons.bell_solid),
-        ),
-        HomeBottomNavItem(
-          title: appLocalizations?.home_screen_navbar_item_profile ?? "Cá nhân",
-          icon: const Icon(CupertinoIcons.profile_circled),
-          // activeIcon: const Icon(CupertinoIcons.profi),
+          title: appLocalizations!.home_screen_navbar_item_profile,
+          icon: FluentIcons.person_24_regular,
+          activeIcon: FluentIcons.person_24_filled,
+          screen: ProfileScreen(),
         ),
       ];
 }

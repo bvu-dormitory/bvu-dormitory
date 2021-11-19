@@ -20,56 +20,55 @@ class AdminHomeScreen extends BaseScreen<AdminHomeController> {
   Widget body(BuildContext context) {
     final controller = context.watch<AdminHomeController>();
 
-    return Scaffold(
-      body: PageView.builder(
-        controller: controller.pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.getNavItemScreens.length,
-        itemBuilder: (context, index) {
-          return controller.getNavItemScreens[index];
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: controller.currentNavBarIndex,
-        onTap: (index) {
-          controller.currentNavBarIndex = index;
-        },
-        type: BottomNavigationBarType.fixed,
-        unselectedLabelStyle: const TextStyle(
-          color: Colors.black,
-          fontSize: 11,
-          fontWeight: FontWeight.bold,
-        ),
-        selectedLabelStyle: const TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.bold,
-        ),
-        items: List.generate(
-          controller.navItemDataList.length,
-          (index) => _bottomNavBarItem(controller, index),
-        ),
-      ),
-    );
-
-    // return CupertinoTabScaffold(
-    //   backgroundColor: Colors.transparent,
-    //   tabBar: CupertinoTabBar(
-    //     iconSize: 25,
-    //     backgroundColor: Colors.white.withOpacity(0.85),
+    // return Scaffold(
+    //   body: PageView.builder(
+    //     controller: controller.pageController,
+    //     physics: const NeverScrollableScrollPhysics(),
+    //     itemCount: controller.getNavItemScreens.length,
+    //     itemBuilder: (context, index) {
+    //       return controller.getNavItemScreens[index];
+    //     },
+    //   ),
+    //   bottomNavigationBar: BottomNavigationBar(
+    //     currentIndex: controller.currentNavBarIndex,
+    //     onTap: (index) {
+    //       controller.currentNavBarIndex = index;
+    //     },
+    //     type: BottomNavigationBarType.fixed,
+    //     unselectedLabelStyle: const TextStyle(
+    //       color: Colors.black,
+    //       fontSize: 11,
+    //       fontWeight: FontWeight.bold,
+    //     ),
+    //     selectedLabelStyle: const TextStyle(
+    //       fontSize: 11,
+    //       fontWeight: FontWeight.bold,
+    //     ),
     //     items: List.generate(
     //       controller.navItemDataList.length,
     //       (index) => _bottomNavBarItem(controller, index),
     //     ),
     //   ),
-    //   controller: controller.tabController,
-    //   tabBuilder: (context, index) {
-    //     return controller.getNavItemScreens[index];
-    //   },
     // );
+
+    return CupertinoTabScaffold(
+      backgroundColor: Colors.transparent,
+      tabBar: CupertinoTabBar(
+        iconSize: 22,
+        backgroundColor: Colors.white.withOpacity(0.85),
+        items: List.generate(
+          controller.navItemDataList.length,
+          (index) => _bottomNavBarItem(controller, index),
+        ),
+      ),
+      // controller: controller.tabController,
+      tabBuilder: (context, index) {
+        return controller.getNavItemScreens[index];
+      },
+    );
   }
 
-  BottomNavigationBarItem _bottomNavBarItem(
-      AdminHomeController controller, int index) {
+  BottomNavigationBarItem _bottomNavBarItem(AdminHomeController controller, int index) {
     return BottomNavigationBarItem(
       // label: controller.navItemDataList[index].title,
       title: Container(
@@ -81,8 +80,24 @@ class AdminHomeScreen extends BaseScreen<AdminHomeController> {
           ),
         ),
       ),
-      icon: controller.navItemDataList[index].icon,
-      activeIcon: controller.navItemDataList[index].activeIcon,
+      icon: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            child: Icon(controller.navItemDataList[index].icon),
+            top: 10,
+          )
+        ],
+      ),
+      activeIcon: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            child: Icon(controller.navItemDataList[index].activeIcon),
+            top: 10,
+          )
+        ],
+      ),
     );
   }
 }

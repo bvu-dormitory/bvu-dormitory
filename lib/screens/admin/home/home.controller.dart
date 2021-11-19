@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/screens/shared/profile/profile.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +11,8 @@ import 'package:bvu_dormitory/screens/shared/newsfeed/newsfeed.screen.dart';
 
 class HomeBottomNavItem {
   String title;
-  Icon icon;
-  Icon? activeIcon;
+  IconData icon;
+  IconData? activeIcon;
 
   HomeBottomNavItem({
     required this.title,
@@ -51,27 +52,32 @@ class AdminHomeController extends BaseController {
         AdminManageScreen(),
         NewsFeedScreen(),
         MessagesScreen(),
-        // ProfileScreen(),
+        ProfileScreen(),
       ];
 
   List<HomeBottomNavItem> get navItemDataList => [
         HomeBottomNavItem(
-          title: appLocalizations?.home_screen_navbar_item_manage ?? "Quản lí",
-          icon: const Icon(FluentIcons.grid_24_regular),
-          activeIcon: const Icon(FluentIcons.grid_24_filled),
+          title: appLocalizations!.home_screen_navbar_item_manage,
+          icon: FluentIcons.grid_24_regular,
+          activeIcon: FluentIcons.grid_24_filled,
         ),
         HomeBottomNavItem(
-          title: appLocalizations?.home_screen_navbar_item_newsfeed ?? "Bảng tin",
-          icon: const Icon(FluentIcons.news_24_regular),
-          activeIcon: const Icon(FluentIcons.news_24_filled),
+          title: appLocalizations!.home_screen_navbar_item_newsfeed,
+          icon: FluentIcons.news_24_regular,
+          activeIcon: FluentIcons.news_24_filled,
         ),
         HomeBottomNavItem(
-          title: appLocalizations?.home_screen_navbar_item_chat ?? "Tin nhắn",
-          icon: const Icon(CupertinoIcons.chat_bubble),
-          activeIcon: const Icon(CupertinoIcons.chat_bubble_fill),
+          title: appLocalizations!.home_screen_navbar_item_chat,
+          icon: CupertinoIcons.chat_bubble,
+          activeIcon: CupertinoIcons.chat_bubble_fill,
+        ),
+        HomeBottomNavItem(
+          title: appLocalizations!.home_screen_navbar_item_profile,
+          icon: FluentIcons.person_24_regular,
+          activeIcon: FluentIcons.person_24_filled,
         ),
         // HomeBottomNavItem(
-        //   title: appLocalizations?.home_screen_navbar_item_profile ?? "Cá nhân",
+        //   title: appLocalizations!.home_screen_navbar_item_profile ?? "Cá nhân",
         //   icon: const Icon(CupertinoIcons.profile_circled),
         //   // activeIcon: const Icon(CupertinoIcons.profi),
         // ),

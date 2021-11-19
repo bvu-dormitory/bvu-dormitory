@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
               ),
             );
           }
-          return snapshot.data == UserRole.admin ? AdminHomeScreen() : const StudentHomeScreen();
+          return snapshot.data == UserRole.admin ? AdminHomeScreen() : StudentHomeScreen();
         }
 
         log('Checking user role...');

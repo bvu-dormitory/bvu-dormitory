@@ -13,6 +13,7 @@ class AppFormPicker extends StatelessWidget {
   final List<dynamic>? dataList;
   final void Function(dynamic) onSelectedItemChanged; // callback for parent
 
+  final bool required;
   final dynamic initialValue;
   dynamic currentValue;
   late CupertinoDatePicker datePicker;
@@ -22,6 +23,7 @@ class AppFormPicker extends StatelessWidget {
     Key? key,
     this.dataList,
     this.initialValue,
+    this.required = false,
     required this.type,
     required this.onSelectedItemChanged,
   }) : super(key: key) {
@@ -52,29 +54,31 @@ class AppFormPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-      height: 200,
+      height: 300,
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: !required ? MainAxisAlignment.spaceBetween : MainAxisAlignment.end,
             children: [
               /// value removing button => clear current value
-              CupertinoButton(
-                onPressed: () {
-                  onSelectedItemChanged(null);
-                  Navigator.of(context).pop();
-                },
-                padding: EdgeInsets.zero,
-                child: Text(
-                  AppLocalizations.of(context)!.app_action_delete,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.red,
+              if (!required) ...{
+                CupertinoButton(
+                  onPressed: () {
+                    onSelectedItemChanged(null);
+                    Navigator.of(context).pop();
+                  },
+                  padding: EdgeInsets.zero,
+                  child: Text(
+                    AppLocalizations.of(context)!.app_action_delete,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.red,
+                    ),
                   ),
                 ),
-              ),
+              },
 
               /// ok button => return lastest selected value
               CupertinoButton(
@@ -92,7 +96,7 @@ class AppFormPicker extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          // const SizedBox(height: 20),
           Expanded(
             child: type == AppFormPickerFieldType.date ? datePicker : customPicker,
           ),

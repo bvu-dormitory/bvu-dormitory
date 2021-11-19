@@ -106,74 +106,10 @@ class Service extends FireStoreModel {
     };
 
     if (type == ServiceType.continous) {
-      s['oldIndex'] = oldIndex;
-      s['newIndex'] = newIndex;
+      s['old_index'] = oldIndex;
+      s['new_index'] = newIndex;
     }
 
     return s;
   }
 }
-
-/// this is used for the services in the invocies collection
-/// this is seperated from the root Services collection, because services could change their price or name over the time,
-/// so we need this sub-collection to keep track of the service price at a certain point
-// class InvoiceService extends Service {
-//   // these two fields only used for continous services
-//   final int? oldIndex;
-//   final int? newIndex;
-//   final int? discounts;
-
-//   /// no 'rooms' field because we don't need it, this service model is inside an invoice
-//   ///  - the invoice is inside only one room at all.
-
-//   InvoiceService({
-//     String? id,
-//     required String name,
-//     required int price,
-//     required String unit,
-//     required ServiceType type,
-//     this.oldIndex,
-//     this.newIndex,
-//     this.discounts,
-//     DocumentReference? reference,
-//   }) : super(
-//           id: id,
-//           name: name,
-//           price: price,
-//           unit: unit,
-//           type: type,
-//           reference: reference,
-//         );
-
-//   static InvoiceService fromFireStoreDocument(QueryDocumentSnapshot<Map<String, dynamic>> e) {
-//     return InvoiceService(
-//       id: e.id,
-//       reference: e.reference,
-//       oldIndex: e['oldIndex'],
-//       newIndex: e['newIndex'],
-//       discounts: e['discounts'],
-//       name: e['name'],
-//       price: e['price'],
-//       unit: e['unit'],
-//       type: ServiceType.values.firstWhere(
-//         (element) => element.name == e['type'],
-//         orElse: () => ServiceType.seperated,
-//       ),
-//     );
-//   }
-
-//   static InvoiceService fromMap(Map<String, dynamic> dict) {
-//     return InvoiceService(
-//       oldIndex: dict['oldIndex'],
-//       newIndex: dict['newIndex'],
-//       discounts: dict['discounts'],
-//       name: dict['name'],
-//       price: dict['price'],
-//       unit: dict['unit'],
-//       type: ServiceType.values.firstWhere(
-//         (element) => element.name == dict['type'],
-//         orElse: () => ServiceType.seperated,
-//       ),
-//     );
-//   }
-// }

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/app/constants/app.cities.dart';
 import 'package:bvu_dormitory/widgets/app.form.field.dart';
 import 'package:bvu_dormitory/widgets/app.form.picker.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -232,6 +233,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
           maxLength: 10,
           prefixIcon: const Icon(FluentIcons.food_cake_24_regular),
           picker: AppFormPicker(
+            required: true,
             type: AppFormPickerFieldType.date,
             onSelectedItemChanged: onDateOfBirthPickerSelectedIndexChanged,
           ),
@@ -250,6 +252,15 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         columnSpan: 4,
         child: AppFormField(
           context: context,
+          type: AppFormFieldType.picker,
+          picker: AppFormPicker(
+            type: AppFormPickerFieldType.custom,
+            dataList: cities,
+            required: true,
+            onSelectedItemChanged: (value) {
+              homeTownController.text = cities[value];
+            },
+          ),
           label: appLocalizations!.admin_manage_student_menu_add_field_hometown,
           controller: homeTownController,
           required: true,
@@ -362,6 +373,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
           maxLength: 10,
           prefixIcon: const Icon(FluentIcons.calendar_arrow_down_24_regular),
           picker: AppFormPicker(
+            required: true,
             type: AppFormPickerFieldType.date,
             onSelectedItemChanged: onJoinDatePickerSelectedIndexChanged,
           ),

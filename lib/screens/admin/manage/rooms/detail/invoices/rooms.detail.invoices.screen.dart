@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +37,9 @@ class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoices
     return AdminRoomsDetailInvoicesController(
       context: context,
       title: AppLocalizations.of(context)!.admin_manage_invoice,
+      building: building,
+      floor: floor,
+      room: room,
     );
   }
 
@@ -80,12 +85,13 @@ class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoices
           case ConnectionState.active:
           case ConnectionState.done:
             if (snapshot.hasError) {
+              log(snapshot.error.toString());
               controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
               // return const Text('Error');
             }
 
             if (snapshot.hasData) {
-              return _buildItemCategoriesList(snapshot.data!);
+              return _buildInvoicesList(snapshot.data!);
             } else {
               return Text(controller.appLocalizations!.admin_manage_service_empty);
             }
@@ -97,7 +103,7 @@ class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoices
     );
   }
 
-  _buildItemCategoriesList(List<Invoice> list) {
+  _buildInvoicesList(List<Invoice> list) {
     final controller = context.read<AdminRoomsDetailInvoicesController>();
 
     final groupedByYear = groupBy(list, (Object? key) {
@@ -106,28 +112,29 @@ class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoices
 
     return Column(
       children: groupedByYear.entries.map((e) {
-        return AppMenuGroup(
-          title: e.key.toString(),
-          items: e.value
-              .map(
-                (invoice) => AppMenuGroupItem(
-                  title: AppLocalizations.of(context)!.admin_manage_invoice_month(invoice.month),
-                  titleStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                  ),
-                  subTitle: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        Text(NumberFormat('#,###').format('12345') + 'đ'),
-                      ],
-                    ),
-                  ),
-                  onPressed: () => controller.onInvoiceItemPressed(invoice),
-                  onLongPressed: () => controller.onInvoicdItemContextMenuOpen(invoice),
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 30.0),
+          child: AppMenuGroup(
+            title: e.key.toString(),
+            items: e.value.map((invoice) {
+              return AppMenuGroupItem(
+                title: AppLocalizations.of(context)!.admin_manage_invoice_month(invoice.month),
+                titleStyle: const TextStyle(
+                  fontWeight: FontWeight.w500,
                 ),
-              )
-              .toList(),
+                subTitle: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    children: [
+                      Text(NumberFormat('#,###').format(invoice.total) + 'đ'),
+                    ],
+                  ),
+                ),
+                onPressed: () => controller.onInvoiceItemPressed(invoice),
+                onLongPressed: () => controller.onInvoiceItemContextMenuOpen(invoice),
+              );
+            }).toList(),
+          ),
         );
       }).toList(),
     );

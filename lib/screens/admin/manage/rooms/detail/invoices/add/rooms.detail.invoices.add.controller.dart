@@ -1,61 +1,18 @@
 import 'dart:developer';
 
-import 'package:bvu_dormitory/models/building.dart';
-import 'package:bvu_dormitory/models/floor.dart';
-import 'package:bvu_dormitory/models/invoice.dart';
-import 'package:bvu_dormitory/models/room.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 
+import 'package:bvu_dormitory/models/building.dart';
+import 'package:bvu_dormitory/models/floor.dart';
+import 'package:bvu_dormitory/models/invoice.dart';
+import 'package:bvu_dormitory/models/room.dart';
+import 'package:bvu_dormitory/repositories/invoice.repository.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/service.dart';
-
-class ThousandsSeparatorInputFormatter extends TextInputFormatter {
-  static const separator = ','; // Change this to '.' for other locales
-
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    // Short-circuit if the new value is empty
-    if (newValue.text.isEmpty) {
-      return newValue.copyWith(text: '');
-    }
-
-    // Handle "deletion" of separator character
-    String oldValueText = oldValue.text.replaceAll(separator, '');
-    String newValueText = newValue.text.replaceAll(separator, '');
-
-    if (oldValue.text.endsWith(separator) && oldValue.text.length == newValue.text.length + 1) {
-      newValueText = newValueText.substring(0, newValueText.length - 1);
-    }
-
-    // Only process if the old value and new value are different
-    if (oldValueText != newValueText) {
-      int selectionIndex = newValue.text.length - newValue.selection.extentOffset;
-      final chars = newValueText.split('');
-
-      String newString = '';
-      for (int i = chars.length - 1; i >= 0; i--) {
-        if ((chars.length - 1 - i) % 3 == 0 && i != chars.length - 1) {
-          newString = separator + newString;
-        }
-        newString = chars[i] + newString;
-      }
-
-      return TextEditingValue(
-        text: newString.toString(),
-        selection: TextSelection.collapsed(
-          offset: newString.length - selectionIndex,
-        ),
-      );
-    }
-
-    // If the new value and old value are the same, just return as-is
-    return newValue;
-  }
-}
 
 class AdminRoomsDetailInvoicesAddController extends BaseController {
   AdminRoomsDetailInvoicesAddController({
@@ -64,21 +21,24 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
     required this.building,
     required this.floor,
     required this.room,
+    this.invoice,
   }) : super(context: context, title: title) {
-    dateController = TextEditingController(text: getDateStringFromDate(DateTime.now()));
-    notesController = TextEditingController(text: "");
+    dateController = TextEditingController(
+        text: getDateStringFromDate(invoice == null ? DateTime.now() : getDateFromDateString(invoice!.createdDate)));
+    notesController = TextEditingController(text: invoice?.notes);
 
     addListener(() {
       reCalculateTotalCost();
     });
   }
 
+  final Invoice? invoice;
   final Building building;
   final Floor floor;
   final Room room;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  int totalCost = 2654000;
+  int totalCost = 0;
 
   DateTime? date;
   late TextEditingController dateController;
@@ -89,11 +49,16 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
   }
 
   late TextEditingController notesController;
-  // Tuple<Service, discount TextEditingController, newIndex TextEditingController (for continous Service)
+  // Tuple<Service, discounts TextEditingController, newIndex TextEditingController (for continous Service)
   late List<Tuple3<Service, TextEditingController, TextEditingController?>> serviceControllers;
 
   String getDateStringFromDate(DateTime value) {
     return "${value.day.toString().padLeft(2, '0')}-${value.month.toString().padLeft(2, '0')}-${value.year}";
+  }
+
+  DateTime getDateFromDateString(String value) {
+    final splitted = value.split('-');
+    return DateTime(int.parse(splitted[2]), int.parse(splitted[1]), int.parse(splitted[0]));
   }
 
   String getServiceSubtotal(Service service, int index) {
@@ -149,22 +114,29 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
     final month = createDate[1];
 
     return Invoice(
-      createdDate: getDateStringFromDate(DateTime.now()),
+      createdDate: getDateStringFromDate(getDateFromDateString(dateController.text)),
       month: int.parse(month),
       year: int.parse(year),
       room: room.reference!,
-      services: serviceControllers
-          .map((e) => Service(
-                name: e.item1.name,
-                price: e.item1.price,
-                unit: e.item1.unit,
-                type: e.item1.type,
-              ))
-          .toList(),
+      payments: [],
+      notes: notesController.text,
+      services: serviceControllers.map((e) {
+        final s = Service(
+          name: e.item1.name,
+          price: e.item1.price,
+          unit: e.item1.unit,
+          type: e.item1.type,
+          discounts: int.tryParse(e.item2.text.split(',').join('')),
+          oldIndex: e.item1.newIndex,
+          newIndex: int.tryParse(e.item3?.text ?? ""),
+        );
+
+        return s;
+      }).toList(),
     );
   }
 
-  void submit() {
+  void submit() async {
     if (formKey.currentState!.validate()) {
       // checking if any service is of the continous type and not provided newIndex value
       if (serviceControllers.any((element) {
@@ -175,7 +147,31 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
       }
 
       // form validated
-      log('validated');
+      if (await hasConnectivity()) {
+        showLoadingDialog();
+
+        try {
+          await InvoiceRepository.addInvoice(getFormValue());
+          navigator.pop();
+        } catch (e) {
+          showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+          log(e.toString());
+        } finally {
+          navigator.pop();
+        }
+      }
+    }
+  }
+
+  deleteInvoice(Invoice invoice) async {
+    if (await hasConnectivity()) {
+      try {
+        await InvoiceRepository.deleteInvoice(invoice);
+      } catch (e) {
+        showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+      } finally {
+        navigator.pop();
+      }
     }
   }
 }

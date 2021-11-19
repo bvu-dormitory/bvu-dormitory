@@ -264,6 +264,8 @@
 
     "admin_manage_invoice_month": "Tháng {month}",
     "admin_manage_invoice_add": "Thêm Hóa đơn",
+    "admin_manage_invoice_list": "Các Hóa đơn",
+    "admin_manage_invoice_view": "Chi tiết Hóa đơn",
     "admin_manage_invoice_export": "Xuất phiếu",
     "admin_manage_invoice_print": "In phiếu",
     "admin_manage_invoice_time": "Thời gian",
@@ -279,6 +281,20 @@
     "@admin_manage_invoice_month": {
         "placeholders": {
             "month": {
+                "type": "int"
+            }
+        }
+    },
+    "admin_manage_invoice_detail": "Phòng {room} - Tháng {month}/{year}",
+    "@admin_manage_invoice_detail": {
+        "placeholders": {
+            "room": {
+                "type": "String"
+            },
+            "month": {
+                "type": "int"
+            },
+            "year": {
                 "type": "int"
             }
         }

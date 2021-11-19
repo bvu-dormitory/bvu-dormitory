@@ -1,31 +1,69 @@
-import 'package:bvu_dormitory/screens/student/home/student.home.controller.dart';
-import 'package:bvu_dormitory/screens/student/home/widgets/student.home.navbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
-class StudentHomeScreen extends StatefulWidget {
-  const StudentHomeScreen({Key? key}) : super(key: key);
+import 'package:bvu_dormitory/base/base.screen.dart';
+import 'package:bvu_dormitory/screens/student/home/student.home.controller.dart';
+
+class StudentHomeScreen extends BaseScreen<StudentHomeController> {
+  StudentHomeScreen({Key? key}) : super(key: key, haveNavigationBar: false);
 
   @override
-  _StudentHomeScreenState createState() => _StudentHomeScreenState();
-}
+  Widget? navigationBarTrailing(BuildContext context) {}
 
-class _StudentHomeScreenState extends State<StudentHomeScreen> {
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => StudentHomeController(context: _, title: ""),
-      child: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.all(10),
-          child: const Center(
-            child: Text(
-              'Student',
-              textAlign: TextAlign.center,
-            ),
+  StudentHomeController provideController(BuildContext context) {
+    return StudentHomeController(context: context, title: '');
+  }
+
+  @override
+  Widget body(BuildContext context) {
+    final controller = context.read<StudentHomeController>();
+
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
+        // backgroundColor: Colors.transparent,
+        iconSize: 22,
+        items: List.generate(controller.navItemsList.length, (index) {
+          return _bottomNavBarItem(controller, index);
+        }),
+      ),
+      tabBuilder: (context, index) {
+        return controller.navItemsList[index].screen;
+      },
+    );
+  }
+
+  BottomNavigationBarItem _bottomNavBarItem(StudentHomeController controller, int index) {
+    return BottomNavigationBarItem(
+      // label: controller.navItemDataList[index].title,
+      title: Container(
+        padding: const EdgeInsets.only(top: 3),
+        child: Text(
+          controller.navItemsList[index].title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
           ),
         ),
-        bottomNavigationBar: const StudentHomeBottomNavbar(),
+      ),
+      icon: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            child: Icon(controller.navItemsList[index].icon),
+            top: 10,
+          )
+        ],
+      ),
+      activeIcon: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            child: Icon(controller.navItemsList[index].activeIcon),
+            top: 10,
+          )
+        ],
       ),
     );
   }

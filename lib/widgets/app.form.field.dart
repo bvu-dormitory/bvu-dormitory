@@ -6,6 +6,7 @@ import 'package:clipboard/clipboard.dart';
 
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'app.form.picker.dart';
 
@@ -89,7 +90,7 @@ class AppFormField extends StatelessWidget {
               enabled: enabled,
               onTap: () {
                 if (type == AppFormFieldType.picker) {
-                  showCupertinoModalPopup(
+                  showCupertinoModalBottomSheet(
                     context: context,
                     builder: (context) {
                       return picker!;
@@ -97,7 +98,7 @@ class AppFormField extends StatelessWidget {
                   );
                 }
               },
-              readOnly: type == AppFormFieldType.picker ? editable : false,
+              readOnly: type == AppFormFieldType.picker ? true : !editable,
               keyboardType: keyboardType,
               textInputAction: keyboardAction,
               maxLines: maxLines,
