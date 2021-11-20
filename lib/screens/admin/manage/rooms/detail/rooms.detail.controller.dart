@@ -33,7 +33,7 @@ class AdminRoomsDetailController extends BaseController {
   List<AppMenuGroupItem> get infoMenuItems => [
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_images ?? "admin_manage_rooms_detail_images",
-          icon: FluentIcons.image_multiple_24_filled,
+          icon: const Icon(FluentIcons.image_multiple_24_filled),
           onPressed: () {
             Navigator.of(context).push(
               CupertinoPageRoute(
@@ -49,7 +49,7 @@ class AdminRoomsDetailController extends BaseController {
         ),
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_service ?? "admin_manage_service",
-          icon: FluentIcons.wifi_1_24_filled,
+          icon: const Icon(FluentIcons.wifi_1_24_filled),
           onPressed: () {
             navigator.push(
               CupertinoPageRoute(
@@ -65,7 +65,7 @@ class AdminRoomsDetailController extends BaseController {
         ),
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_item ?? "admin_manage_item",
-          icon: FluentIcons.bed_24_filled,
+          icon: const Icon(FluentIcons.bed_24_filled),
           onPressed: () {
             navigator.push(
               CupertinoPageRoute(
@@ -81,7 +81,7 @@ class AdminRoomsDetailController extends BaseController {
         ),
         AppMenuGroupItem(
             title: appLocalizations?.admin_manage_student ?? "admin_manage_student",
-            icon: FluentIcons.people_24_filled,
+            icon: const Icon(FluentIcons.people_24_filled),
             onPressed: () {
               navigator.push(CupertinoPageRoute(
                 builder: (context) => AdminRoomsDetailStudentsScreen(
@@ -98,7 +98,7 @@ class AdminRoomsDetailController extends BaseController {
   List<AppMenuGroupItem> get messageMenuItems => [
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_contact_chat ?? "admin_manage_rooms_detail_contact_chat",
-          icon: FluentIcons.chat_24_filled,
+          icon: const Icon(FluentIcons.chat_24_filled),
         ),
       ];
 
@@ -106,7 +106,7 @@ class AdminRoomsDetailController extends BaseController {
   List<AppMenuGroupItem> get invoiceMenuItems => [
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_add ?? "admin_manage_rooms_detail_invoice_add",
-          icon: FluentIcons.receipt_add_24_filled,
+          icon: const Icon(FluentIcons.receipt_add_24_filled),
           onPressed: () {
             navigator.push(CupertinoPageRoute(
               builder: (context) => AdminRoomsDetailInvoicesAddScreen(
@@ -120,7 +120,7 @@ class AdminRoomsDetailController extends BaseController {
         ),
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_list ?? "admin_manage_rooms_detail_invoice_list",
-          icon: FluentIcons.checkbox_person_24_filled,
+          icon: const Icon(FluentIcons.checkbox_person_24_filled),
           onPressed: () {
             navigator.push(CupertinoPageRoute(
               builder: (context) => AdminRoomsDetailInvoicesScreen(
@@ -138,12 +138,12 @@ class AdminRoomsDetailController extends BaseController {
   List<AppMenuGroupItem> get repairMenuItems => [
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_repair_list ?? "admin_manage_rooms_detail_repair_list",
-          icon: FluentIcons.chat_help_24_filled,
+          icon: const Icon(FluentIcons.chat_help_24_filled),
         ),
         AppMenuGroupItem(
           title:
               appLocalizations?.admin_manage_rooms_detail_repair_history ?? "admin_manage_rooms_detail_repair_history",
-          icon: FluentIcons.checkbox_checked_24_filled,
+          icon: const Icon(FluentIcons.checkbox_checked_24_filled),
         ),
       ];
 }

@@ -101,6 +101,7 @@
 
     "admin_manage_welcome": "Xin chào,",
     "admin_manage_sign_out": "Đăng xuất",
+    "admin_manage_members": "Thành viên",
     "admin_manage_building": "Khu",
     "admin_manage_floor": "Tầng",
     "admin_manage_room": "Phòng",
@@ -290,5 +291,10 @@
                 "type": "int"
             }
         }
-    }
+    },
+
+
+    "student_invoice_history": "Lịch sử thanh toán",
+    "student_invoice_current": "Hóa đơn tháng trước",
+    "student_active_members": "Các thành viên"
 }

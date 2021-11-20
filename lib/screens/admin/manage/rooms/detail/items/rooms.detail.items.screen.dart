@@ -118,7 +118,7 @@ class AdminRoomsDetailItemsScreen extends BaseScreen<AdminRoomsDetailItemsContro
                         return AppMenuGroupItem(
                           title: theItem.code,
                           titleStyle: const TextStyle(fontWeight: FontWeight.w500),
-                          icon: FluentIcons.number_symbol_16_regular,
+                          icon: const Icon(FluentIcons.number_symbol_16_regular),
                           subTitle: Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: Row(

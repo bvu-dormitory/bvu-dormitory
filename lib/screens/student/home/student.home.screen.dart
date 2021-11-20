@@ -1,11 +1,10 @@
-import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
 
 import 'package:provider/provider.dart';
 
 import 'package:bvu_dormitory/base/base.screen.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/screens/student/home/student.home.controller.dart';
 
 class StudentHomeScreen extends BaseScreen<StudentHomeController> {

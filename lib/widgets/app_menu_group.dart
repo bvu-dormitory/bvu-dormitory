@@ -9,7 +9,7 @@ class AppMenuGroupItem {
   bool hasTrailingArrow;
   Widget? trailing;
   Widget? subTitle;
-  IconData? icon;
+  Widget? icon;
   void Function()? onPressed;
   void Function()? onLongPressed;
   bool enableContextMenu;
@@ -81,38 +81,41 @@ class AppMenuGroup extends StatelessWidget {
           }
         },
         padding: const EdgeInsets.all(0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(isFirst ? 10 : 0),
-              topRight: Radius.circular(isFirst ? 10 : 0),
-              bottomLeft: Radius.circular(isLast ? 10 : 0),
-              bottomRight: Radius.circular(isLast ? 10 : 0),
-            ),
-            border: Border.all(
-              color: Colors.grey.withOpacity(0.3),
-              width: 0.5,
-            ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(isFirst ? 10 : 0),
+            topRight: Radius.circular(isFirst ? 10 : 0),
+            bottomLeft: Radius.circular(isLast ? 10 : 0),
+            bottomRight: Radius.circular(isLast ? 10 : 0),
           ),
-          child: Material(
-            borderRadius: BorderRadius.circular(10),
-            child: ListTile(
-              leading: icon.icon != null ? Icon(icon.icon, size: 20) : null,
-              minLeadingWidth: 10,
-              trailing:
-                  icon.trailing ?? (icon.hasTrailingArrow ? const Icon(CupertinoIcons.right_chevron, size: 16) : null),
-              subtitle: icon.subTitle,
-              title: Text(
-                icon.title,
-                textAlign: TextAlign.left,
-                style: icon.titleStyle ??
-                    TextStyle(
-                      color: Colors.black.withOpacity(0.75),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15,
-                      // fontSize: 20,
-                    ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: Colors.grey.withOpacity(0.3),
+                width: 0.5,
+              ),
+            ),
+            child: Material(
+              borderRadius: BorderRadius.circular(10),
+              child: ListTile(
+                tileColor: Colors.white,
+                leading: icon.icon.runtimeType == IconData ? Icon(icon.icon as IconData, size: 20) : icon.icon,
+                minLeadingWidth: 10,
+                trailing: icon.trailing ??
+                    (icon.hasTrailingArrow ? const Icon(CupertinoIcons.right_chevron, size: 16) : null),
+                subtitle: icon.subTitle,
+                title: Text(
+                  icon.title,
+                  textAlign: TextAlign.left,
+                  style: icon.titleStyle ??
+                      TextStyle(
+                        color: Colors.black.withOpacity(0.75),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
+                        // fontSize: 20,
+                      ),
+                ),
               ),
             ),
           ),

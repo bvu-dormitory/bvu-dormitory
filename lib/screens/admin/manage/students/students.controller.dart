@@ -17,7 +17,7 @@ class AdminStudentsController extends BaseController {
   List<AppMenuGroupItem> get menuItems => [
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_student_menu_add ?? "admin_manage_student_menu_add",
-          icon: FluentIcons.person_add_24_regular,
+          icon: const Icon(FluentIcons.person_add_24_regular),
           onPressed: () {
             navigator.push(
               CupertinoPageRoute(
@@ -28,7 +28,7 @@ class AdminStudentsController extends BaseController {
         ),
         AppMenuGroupItem(
             title: appLocalizations?.admin_manage_student_menu_export_excel ?? "admin_manage_student_menu_export_excel",
-            icon: FluentIcons.sign_out_24_regular,
+            icon: const Icon(FluentIcons.sign_out_24_regular),
             onPressed: () {
               navigator.push(
                 CupertinoPageRoute(

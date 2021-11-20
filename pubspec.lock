@@ -300,6 +300,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.3.0"
+  flutter_custom_clippers:
+    dependency: "direct main"
+    description:
+      name: flutter_custom_clippers
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   flutter_fadein:
     dependency: "direct main"
     description:
@@ -350,6 +357,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  hexcolor:
+    dependency: "direct main"
+    description:
+      name: hexcolor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
   http:
     dependency: transitive
     description:

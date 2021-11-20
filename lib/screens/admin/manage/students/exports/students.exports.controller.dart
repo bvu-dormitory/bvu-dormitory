@@ -26,19 +26,19 @@ class AdminStudentsExportsController extends BaseController {
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_student_menu_export_excel_all ??
               "admin_manage_student_menu_export_excel_all",
-          icon: FluentIcons.people_24_regular,
+          icon: const Icon(FluentIcons.people_24_regular),
           onPressed: exportAllStudents,
         ),
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_student_menu_export_excel_active ??
               "admin_manage_student_menu_export_excel_active",
-          icon: AntDesign.Safety,
+          icon: const Icon(AntDesign.Safety),
           onPressed: exportActiveStudents,
         ),
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_student_menu_export_excel_absent ??
               "admin_manage_student_menu_export_excel_absent",
-          icon: AntDesign.close,
+          icon: const Icon(AntDesign.close),
           onPressed: exportAbsentStudents,
         ),
       ];

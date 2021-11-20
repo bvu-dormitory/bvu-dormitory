@@ -1,7 +1,13 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
+import 'package:bvu_dormitory/models/invoice.dart';
+import 'package:bvu_dormitory/repositories/invoice.repository.dart';
+import 'package:bvu_dormitory/widgets/app.ticket.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -10,6 +16,8 @@ import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:bvu_dormitory/repositories/user.repository.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/src/provider.dart';
 import 'student.room.controller.dart';
 
 class StudentRoomScreen extends BaseScreen<StudentRoomController> {
@@ -41,11 +49,16 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
         stream: UserRepository.getCurrentFireStoreStudentStream(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Column(
-              children: [
-                _roomHeader(snapshot.data!),
-                _roomBody(snapshot.data!),
-              ],
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _roomHeader(snapshot.data!),
+                  Flexible(
+                    child: _roomBody(snapshot.data!),
+                  ),
+                ],
+              ),
             );
           }
 
@@ -82,7 +95,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
           const CircleAvatar(
             backgroundColor: Colors.amber,
             radius: 20,
-            backgroundImage: AssetImage('lib/assets/icons/default-user.png'),
+            backgroundImage: AssetImage('lib/assets/icons/user.png'),
           ),
         ],
       );
@@ -145,29 +158,47 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
       );
     }
 
-    return Container(
-      width: double.infinity,
-      alignment: Alignment.topLeft,
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, left: 20, right: 20, bottom: 10),
-      decoration: BoxDecoration(
-        // color: Colors.blue.shade800,
-        // color: Colors.white,
-        gradient: AppColor.mainAppBarGradientColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.01),
-            blurRadius: 20,
-            offset: const Offset(0, 1),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        ClipPath(
+          clipper: WaveClipperTwo(),
+          child: Container(
+            width: double.infinity,
+            alignment: Alignment.topLeft,
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, left: 20, right: 20, bottom: 105),
+            decoration: BoxDecoration(
+              gradient: AppColor.mainAppBarGradientColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.01),
+                  blurRadius: 20,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _appNameSection(),
+                const SizedBox(height: 30),
+                _nameSection(student),
+              ],
+            ),
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          _appNameSection(),
-          const SizedBox(height: 30),
-          _nameSection(student),
-        ],
-      ),
+        ),
+
+        // Invoice card
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: -90,
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: _roomCurrentInvoice(student),
+          ),
+        ),
+      ],
     );
   }
 
@@ -176,9 +207,26 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
       future: RoomRepository.loadRoomFromRef(student.room!),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: _roomBodyGrid(snapshot.data!),
+          return Container(
+            padding: const EdgeInsets.only(top: 100, left: 20, right: 20, bottom: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: _roomRepairCard(snapshot.data!),
+                    ),
+                    const SizedBox(width: 40),
+                    Flexible(
+                      child: _roomActiveMembers(snapshot.data!),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 50),
+                _roomBodyMenuGroups(snapshot.data!),
+              ],
+            ),
           );
         }
 
@@ -187,7 +235,180 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
     );
   }
 
-  _roomBodyGrid(Room room) {
-    return Container();
+  _roomBodyMenuGroups(Room room) {
+    final controller = context.read<StudentRoomController>();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: List.generate(
+        controller.menuGroups.length,
+        (index) => Container(
+          padding: const EdgeInsets.only(top: 10, bottom: 20),
+          child: controller.menuGroups[index],
+        ),
+      ),
+    );
+  }
+
+  _roomCurrentInvoice(Student student) {
+    final controller = context.read<StudentRoomController>();
+
+    return Container(
+      height: 150,
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Colors.grey.withOpacity(0.3),
+          width: 0.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.15),
+            blurRadius: 24,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // load room
+          FutureBuilder<Room>(
+            future: RoomRepository.loadRoomFromRef(student.room!),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return FutureBuilder<Invoice?>(
+                  future: InvoiceRepository.getLastestInvoiceInRoom(snapshot.data!.reference!),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return SelectableText(
+                        AppLocalizations.of(context)!.admin_manage_room + ' ' + snapshot.data!.createdDate + ".",
+                        style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 18,
+                        ),
+                      );
+                    }
+
+                    if (snapshot.hasError) {
+                      log(snapshot.error.toString());
+                    }
+
+                    return const CupertinoActivityIndicator(radius: 10);
+                  },
+                );
+              }
+
+              return const CupertinoActivityIndicator(radius: 10);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  _roomRepairCard(Room room) {
+    final controller = context.read<StudentRoomController>();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.admin_manage_repair,
+          style: TextStyle(
+            color: Colors.black.withOpacity(0.5),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 10),
+        CupertinoButton(
+          onPressed: () {},
+          padding: EdgeInsets.zero,
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: Colors.grey.withOpacity(0.3),
+                width: 0.5,
+              ),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              '0',
+              style: TextStyle(
+                color: HexColor('#81B214'),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _roomActiveMembers(Room room) {
+    final controller = context.read<StudentRoomController>();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.student_active_members,
+          style: TextStyle(
+            color: Colors.black.withOpacity(0.5),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 10),
+        CupertinoButton(
+          onPressed: () {},
+          padding: EdgeInsets.zero,
+          child: Container(
+            height: 50,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: Colors.grey.withOpacity(0.3),
+                width: 0.5,
+              ),
+            ),
+            alignment: Alignment.center,
+            child: FutureBuilder<int>(
+              future: RoomRepository.getActiveStudentsQuantity(room.reference!),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  log('active students in this room: ' + snapshot.data.toString());
+
+                  return Text(
+                    snapshot.data.toString(),
+                    style: TextStyle(
+                      color: HexColor('#81B214'),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }
+
+                if (snapshot.hasError) {
+                  log(snapshot.error.toString());
+                }
+
+                return const CupertinoActivityIndicator(radius: 10);
+              },
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -51,4 +51,16 @@ class RoomRepository {
   static addRoom({required String value}) {}
 
   static updateRoom({required String value, required String roomId}) {}
+
+  static Future<int> getActiveStudentsQuantity(DocumentReference<Object?> documentReference) async {
+    return (await instance
+            .collection('users')
+            .where(
+              'room',
+              isEqualTo: documentReference.path,
+            )
+            .where('active', isEqualTo: true)
+            .get())
+        .size;
+  }
 }
