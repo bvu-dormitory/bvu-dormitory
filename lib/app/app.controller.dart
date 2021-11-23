@@ -6,15 +6,12 @@ import 'package:flutter/material.dart';
 class BaseProvider extends ChangeNotifier {}
 
 class AppController extends BaseController {
-  late ThemeMode _appThemeMode = ThemeMode.system;
-  get appThemeMode => _appThemeMode;
+  late ThemeMode _appThemeMode = ThemeMode.light;
+  ThemeMode get appThemeMode => _appThemeMode;
 
-  AppController({required BuildContext context})
-      : super(context: context, title: "") {
+  AppController({required BuildContext context}) : super(context: context, title: "") {
     checkConnectivity();
   }
-
-  // get currentLocale => appLocalizations.;
 
   void checkConnectivity() async {
     if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
@@ -33,14 +30,10 @@ class AppController extends BaseController {
     showDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: Text(appLocalizations?.app_dialog_title_error ??
-            "app_dialog_title_error"),
-        content: Text(
-            appLocalizations?.app_connectivity_none ?? "app_connectivity_none"),
+        title: Text(appLocalizations?.app_dialog_title_error ?? "app_dialog_title_error"),
+        content: Text(appLocalizations?.app_connectivity_none ?? "app_connectivity_none"),
         actions: [
-          CupertinoDialogAction(
-              child: Text(appLocalizations?.app_dialog_action_ok ??
-                  "app_dialog_action_ok")),
+          CupertinoDialogAction(child: Text(appLocalizations?.app_dialog_action_ok ?? "app_dialog_action_ok")),
         ],
       ),
     );

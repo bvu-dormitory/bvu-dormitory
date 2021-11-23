@@ -53,19 +53,19 @@ class StudentHomeController extends BaseController {
           title: appLocalizations!.home_screen_navbar_item_newsfeed,
           icon: FluentIcons.news_24_regular,
           activeIcon: FluentIcons.news_24_filled,
-          screen: NewsFeedScreen(),
+          screen: NewsFeedScreen(user: student),
         ),
         HomeBottomNavItem(
           title: appLocalizations!.home_screen_navbar_item_chat,
           icon: FluentIcons.chat_24_regular,
           activeIcon: FluentIcons.chat_24_filled,
-          screen: MessagesScreen(),
+          screen: MessagesScreen(user: student),
         ),
         HomeBottomNavItem(
           title: appLocalizations!.home_screen_navbar_item_profile,
           icon: FluentIcons.person_24_regular,
           activeIcon: FluentIcons.person_24_filled,
-          screen: ProfileScreen(),
+          screen: ProfileScreen(user: student),
         ),
       ];
 }

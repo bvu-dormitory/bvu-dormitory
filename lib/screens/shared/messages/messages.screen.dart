@@ -1,5 +1,6 @@
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
+import 'package:bvu_dormitory/models/user.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,9 @@ import 'package:provider/provider.dart';
 import 'message.controller.dart';
 
 class MessagesScreen extends BaseScreen<MessageController> {
-  MessagesScreen({Key? key}) : super(key: key, haveNavigationBar: false);
+  MessagesScreen({Key? key, required this.user}) : super(key: key, haveNavigationBar: false);
+
+  final AppUser user;
 
   @override
   MessageController provideController(BuildContext context) {

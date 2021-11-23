@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
+import 'package:bvu_dormitory/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,9 @@ import 'package:provider/provider.dart';
 import 'newsfeed.controller.dart';
 
 class NewsFeedScreen extends BaseScreen<NewsFeedController> {
-  NewsFeedScreen({Key? key}) : super(key: key, haveNavigationBar: false);
+  NewsFeedScreen({Key? key, required this.user}) : super(key: key, haveNavigationBar: false);
+
+  final AppUser user;
 
   @override
   Widget? navigationBarTrailing(BuildContext context) {}
@@ -54,7 +57,9 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
           ),
           Row(
             children: [
-              _composeButton(context),
+              if (user.role == UserRole.admin) ...{
+                _composeButton(context),
+              },
               const SizedBox(width: 15),
               _addGroupButton(context),
             ],

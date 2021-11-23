@@ -5,16 +5,19 @@ import 'app.colors.dart';
 
 class AppThemes {
   static get light => ThemeData(
-        primarySwatch: AppColor.primarySwatch,
-        backgroundColor: AppColor.backgroundColor,
+        primarySwatch: Colors.blue,
+        primaryColor: Colors.white,
         brightness: Brightness.light,
-        // fontFamily: GoogleFonts.montserrat().fontFamily,
+        scaffoldBackgroundColor: AppColor.backgroundColorLight,
       );
 
   static get dark => ThemeData(
-        primarySwatch: AppColor.primarySwatchDark,
-        backgroundColor: AppColor.backgroundColorDark,
+        primarySwatch: Colors.blue,
+        primaryColor: AppColor.backgroundColorLight,
         brightness: Brightness.dark,
-        // fontFamily: GoogleFonts.montserrat().fontFamily,
+        scaffoldBackgroundColor: AppColor.backgroundColorDark,
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: AppColor.backgroundColorDark,
+        ),
       );
 }

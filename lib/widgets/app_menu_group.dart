@@ -1,7 +1,10 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:bvu_dormitory/app/constants/app.styles.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 
 class AppMenuGroupItem {
   String title;
@@ -30,7 +33,7 @@ class AppMenuGroupItem {
 }
 
 class AppMenuGroup extends StatelessWidget {
-  const AppMenuGroup({
+  AppMenuGroup({
     Key? key,
     this.title,
     this.titleStyle,
@@ -47,7 +50,7 @@ class AppMenuGroup extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (title != null) ...{
-          Text(title!, style: titleStyle ?? AppStyles.menuGroupTextStyle),
+          Text(title!, style: titleStyle ?? AppStyles.getMenuGroupTextStyle(context)),
           const SizedBox(height: 10),
         },
         ...List.generate(items.length, (index) {
@@ -56,12 +59,13 @@ class AppMenuGroup extends StatelessWidget {
           return item.enableContextMenu
               ? CupertinoContextMenu(
                   actions: item.contextMenuActions!,
-                  child: _menuItem(icon: item, isFirst: index == 0, isLast: index == items.length - 1),
+                  child:
+                      _menuItem(context: context, icon: item, isFirst: index == 0, isLast: index == items.length - 1),
                   previewBuilder: (context, animation, child) {
-                    return _menuItem(icon: item, isFirst: true, isLast: true);
+                    return _menuItem(context: context, icon: item, isFirst: true, isLast: true);
                   },
                 )
-              : _menuItem(icon: item, isFirst: index == 0, isLast: index == items.length - 1);
+              : _menuItem(context: context, icon: item, isFirst: index == 0, isLast: index == items.length - 1);
         }),
       ],
     );
@@ -71,7 +75,15 @@ class AppMenuGroup extends StatelessWidget {
     required AppMenuGroupItem icon,
     bool isFirst = false,
     bool isLast = false,
+    required BuildContext context,
   }) {
+    final appProvider = context.read<AppController>();
+
+    final border = BorderSide(
+      color: AppColor.borderColor(appProvider.appThemeMode),
+      width: 0.5,
+    );
+
     return GestureDetector(
       onLongPress: icon.onLongPressed,
       child: CupertinoButton(
@@ -81,41 +93,45 @@ class AppMenuGroup extends StatelessWidget {
           }
         },
         padding: const EdgeInsets.all(0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(isFirst ? 10 : 0),
-            topRight: Radius.circular(isFirst ? 10 : 0),
-            bottomLeft: Radius.circular(isLast ? 10 : 0),
-            bottomRight: Radius.circular(isLast ? 10 : 0),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: Colors.grey.withOpacity(0.3),
-                width: 0.5,
-              ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: AppColor.borderColor(appProvider.appThemeMode),
+              width: appProvider.appThemeMode == ThemeMode.light ? 0.5 : 0.3,
             ),
-            child: Material(
-              borderRadius: BorderRadius.circular(10),
-              child: ListTile(
-                tileColor: Colors.white,
-                leading: icon.icon.runtimeType == IconData ? Icon(icon.icon as IconData, size: 20) : icon.icon,
-                minLeadingWidth: 10,
-                trailing: icon.trailing ??
-                    (icon.hasTrailingArrow ? const Icon(CupertinoIcons.right_chevron, size: 16) : null),
-                subtitle: icon.subTitle,
-                title: Text(
-                  icon.title,
-                  textAlign: TextAlign.left,
-                  style: icon.titleStyle ??
-                      TextStyle(
-                        color: Colors.black.withOpacity(0.75),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15,
-                        // fontSize: 20,
-                      ),
-                ),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(isFirst ? 10 : 0),
+              topRight: Radius.circular(isFirst ? 10 : 0),
+              bottomLeft: Radius.circular(isLast ? 10 : 0),
+              bottomRight: Radius.circular(isLast ? 10 : 0),
+            ),
+          ),
+          child: Material(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(isFirst ? 10 : 0),
+              topRight: Radius.circular(isFirst ? 10 : 0),
+              bottomLeft: Radius.circular(isLast ? 10 : 0),
+              bottomRight: Radius.circular(isLast ? 10 : 0),
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: ListTile(
+              tileColor: AppColor.secondaryBackgroundColor(appProvider.appThemeMode),
+              leading: icon.icon.runtimeType == IconData ? Icon(icon.icon as IconData, size: 20) : icon.icon,
+              minLeadingWidth: 10,
+              trailing:
+                  icon.trailing ?? (icon.hasTrailingArrow ? const Icon(CupertinoIcons.right_chevron, size: 16) : null),
+              subtitle: icon.subTitle,
+              title: Text(
+                icon.title,
+                textAlign: TextAlign.left,
+                style: icon.titleStyle ??
+                    TextStyle(
+                      color: AppColor.textColor(appProvider.appThemeMode),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15,
+                      // fontSize: 20,
+                    ),
               ),
             ),
           ),

@@ -1,3 +1,5 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +9,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/src/provider.dart';
 
 import 'app.form.picker.dart';
 
@@ -62,6 +65,8 @@ class AppFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appProvider = context.read<AppController>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -108,7 +113,7 @@ class AppFormField extends StatelessWidget {
               style: !enabled ? const TextStyle(color: Colors.grey) : null,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: AppColor.secondaryBackgroundColor(appProvider.appThemeMode),
                 contentPadding: EdgeInsets.only(
                   top: maxLines > 1 ? 15 : 0,
                   bottom: 0,

@@ -1,4 +1,5 @@
 import 'package:bvu_dormitory/base/base.screen.dart';
+import 'package:bvu_dormitory/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -6,11 +7,13 @@ import 'package:bvu_dormitory/screens/admin/home/home.controller.dart';
 import 'package:provider/provider.dart';
 
 class AdminHomeScreen extends BaseScreen<AdminHomeController> {
-  AdminHomeScreen({Key? key}) : super(key: key, haveNavigationBar: false);
+  AdminHomeScreen({Key? key, required this.user}) : super(key: key, haveNavigationBar: false);
+
+  final AppUser user;
 
   @override
   AdminHomeController provideController(BuildContext context) {
-    return AdminHomeController(context: context, title: "");
+    return AdminHomeController(context: context, title: "", user: user);
   }
 
   @override

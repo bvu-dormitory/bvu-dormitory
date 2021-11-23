@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:bvu_dormitory/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,8 @@ class StudentHomeScreen extends BaseScreen<StudentHomeController> {
       tabBar: CupertinoTabBar(
         // backgroundColor: Colors.transparent,
         iconSize: 22,
-        currentIndex: 3,
-        activeColor: AppColor.mainColor,
+        currentIndex: 0,
+        activeColor: AppColor.mainColor(context.watch<AppController>().appThemeMode),
         items: List.generate(controller.navItemsList.length, (index) {
           return _bottomNavBarItem(controller, index);
         }),

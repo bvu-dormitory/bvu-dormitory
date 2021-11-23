@@ -77,7 +77,7 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
     return CupertinoPageScaffold(
       navigationBar: _navigationBar(),
       child: Scaffold(
-        backgroundColor: AppColor.backgroundColor,
+        backgroundColor: AppColor.backgroundColorLight,
         body: _body(),
       ),
     );

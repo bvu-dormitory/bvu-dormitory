@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/screens/shared/profile/profile.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class AdminHomeController extends BaseController {
   AdminHomeController({
     required BuildContext context,
     required String title,
+    required this.user,
   }) : super(title: title, context: context) {
     // notifyListeners();
     _pageController = PageController(
@@ -34,6 +36,8 @@ class AdminHomeController extends BaseController {
 
     // tabController = CupertinoTabController(initialIndex: currentNavBarIndex);
   }
+
+  final AppUser user;
 
   late final PageController _pageController;
   PageController get pageController => _pageController;
@@ -50,9 +54,9 @@ class AdminHomeController extends BaseController {
 
   List<Widget> get getNavItemScreens => [
         AdminManageScreen(),
-        NewsFeedScreen(),
-        MessagesScreen(),
-        ProfileScreen(),
+        NewsFeedScreen(user: user),
+        MessagesScreen(user: user),
+        ProfileScreen(user: user),
       ];
 
   List<HomeBottomNavItem> get navItemDataList => [

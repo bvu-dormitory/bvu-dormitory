@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/models/invoice.dart';
 import 'package:bvu_dormitory/repositories/invoice.repository.dart';
@@ -251,18 +252,20 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
       width: double.infinity,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: Colors.grey.withOpacity(0.3),
+          color: AppColor.borderColor(context.read<AppController>().appThemeMode),
           width: 0.5,
         ),
         boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.15),
-            blurRadius: 24,
-            offset: const Offset(0, 5),
-          ),
+          if (context.read<AppController>().appThemeMode == ThemeMode.light) ...{
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.15),
+              blurRadius: 24,
+              offset: const Offset(0, 5),
+            ),
+          },
         ],
       ),
       child: Column(
@@ -279,7 +282,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
                     if (snapshot.hasData) {
                       return SelectableText(
                         AppLocalizations.of(context)!.admin_manage_room + ' ' + snapshot.data!.createdDate + ".",
-                        style: TextStyle(
+                        style: const TextStyle(
                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.w800,
                           fontSize: 18,
@@ -313,7 +316,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
         Text(
           AppLocalizations.of(context)!.admin_manage_repair,
           style: TextStyle(
-            color: Colors.black.withOpacity(0.5),
+            color: AppColor.textColor(context.read<AppController>().appThemeMode),
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -324,10 +327,10 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: Colors.grey.withOpacity(0.3),
+                color: AppColor.borderColor(context.read<AppController>().appThemeMode),
                 width: 0.5,
               ),
             ),
@@ -355,7 +358,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
         Text(
           AppLocalizations.of(context)!.student_active_members,
           style: TextStyle(
-            color: Colors.black.withOpacity(0.5),
+            color: AppColor.textColor(context.read<AppController>().appThemeMode),
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -367,10 +370,10 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
             height: 50,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: Colors.grey.withOpacity(0.3),
+                color: AppColor.borderColor(context.read<AppController>().appThemeMode),
                 width: 0.5,
               ),
             ),

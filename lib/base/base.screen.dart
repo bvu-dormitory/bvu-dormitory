@@ -1,5 +1,7 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,9 +41,15 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
   /// screen navbar
   ObstructingPreferredSizeWidget? navigationBar(BuildContext context) {
     return CupertinoNavigationBar(
+      backgroundColor: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
       transitionBetweenRoutes: true,
       previousPageTitle: previousPageTitle,
-      middle: Text(context.read<T>().title),
+      middle: Text(
+        context.read<T>().title,
+        style: TextStyle(
+          color: AppColor.textColor(context.read<AppController>().appThemeMode),
+        ),
+      ),
       trailing: navigationBarTrailing(context),
     );
   }
@@ -58,12 +66,10 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
         builder: (context) {
           this.context = context;
           return CupertinoPageScaffold(
-            backgroundColor: AppColor.backgroundColor,
             navigationBar: _haveNavigationBar ? navigationBar(context) : null,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
               extendBody: true,
-              backgroundColor: AppColor.backgroundColor,
               body: body(context),
             ),
           );

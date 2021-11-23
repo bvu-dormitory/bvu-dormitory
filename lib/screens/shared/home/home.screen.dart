@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
             );
           }
           return snapshot.data!.role == UserRole.admin
-              ? AdminHomeScreen()
+              ? AdminHomeScreen(user: snapshot.data!)
               : StudentHomeScreen(student: snapshot.data! as Student);
         }
 

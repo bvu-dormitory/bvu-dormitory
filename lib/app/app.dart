@@ -66,17 +66,6 @@ class _ApplicationState extends State<Application> {
                 // ROUTING
                 routes: AppRoutes.go, // ignore if using onGenerateRoute
                 home: (snapshot.hasData) ? const HomeScreen() : const LoginScreen(),
-                // onGenerateRoute: (settings) {
-                //   log('onGenerateRoute...');
-                //   return AuthRepository.instance.currentUser != null
-                //       ? MaterialPageRoute(
-                //           builder: (context) => AppRoutes.login.screen,
-                //         )
-                //       : MaterialPageRoute(
-                //           builder: (context) =>
-                //               AppRoutes.getByName(settings.name ?? "").screen,
-                //         );
-                // },
                 onUnknownRoute: (settings) {
                   logger.w('route not found, redirect to the 404 screen');
                   return MaterialPageRoute(

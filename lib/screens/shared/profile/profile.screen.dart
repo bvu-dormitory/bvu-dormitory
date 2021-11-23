@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
@@ -15,14 +16,23 @@ import 'package:bvu_dormitory/base/base.screen.dart';
 import 'profile.controller.dart';
 
 class ProfileScreen extends BaseScreen<ProfileController> {
-  ProfileScreen({Key? key}) : super(key: key, haveNavigationBar: false);
+  ProfileScreen({
+    Key? key,
+    required this.user,
+  }) : super(key: key, haveNavigationBar: false);
+
+  final AppUser user;
 
   @override
   Widget? navigationBarTrailing(BuildContext context) {}
 
   @override
   provideController(BuildContext context) {
-    return ProfileController(context: context, title: AppLocalizations.of(context)!.home_screen_navbar_item_profile);
+    return ProfileController(
+      context: context,
+      title: AppLocalizations.of(context)!.home_screen_navbar_item_profile,
+      user: user,
+    );
   }
 
   @override
@@ -188,8 +198,12 @@ class ProfileScreen extends BaseScreen<ProfileController> {
           const SizedBox(height: 25),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                width: 1,
+                color: AppColor.borderColor(context.read<AppController>().appThemeMode),
+              ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.max,
