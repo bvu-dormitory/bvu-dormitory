@@ -296,5 +296,10 @@
 
     "student_invoice_history": "Lịch sử thanh toán",
     "student_invoice_current": "Hóa đơn tháng trước",
-    "student_active_members": "Các thành viên"
+    "student_active_members": "Các thành viên",
+
+    "profile_avatar_edit": "Sửa",
+    "profile_app_settings": "Thiết lập",
+    "profile_app_settings_theme": "Giao diện",
+    "profile_app_settings_locale": "Ngôn ngữ"
 }

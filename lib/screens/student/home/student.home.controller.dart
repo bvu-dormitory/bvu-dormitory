@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/screens/shared/profile/profile.screen.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,10 @@ class StudentHomeController extends BaseController {
   StudentHomeController({
     required BuildContext context,
     required String title,
+    required this.student,
   }) : super(context: context, title: title);
+
+  final Student student;
 
   int _currentNavBarIndex = 0;
   int get currentNavBarIndex => _currentNavBarIndex;

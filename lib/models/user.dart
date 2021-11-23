@@ -63,16 +63,23 @@ class AppUser extends FireStoreModel {
   factory AppUser.fromFireStoreDocument(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
-    return AppUser(
-      id: snapshot.id,
-      firstName: data['first_name'],
-      lastName: data['last_name'],
-      role: UserRole.values.firstWhere(
-        (element) => describeEnum(element) == data['role'],
-        orElse: () => UserRole.student,
-      ),
-      photoURL: data['photo_url'],
+    final theRole = UserRole.values.firstWhere(
+      (element) => describeEnum(element) == data['role'],
+      orElse: () => UserRole.student,
     );
+
+    return theRole == UserRole.admin
+        ? AppUser(
+            id: snapshot.id,
+            firstName: data['first_name'],
+            lastName: data['last_name'],
+            role: UserRole.values.firstWhere(
+              (element) => describeEnum(element) == data['role'],
+              orElse: () => UserRole.student,
+            ),
+            photoURL: data['photo_url'],
+          )
+        : Student.fromFireStoreDocument(snapshot);
   }
 
   @override

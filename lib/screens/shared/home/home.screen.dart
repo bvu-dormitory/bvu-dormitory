@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
+import 'package:bvu_dormitory/repositories/user.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +14,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      // stream: FirebaseAuth.instance.userChanges(),
-      future: AuthRepository.getCurrentUserRole(),
+    return FutureBuilder<AppUser?>(
+      future: UserRepository.getCurrentFireStoreUser(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -31,7 +31,9 @@ class HomeScreen extends StatelessWidget {
               ),
             );
           }
-          return snapshot.data == UserRole.admin ? AdminHomeScreen() : StudentHomeScreen();
+          return snapshot.data!.role == UserRole.admin
+              ? AdminHomeScreen()
+              : StudentHomeScreen(student: snapshot.data! as Student);
         }
 
         log('Checking user role...');

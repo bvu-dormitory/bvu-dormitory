@@ -42,6 +42,7 @@ class AppFormPicker extends StatelessWidget {
     else {
       customPicker = CupertinoPicker(
         itemExtent: 40,
+        scrollController: FixedExtentScrollController(initialItem: dataList!.indexOf(initialValue)),
         onSelectedItemChanged: (value) {
           currentValue = value;
         },

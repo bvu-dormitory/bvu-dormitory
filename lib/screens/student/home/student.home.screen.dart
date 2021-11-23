@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,14 +9,16 @@ import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/screens/student/home/student.home.controller.dart';
 
 class StudentHomeScreen extends BaseScreen<StudentHomeController> {
-  StudentHomeScreen({Key? key}) : super(key: key, haveNavigationBar: false);
+  StudentHomeScreen({Key? key, required this.student}) : super(key: key, haveNavigationBar: false);
+
+  final Student student;
 
   @override
   Widget? navigationBarTrailing(BuildContext context) {}
 
   @override
   StudentHomeController provideController(BuildContext context) {
-    return StudentHomeController(context: context, title: '');
+    return StudentHomeController(context: context, title: '', student: student);
   }
 
   @override
@@ -26,7 +29,7 @@ class StudentHomeScreen extends BaseScreen<StudentHomeController> {
       tabBar: CupertinoTabBar(
         // backgroundColor: Colors.transparent,
         iconSize: 22,
-        currentIndex: 0,
+        currentIndex: 3,
         activeColor: AppColor.mainColor,
         items: List.generate(controller.navItemsList.length, (index) {
           return _bottomNavBarItem(controller, index);

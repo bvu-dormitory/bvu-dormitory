@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/models/invoice.dart';
 import 'package:bvu_dormitory/repositories/invoice.repository.dart';
+import 'package:bvu_dormitory/screens/student/home/student.home.controller.dart';
 import 'package:bvu_dormitory/widgets/app.ticket.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,29 +44,21 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
       ),
     );
 
-    return SafeArea(
-      top: false,
-      child: StreamBuilder<Student>(
-        stream: UserRepository.getCurrentFireStoreStudentStream(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _roomHeader(snapshot.data!),
-                  Flexible(
-                    child: _roomBody(snapshot.data!),
-                  ),
-                ],
-              ),
-            );
-          }
+    final student = context.read<StudentHomeController>().student;
 
-          return const CupertinoActivityIndicator(radius: 10);
-        },
-      ),
-    );
+    return SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _roomHeader(student),
+              Flexible(
+                child: _roomBody(student),
+              ),
+            ],
+          ),
+        ));
   }
 
   _roomHeader(Student student) {
@@ -93,7 +86,6 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
             ],
           ),
           const CircleAvatar(
-            backgroundColor: Colors.amber,
             radius: 20,
             backgroundImage: AssetImage('lib/assets/icons/user.png'),
           ),
@@ -316,7 +308,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
     final controller = context.read<StudentRoomController>();
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           AppLocalizations.of(context)!.admin_manage_repair,
@@ -358,7 +350,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
     final controller = context.read<StudentRoomController>();
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           AppLocalizations.of(context)!.student_active_members,
