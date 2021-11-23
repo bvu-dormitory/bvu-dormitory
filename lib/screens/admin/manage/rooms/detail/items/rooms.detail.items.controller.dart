@@ -18,10 +18,8 @@ class AdminRoomsDetailItemsController extends BaseController {
       [
         AppModalBottomSheetMenuGroup(items: [
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_item_detail_detach,
-              style: const TextStyle(color: Colors.red),
-            ),
+            label: appLocalizations!.admin_manage_item_detail_detach,
+            labelStyle: const TextStyle(color: Colors.red),
             icon: const Icon(FluentIcons.sign_out_24_regular, color: Colors.red),
             onPressed: () => _detachFromRoom(theItem),
           ),

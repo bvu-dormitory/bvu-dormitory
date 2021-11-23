@@ -1,3 +1,5 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,7 +58,7 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
                 height: 40,
               ),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColor.secondaryBackgroundColor(context.watch<AppController>().appThemeMode),
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -73,10 +75,10 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
             Text(
               item.title,
               style: TextStyle(
-                color: Colors.blueGrey.withOpacity(1),
+                color: AppColor.textColor(context.watch<AppController>().appThemeMode),
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                fontFamily: GoogleFonts.montserrat().fontFamily,
+                // fontFamily: GoogleFonts.montserrat().fontFamily,
               ),
             ),
           ],

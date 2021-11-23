@@ -297,6 +297,8 @@
     "student_invoice_history": "Lịch sử thanh toán",
     "student_invoice_current": "Hóa đơn tháng trước",
     "student_active_members": "Các thành viên",
+    "student_room_services_guide": "Liên hệ Quản trị viên/Người quản lý để được mở hoặc hủy dịch vụ.",
+    "student_room_items_guide": "Liên hệ Quản trị viên/Người quản lý khi tài sản bị hư hỏng hoặc muốn lắp thêm tài sản.",
 
     "profile_avatar_edit": "Sửa",
     "profile_app_settings": "Thiết lập",

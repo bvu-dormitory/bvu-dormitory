@@ -1,12 +1,12 @@
 import 'dart:developer';
 
-import 'package:bvu_dormitory/repositories/student.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:bvu_dormitory/repositories/student.repository.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
@@ -35,22 +35,12 @@ class AdminRoomsDetailStudentsController extends BaseController {
         title: appLocalizations!.admin_manage_contact,
         items: [
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_online_chat,
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
+            label: appLocalizations!.admin_manage_rooms_detail_students_online_chat,
             icon: const Icon(FluentIcons.send_24_regular),
             onPressed: () {},
           ),
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_sms,
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
+            label: appLocalizations!.admin_manage_rooms_detail_students_sms,
             icon: const Icon(FluentIcons.chat_24_regular),
             onPressed: () {
               _makePhoneCall(appLocalizations!
@@ -58,12 +48,7 @@ class AdminRoomsDetailStudentsController extends BaseController {
             },
           ),
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_call,
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
+            label: appLocalizations!.admin_manage_rooms_detail_students_call,
             icon: const Icon(FluentIcons.call_24_regular),
             onPressed: () {
               _makePhoneCall("tel:${student.id!}");
@@ -78,13 +63,11 @@ class AdminRoomsDetailStudentsController extends BaseController {
                 : ""),
         items: [
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_sms,
-              style: TextStyle(
-                color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
-                    ? Colors.black.withOpacity(0.25)
-                    : Colors.black.withOpacity(0.5),
-              ),
+            label: appLocalizations!.admin_manage_rooms_detail_students_sms,
+            labelStyle: TextStyle(
+              color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
+                  ? Colors.black.withOpacity(0.25)
+                  : Colors.black.withOpacity(0.5),
             ),
             icon: Icon(
               FluentIcons.chat_24_regular,
@@ -100,13 +83,11 @@ class AdminRoomsDetailStudentsController extends BaseController {
                   },
           ),
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_call,
-              style: TextStyle(
-                color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
-                    ? Colors.black.withOpacity(0.25)
-                    : Colors.black.withOpacity(0.5),
-              ),
+            label: appLocalizations!.admin_manage_rooms_detail_students_call,
+            labelStyle: TextStyle(
+              color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
+                  ? Colors.black.withOpacity(0.25)
+                  : Colors.black.withOpacity(0.5),
             ),
             icon: Icon(
               FluentIcons.call_24_regular,
@@ -126,12 +107,7 @@ class AdminRoomsDetailStudentsController extends BaseController {
         title: appLocalizations!.admin_manage_invoice,
         items: [
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_invoices,
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
+            label: appLocalizations!.admin_manage_rooms_detail_students_invoices,
             icon: const Icon(FluentIcons.checkmark_circle_24_regular),
             onPressed: () {},
           ),
@@ -141,24 +117,14 @@ class AdminRoomsDetailStudentsController extends BaseController {
         title: appLocalizations!.admin_manage_rooms_detail_info,
         items: [
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_change_room,
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
+            label: appLocalizations!.admin_manage_rooms_detail_students_change_room,
             icon: const Icon(FluentIcons.arrow_sync_24_regular),
             onPressed: () {
               _changeRoom(student);
             },
           ),
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_view_profile,
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
+            label: appLocalizations!.admin_manage_rooms_detail_students_view_profile,
             icon: const Icon(FluentIcons.info_24_regular),
             onPressed: () async {
               navigator.pop();
@@ -176,10 +142,7 @@ class AdminRoomsDetailStudentsController extends BaseController {
             },
           ),
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.admin_manage_rooms_detail_students_delete_profile,
-              style: TextStyle(color: Colors.black.withOpacity(0.5)),
-            ),
+            label: appLocalizations!.admin_manage_rooms_detail_students_delete_profile,
             icon: const Icon(FluentIcons.delete_24_regular),
             onPressed: () {
               _deleteStudent(student);

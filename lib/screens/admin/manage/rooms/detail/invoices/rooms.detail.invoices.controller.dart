@@ -46,7 +46,8 @@ class AdminRoomsDetailInvoicesController extends BaseController {
       [
         AppModalBottomSheetMenuGroup(items: [
           AppModalBottomSheetItem(
-            label: Text(appLocalizations!.app_action_delete, style: const TextStyle(color: Colors.red)),
+            label: appLocalizations!.app_action_delete,
+            labelStyle: const TextStyle(color: Colors.red),
             icon: const Icon(FluentIcons.delete_24_regular, color: Colors.red),
             onPressed: () => _deleteInvoice(invoice),
           ),

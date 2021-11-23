@@ -260,7 +260,6 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
               // fontWeight: FontWeight.bold,
               fontSize: 14,
               fontFamily: GoogleFonts.montserrat().fontFamily,
-              color: invoice != null ? Colors.grey : Colors.black,
             ),
             decoration: InputDecoration(
               // isCollapsed: true,
@@ -396,7 +395,6 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                   service.name,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
-                    color: Colors.black.withOpacity(0.6),
                     fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
@@ -611,7 +609,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
     return Container(
       alignment: Alignment.topLeft,
       padding: const EdgeInsets.all(20),
-      color: Colors.white,
+      // color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

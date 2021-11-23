@@ -1,17 +1,25 @@
 import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
+import 'package:bvu_dormitory/models/room.dart';
+import 'package:bvu_dormitory/screens/student/room/services/student.services.screen.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/src/provider.dart';
+
+import 'items/student.items.screen.dart';
+import 'members/student.members.screen.dart';
 
 class StudentRoomController extends BaseController {
   StudentRoomController({
     required BuildContext context,
     required String title,
   }) : super(context: context, title: title);
+
+  late Room? room;
 
   TextStyle get menuGroupTitleStyle => TextStyle(
         fontWeight: FontWeight.w600,
@@ -29,14 +37,50 @@ class StudentRoomController extends BaseController {
             AppMenuGroupItem(
               title: appLocalizations!.admin_manage_service,
               icon: Icon(FluentIcons.wifi_1_24_filled, size: 20, color: iconColor),
+              onPressed: room != null
+                  ? () {
+                      navigator.push(
+                        CupertinoPageRoute(
+                          builder: (context) => StudentServicesScreen(
+                            previousPageTitle: title,
+                            room: room!,
+                          ),
+                        ),
+                      );
+                    }
+                  : null,
             ),
             AppMenuGroupItem(
               title: appLocalizations!.admin_manage_item,
               icon: Icon(FluentIcons.lightbulb_24_filled, size: 20, color: iconColor),
+              onPressed: room != null
+                  ? () {
+                      navigator.push(
+                        CupertinoPageRoute(
+                          builder: (context) => StudentItemsScreen(
+                            previousPageTitle: title,
+                            room: room!,
+                          ),
+                        ),
+                      );
+                    }
+                  : null,
             ),
             AppMenuGroupItem(
               title: appLocalizations!.admin_manage_members,
               icon: Icon(FluentIcons.people_24_filled, size: 20, color: iconColor),
+              onPressed: room != null
+                  ? () {
+                      navigator.push(
+                        CupertinoPageRoute(
+                          builder: (context) => StudentMembersScreen(
+                            previousPageTitle: title,
+                            room: room!,
+                          ),
+                        ),
+                      );
+                    }
+                  : null,
             ),
           ],
         ),

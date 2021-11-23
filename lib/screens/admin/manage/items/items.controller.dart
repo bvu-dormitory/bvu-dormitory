@@ -27,7 +27,7 @@ class AdminItemsController extends BaseController {
 
     showCupertinoModalBottomSheet(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.3),
+      barrierColor: Colors.black.withOpacity(0.75),
       builder: (context) {
         return SingleChildScrollView(
           padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 30 + MediaQuery.of(context).viewInsets.bottom),
@@ -36,6 +36,7 @@ class AdminItemsController extends BaseController {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Material(
+                color: Colors.transparent,
                 child: Form(
                   key: formKey,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -140,15 +141,13 @@ class AdminItemsController extends BaseController {
     showBottomSheetMenuModal(category.name, null, true, [
       AppModalBottomSheetMenuGroup(items: [
         AppModalBottomSheetItem(
-          label: Text(appLocalizations!.admin_manage_item_edit),
+          label: appLocalizations!.admin_manage_item_edit,
           icon: const Icon(FluentIcons.compose_24_regular),
           onPressed: () => showCategoryEditBottomSheet(category: category),
         ),
         AppModalBottomSheetItem(
-          label: Text(
-            appLocalizations!.app_action_delete,
-            style: const TextStyle(color: Colors.red),
-          ),
+          label: appLocalizations!.app_action_delete,
+          labelStyle: const TextStyle(color: Colors.red),
           icon: const Icon(FluentIcons.delete_24_regular, color: Colors.red),
           onPressed: () => _deleteCategory(category),
         ),

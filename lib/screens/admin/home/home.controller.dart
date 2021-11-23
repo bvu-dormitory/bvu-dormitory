@@ -53,7 +53,7 @@ class AdminHomeController extends BaseController {
   }
 
   List<Widget> get getNavItemScreens => [
-        AdminManageScreen(),
+        AdminManageScreen(user: user),
         NewsFeedScreen(user: user),
         MessagesScreen(user: user),
         ProfileScreen(user: user),
@@ -80,10 +80,5 @@ class AdminHomeController extends BaseController {
           icon: FluentIcons.person_24_regular,
           activeIcon: FluentIcons.person_24_filled,
         ),
-        // HomeBottomNavItem(
-        //   title: appLocalizations!.home_screen_navbar_item_profile ?? "Cá nhân",
-        //   icon: const Icon(CupertinoIcons.profile_circled),
-        //   // activeIcon: const Icon(CupertinoIcons.profi),
-        // ),
       ];
 }

@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,15 +58,15 @@ class AdminBuildingsBody extends StatelessWidget {
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
-                                    color: Colors.black.withOpacity(0.7),
+                                    // color: Colors.black.withOpacity(0.7),
                                   ),
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
                                   theBuilding.descriptions,
                                   style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                  ),
+                                      // color: Colors.black.withOpacity(0.5),
+                                      ),
                                 )
                               ],
                             ),

@@ -1,3 +1,4 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:bvu_dormitory/widgets/app.form.field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,6 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
     return CupertinoPageScaffold(
       navigationBar: _navigationBar(),
       child: Scaffold(
-        backgroundColor: AppColor.backgroundColorLight,
         body: _body(),
       ),
     );
@@ -85,7 +85,13 @@ class _AdminRoomsDetailStudentsBodyState extends State<AdminRoomsDetailStudentsB
 
   _navigationBar() {
     return CupertinoNavigationBar(
-      middle: Text(controller.title),
+      middle: Text(
+        controller.title,
+        style: TextStyle(
+          color: AppColor.textColor(context.read<AppController>().appThemeMode),
+        ),
+      ),
+      backgroundColor: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
       previousPageTitle: controller.previousPageTitle,
       trailing: CupertinoButton(
         padding: EdgeInsets.zero,

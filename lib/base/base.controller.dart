@@ -1,3 +1,5 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +8,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:provider/src/provider.dart';
 
 // import 'package:bvu_dormitory/helpers/extensions/navigator.extensions.dart';
 
@@ -13,13 +16,15 @@ enum DialogConfirmType { update, submit }
 
 class AppModalBottomSheetItem {
   Widget icon;
-  Text label;
+  String label;
+  TextStyle? labelStyle;
   void Function()? onPressed;
 
   AppModalBottomSheetItem({
     required this.label,
     required this.icon,
     this.onPressed,
+    this.labelStyle,
   });
 }
 
@@ -162,7 +167,7 @@ abstract class BaseController extends ChangeNotifier {
                   /// bottom sheet header
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    color: const Color.fromARGB(255, 240, 240, 240),
+                    color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -205,6 +210,7 @@ abstract class BaseController extends ChangeNotifier {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // menu group title
                             if (theGroup.title != null) ...{
                               Container(
                                 padding: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
@@ -213,7 +219,7 @@ abstract class BaseController extends ChangeNotifier {
                                   style: titleStyle ??
                                       TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black.withOpacity(0.5),
+                                        color: AppColor.textColor(context.read<AppController>().appThemeMode),
                                       ),
                                 ),
                               ),
@@ -228,7 +234,13 @@ abstract class BaseController extends ChangeNotifier {
                                 return CupertinoButton(
                                   padding: EdgeInsets.zero,
                                   child: ListTile(
-                                    title: theItem.label,
+                                    title: Text(
+                                      theItem.label,
+                                      style: theItem.labelStyle ??
+                                          TextStyle(
+                                            color: AppColor.textColor(context.read<AppController>().appThemeMode),
+                                          ),
+                                    ),
                                     minLeadingWidth: 15,
                                     leading: theItem.icon,
                                   ),

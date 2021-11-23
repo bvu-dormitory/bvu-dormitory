@@ -56,7 +56,7 @@ class AdminItemsGroupsDetailController extends BaseController {
 
     showCupertinoModalBottomSheet(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.3),
+      barrierColor: Colors.black.withOpacity(0.75),
       builder: (context) {
         return SingleChildScrollView(
           padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 30 + MediaQuery.of(context).viewInsets.bottom),
@@ -65,6 +65,7 @@ class AdminItemsGroupsDetailController extends BaseController {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Material(
+                color: Colors.transparent,
                 child: Form(
                   key: formKey,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -250,14 +251,12 @@ class AdminItemsGroupsDetailController extends BaseController {
         title: appLocalizations!.admin_manage_item_detail_duplicate,
         items: [
           AppModalBottomSheetItem(
-            label: Text(appLocalizations!.admin_manage_item_detail_duplicate_one,
-                style: TextStyle(color: Colors.black.withOpacity(0.6))),
+            label: appLocalizations!.admin_manage_item_detail_duplicate_one,
             icon: const Icon(FluentIcons.multiplier_1x_24_regular, size: 30),
             onPressed: () => _showDuplicationBottomSheet(item: item),
           ),
           AppModalBottomSheetItem(
-            label: Text(appLocalizations!.admin_manage_item_detail_duplicate_multiple,
-                style: TextStyle(color: Colors.black.withOpacity(0.6))),
+            label: appLocalizations!.admin_manage_item_detail_duplicate_multiple,
             icon: const Icon(FluentIcons.multiplier_5x_24_regular, size: 30),
             onPressed: () => _showDuplicationBottomSheet(item: item, multipleTimes: true),
           ),
@@ -271,28 +270,22 @@ class AdminItemsGroupsDetailController extends BaseController {
         title: appLocalizations!.app_bottom_sheet_menu_actions,
         items: [
           AppModalBottomSheetItem(
-            label:
-                Text(appLocalizations!.admin_manage_item_edit, style: TextStyle(color: Colors.black.withOpacity(0.6))),
+            label: appLocalizations!.admin_manage_item_edit,
             icon: const Icon(FluentIcons.compose_24_regular),
             onPressed: () => showItemEditBottomSheet(item: item),
           ),
           AppModalBottomSheetItem(
-            label: Text(
-              item.roomId != null
-                  ? appLocalizations!.admin_manage_item_detail_detach
-                  : appLocalizations!.admin_manage_item_detail_attach,
-              style: TextStyle(color: Colors.black.withOpacity(0.6)),
-            ),
+            label: item.roomId != null
+                ? appLocalizations!.admin_manage_item_detail_detach
+                : appLocalizations!.admin_manage_item_detail_attach,
             icon: Icon(item.roomId != null ? SimpleLineIcons.logout : SimpleLineIcons.login, size: 22),
             onPressed: () => item.roomId == null
                 ? _assignOrDetechFromRoom(item: item)
                 : _assignOrDetechFromRoom(item: item, detaching: true),
           ),
           AppModalBottomSheetItem(
-            label: Text(
-              appLocalizations!.app_action_delete,
-              style: const TextStyle(color: Colors.red),
-            ),
+            label: appLocalizations!.app_action_delete,
+            labelStyle: const TextStyle(color: Colors.red),
             icon: const Icon(FluentIcons.delete_24_regular, color: Colors.red),
             onPressed: () => _deleteItem(item),
           ),

@@ -24,7 +24,7 @@ class AdminRoomsDetailServicesController extends BaseController {
   final Floor floor;
   final Room room;
 
-  onStudentActiveStateChanged(Service service, bool value) async {
+  onRoomServiceStateChanged(Service service, bool value) async {
     showLoadingDialog();
     log('message');
 

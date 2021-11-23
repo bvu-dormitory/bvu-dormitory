@@ -121,27 +121,17 @@ class ProfileScreen extends BaseScreen<ProfileController> {
     return Scrollbar(
       thickness: 1,
       child: SingleChildScrollView(
-        // padding: const EdgeInsets.all(20),
-        child: StreamBuilder<AppUser>(
-          stream: UserRepository.getCurrentFireStoreStudentStream(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _profileHeader(snapshot.data!),
-                  const SizedBox(height: 50),
-                  Flexible(
-                    child: _profileMenu(snapshot.data!),
-                  ),
-                ],
-              );
-            }
-
-            return const CupertinoActivityIndicator(radius: 10);
-          },
-        ),
-      ),
+          // padding: const EdgeInsets.all(20),
+          child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _profileHeader(user),
+          const SizedBox(height: 50),
+          Flexible(
+            child: _profileMenu(user),
+          ),
+        ],
+      )),
     );
   }
 

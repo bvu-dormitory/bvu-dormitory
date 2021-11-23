@@ -23,10 +23,8 @@ class AdminServicesController extends BaseController {
           title: appLocalizations!.app_bottom_sheet_menu_general,
           items: [
             AppModalBottomSheetItem(
-              label: Text(
-                appLocalizations!.admin_manage_service_chart,
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
-              ),
+              label: appLocalizations!.admin_manage_service_chart,
+              labelStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
               icon: const Icon(SimpleLineIcons.pie_chart, size: 22),
               onPressed: () {
                 // _editService(service);
@@ -38,20 +36,16 @@ class AdminServicesController extends BaseController {
           title: appLocalizations!.app_bottom_sheet_menu_actions,
           items: [
             AppModalBottomSheetItem(
-              label: Text(
-                appLocalizations!.admin_manage_service_edit,
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
-              ),
+              label: appLocalizations!.admin_manage_service_edit,
+              labelStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
               icon: const Icon(FluentIcons.compose_24_regular),
               onPressed: () {
                 _editService(service);
               },
             ),
             AppModalBottomSheetItem(
-              label: Text(
-                appLocalizations!.app_action_delete,
-                style: const TextStyle(color: Colors.red),
-              ),
+              label: appLocalizations!.app_action_delete,
+              labelStyle: const TextStyle(color: Colors.red),
               icon: const Icon(FluentIcons.delete_24_regular, color: Colors.red),
               onPressed: () {
                 _deleteService(service);

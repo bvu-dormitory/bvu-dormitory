@@ -34,7 +34,7 @@ class InvoiceRepository {
         .limit(1)
         .get();
 
-    log('lastest invoices: ' + lastestInvoiceDoc.size.toString());
+    // log('lastest invoices: ' + lastestInvoiceDoc.size.toString());
 
     // there is no docs matching the above criterias
     if (lastestInvoiceDoc.size == 0) {

@@ -1,3 +1,5 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:bvu_dormitory/models/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,42 +25,10 @@ class AdminHomeScreen extends BaseScreen<AdminHomeController> {
   Widget body(BuildContext context) {
     final controller = context.watch<AdminHomeController>();
 
-    // return Scaffold(
-    //   body: PageView.builder(
-    //     controller: controller.pageController,
-    //     physics: const NeverScrollableScrollPhysics(),
-    //     itemCount: controller.getNavItemScreens.length,
-    //     itemBuilder: (context, index) {
-    //       return controller.getNavItemScreens[index];
-    //     },
-    //   ),
-    //   bottomNavigationBar: BottomNavigationBar(
-    //     currentIndex: controller.currentNavBarIndex,
-    //     onTap: (index) {
-    //       controller.currentNavBarIndex = index;
-    //     },
-    //     type: BottomNavigationBarType.fixed,
-    //     unselectedLabelStyle: const TextStyle(
-    //       color: Colors.black,
-    //       fontSize: 11,
-    //       fontWeight: FontWeight.bold,
-    //     ),
-    //     selectedLabelStyle: const TextStyle(
-    //       fontSize: 11,
-    //       fontWeight: FontWeight.bold,
-    //     ),
-    //     items: List.generate(
-    //       controller.navItemDataList.length,
-    //       (index) => _bottomNavBarItem(controller, index),
-    //     ),
-    //   ),
-    // );
-
     return CupertinoTabScaffold(
-      backgroundColor: Colors.transparent,
       tabBar: CupertinoTabBar(
         iconSize: 22,
-        backgroundColor: Colors.white.withOpacity(0.85),
+        activeColor: AppColor.mainColor(context.watch<AppController>().appThemeMode),
         items: List.generate(
           controller.navItemDataList.length,
           (index) => _bottomNavBarItem(controller, index),

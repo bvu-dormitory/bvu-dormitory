@@ -28,7 +28,6 @@ class StudentHomeScreen extends BaseScreen<StudentHomeController> {
 
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-        // backgroundColor: Colors.transparent,
         iconSize: 22,
         currentIndex: 0,
         activeColor: AppColor.mainColor(context.watch<AppController>().appThemeMode),

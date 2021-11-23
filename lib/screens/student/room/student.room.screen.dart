@@ -1,25 +1,23 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
+
 import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/models/invoice.dart';
 import 'package:bvu_dormitory/repositories/invoice.repository.dart';
 import 'package:bvu_dormitory/screens/student/home/student.home.controller.dart';
-import 'package:bvu_dormitory/widgets/app.ticket.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/repositories/room.repository.dart';
-import 'package:bvu_dormitory/repositories/user.repository.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:provider/src/provider.dart';
 import 'student.room.controller.dart';
 
 class StudentRoomScreen extends BaseScreen<StudentRoomController> {
@@ -196,10 +194,14 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
   }
 
   _roomBody(Student student) {
+    final controller = context.read<StudentRoomController>();
+
     return FutureBuilder<Room>(
       future: RoomRepository.loadRoomFromRef(student.room!),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          controller.room = snapshot.data!;
+
           return Container(
             padding: const EdgeInsets.only(top: 100, left: 20, right: 20, bottom: 20),
             child: Column(
@@ -382,7 +384,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
               future: RoomRepository.getActiveStudentsQuantity(room.reference!),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  log('active students in this room: ' + snapshot.data.toString());
+                  // log('active students in this room: ' + snapshot.data.toString());
 
                   return Text(
                     snapshot.data.toString(),
