@@ -1,3 +1,5 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/screens/shared/login/login.controller.dart';
 import 'package:bvu_dormitory/widgets/otp_composer.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,9 +38,9 @@ class _LoginOTPBottomSheetState extends State<LoginOTPBottomSheet> {
           horizontal: 20,
           vertical: 30,
         ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
+        decoration: BoxDecoration(
+          color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
+          boxShadow: const [
             BoxShadow(
               color: Colors.black26,
               offset: Offset(0, -5),
@@ -75,8 +77,7 @@ class _LoginOTPBottomSheetState extends State<LoginOTPBottomSheet> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              AppLocalizations.of(context)?.login_otp_bottom_sheet_title ??
-                  "login_otp_bottom_sheet_title",
+              AppLocalizations.of(context)?.login_otp_bottom_sheet_title ?? "login_otp_bottom_sheet_title",
               style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 16,
@@ -98,8 +99,7 @@ class _LoginOTPBottomSheetState extends State<LoginOTPBottomSheet> {
         ),
         const SizedBox(height: 25),
         Text(
-          AppLocalizations.of(context)?.login_otp_bottom_sheet_guide_title(
-                  controller.phoneInputController.text) ??
+          AppLocalizations.of(context)?.login_otp_bottom_sheet_guide_title(controller.phoneInputController.text) ??
               "login_otp_bottom_sheet_guide_title",
           textAlign: TextAlign.left,
           style: const TextStyle(
@@ -118,8 +118,7 @@ class _LoginOTPBottomSheetState extends State<LoginOTPBottomSheet> {
       children: [
         CupertinoButton(
           child: Text(
-            AppLocalizations.of(context)
-                    ?.login_otp_bottom_sheet_cancel_button ??
+            AppLocalizations.of(context)?.login_otp_bottom_sheet_cancel_button ??
                 "login_otp_bottom_sheet_cancel_button",
             style: TextStyle(
               color: controller.otpVerifyInProcess ? Colors.grey : Colors.red,
@@ -142,22 +141,17 @@ class _LoginOTPBottomSheetState extends State<LoginOTPBottomSheet> {
                   radius: 10,
                 )
               : Text(
-                  AppLocalizations.of(context)
-                          ?.login_otp_bottom_sheet_submit_button ??
+                  AppLocalizations.of(context)?.login_otp_bottom_sheet_submit_button ??
                       "login_otp_bottom_sheet_submit_button",
                   style: const TextStyle(
                       // fontWeight: FontWeight.bold,
                       ),
                 ),
-          padding: controller.otpVerifyInProcess
-              ? const EdgeInsets.all(5)
-              : const EdgeInsets.symmetric(horizontal: 30),
+          padding: controller.otpVerifyInProcess ? const EdgeInsets.all(5) : const EdgeInsets.symmetric(horizontal: 30),
           color: Colors.blue,
           disabledColor: Colors.blue.withOpacity(0.25),
           borderRadius: BorderRadius.circular(50),
-          onPressed: controller.isOtpPassed && !controller.otpVerifyInProcess
-              ? controller.verifyOTP
-              : null,
+          onPressed: controller.isOtpPassed && !controller.otpVerifyInProcess ? controller.verifyOTP : null,
         ),
       ],
     );

@@ -281,6 +281,8 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
                 return FutureBuilder<Invoice?>(
                   future: InvoiceRepository.getLastestInvoiceInRoom(snapshot.data!.reference!),
                   builder: (context, snapshot) {
+                    // log(snapshot.toString());
+
                     if (snapshot.hasData) {
                       return SelectableText(
                         AppLocalizations.of(context)!.admin_manage_room + ' ' + snapshot.data!.createdDate + ".",
@@ -294,6 +296,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
 
                     if (snapshot.hasError) {
                       log(snapshot.error.toString());
+                      controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
                     }
 
                     return const CupertinoActivityIndicator(radius: 10);

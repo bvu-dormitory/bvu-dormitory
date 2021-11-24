@@ -28,7 +28,7 @@ class InvoiceRepository {
   static Future<Invoice?> getLastestInvoiceInRoom(DocumentReference roomRef) async {
     final lastestInvoiceDoc = await instance
         .collection(collectionPath)
-        .where('room', isEqualTo: roomRef.path)
+        .where('room', isEqualTo: roomRef)
         .orderBy('year', descending: true)
         .orderBy('month', descending: true)
         .limit(1)

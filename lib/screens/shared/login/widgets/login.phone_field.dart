@@ -1,3 +1,5 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/screens/shared/login/login.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,8 +13,7 @@ class LoginPhoneField extends StatefulWidget {
   _LoginPhoneFieldState createState() => _LoginPhoneFieldState();
 }
 
-class _LoginPhoneFieldState extends State<LoginPhoneField>
-    with SingleTickerProviderStateMixin {
+class _LoginPhoneFieldState extends State<LoginPhoneField> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Consumer<LoginController>(
@@ -31,11 +32,10 @@ class _LoginPhoneFieldState extends State<LoginPhoneField>
           fontWeight: FontWeight.bold,
         ),
         decoration: InputDecoration(
-          hintText: AppLocalizations.of(context)?.login_phone_field_hint ??
-              "login_phone_field_hint",
+          hintText: AppLocalizations.of(context)?.login_phone_field_hint ?? "login_phone_field_hint",
           counterText: "",
           filled: true,
-          fillColor: Colors.white.withOpacity(0.9),
+          fillColor: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
           contentPadding: const EdgeInsets.fromLTRB(20, 5, 10, 5),
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(

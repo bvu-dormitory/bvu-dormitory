@@ -1,6 +1,9 @@
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/src/provider.dart';
 
 class OTPComposer extends StatefulWidget {
   Function(bool isValid, String? value) onChange;
@@ -94,7 +97,7 @@ class _OTPComposerState extends State<OTPComposer> {
           FilteringTextInputFormatter.allow(RegExp("[0-9]")),
         ],
         style: TextStyle(
-          color: widget.disabled ? Colors.grey : Colors.black,
+          color: widget.disabled ? Colors.grey : AppColor.textColor(context.read<AppController>().appThemeMode),
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ),
