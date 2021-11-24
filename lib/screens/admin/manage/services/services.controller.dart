@@ -24,7 +24,6 @@ class AdminServicesController extends BaseController {
           items: [
             AppModalBottomSheetItem(
               label: appLocalizations!.admin_manage_service_chart,
-              labelStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
               icon: const Icon(SimpleLineIcons.pie_chart, size: 22),
               onPressed: () {
                 // _editService(service);
@@ -37,7 +36,6 @@ class AdminServicesController extends BaseController {
           items: [
             AppModalBottomSheetItem(
               label: appLocalizations!.admin_manage_service_edit,
-              labelStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
               icon: const Icon(FluentIcons.compose_24_regular),
               onPressed: () {
                 _editService(service);

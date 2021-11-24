@@ -117,7 +117,7 @@ class AppMenuGroup extends StatelessWidget {
             clipBehavior: Clip.hardEdge,
             child: ListTile(
               tileColor: AppColor.secondaryBackgroundColor(appProvider.appThemeMode),
-              leading: icon.icon.runtimeType == IconData ? Icon(icon.icon as IconData, size: 20) : icon.icon,
+              leading: icon.icon,
               minLeadingWidth: 10,
               trailing:
                   icon.trailing ?? (icon.hasTrailingArrow ? const Icon(CupertinoIcons.right_chevron, size: 16) : null),

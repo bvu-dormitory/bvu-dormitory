@@ -164,14 +164,20 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
   }
 
   deleteInvoice(Invoice invoice) async {
-    if (await hasConnectivity()) {
-      try {
-        await InvoiceRepository.deleteInvoice(invoice);
-      } catch (e) {
-        showSnackbar(e.toString(), const Duration(seconds: 5), () {});
-      } finally {
-        navigator.pop();
-      }
-    }
+    showConfirmDialog(
+        title: appLocalizations!.app_dialog_title_delete,
+        confirmType: DialogConfirmType.submit,
+        onSubmit: () async {
+          if (await hasConnectivity()) {
+            try {
+              await InvoiceRepository.deleteInvoice(invoice);
+              navigator.pop();
+            } catch (e) {
+              showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+            } finally {
+              navigator.pop();
+            }
+          }
+        });
   }
 }

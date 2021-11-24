@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -609,7 +611,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
     return Container(
       alignment: Alignment.topLeft,
       padding: const EdgeInsets.all(20),
-      // color: Colors.white,
+      color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

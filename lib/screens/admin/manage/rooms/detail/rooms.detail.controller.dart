@@ -31,25 +31,25 @@ class AdminRoomsDetailController extends BaseController {
 
   /// Info menu
   List<AppMenuGroupItem> get infoMenuItems => [
-        AppMenuGroupItem(
-          title: appLocalizations?.admin_manage_rooms_detail_images ?? "admin_manage_rooms_detail_images",
-          icon: const Icon(FluentIcons.image_multiple_24_filled),
-          onPressed: () {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (context) => AdminRoomsDetailImagesScreen(
-                  building: building,
-                  floor: floor,
-                  room: room,
-                  previousPageTitle: title,
-                ),
-              ),
-            );
-          },
-        ),
+        // AppMenuGroupItem(
+        //   title: appLocalizations?.admin_manage_rooms_detail_images ?? "admin_manage_rooms_detail_images",
+        //   icon: const Icon(FluentIcons.image_multiple_24_filled, size: 20),
+        //   onPressed: () {
+        //     Navigator.of(context).push(
+        //       CupertinoPageRoute(
+        //         builder: (context) => AdminRoomsDetailImagesScreen(
+        //           building: building,
+        //           floor: floor,
+        //           room: room,
+        //           previousPageTitle: title,
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // ),
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_service ?? "admin_manage_service",
-          icon: const Icon(FluentIcons.wifi_1_24_filled),
+          icon: const Icon(FluentIcons.wifi_1_24_filled, size: 20),
           onPressed: () {
             navigator.push(
               CupertinoPageRoute(
@@ -65,7 +65,7 @@ class AdminRoomsDetailController extends BaseController {
         ),
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_item ?? "admin_manage_item",
-          icon: const Icon(FluentIcons.bed_24_filled),
+          icon: const Icon(FluentIcons.bed_24_filled, size: 20),
           onPressed: () {
             navigator.push(
               CupertinoPageRoute(
@@ -81,7 +81,7 @@ class AdminRoomsDetailController extends BaseController {
         ),
         AppMenuGroupItem(
             title: appLocalizations?.admin_manage_student ?? "admin_manage_student",
-            icon: const Icon(FluentIcons.people_24_filled),
+            icon: const Icon(FluentIcons.people_24_filled, size: 20),
             onPressed: () {
               navigator.push(CupertinoPageRoute(
                 builder: (context) => AdminRoomsDetailStudentsScreen(
@@ -98,7 +98,7 @@ class AdminRoomsDetailController extends BaseController {
   List<AppMenuGroupItem> get messageMenuItems => [
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_contact_chat ?? "admin_manage_rooms_detail_contact_chat",
-          icon: const Icon(FluentIcons.chat_24_filled),
+          icon: const Icon(FluentIcons.chat_24_filled, size: 20),
         ),
       ];
 
@@ -106,7 +106,7 @@ class AdminRoomsDetailController extends BaseController {
   List<AppMenuGroupItem> get invoiceMenuItems => [
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_add ?? "admin_manage_rooms_detail_invoice_add",
-          icon: const Icon(FluentIcons.receipt_add_24_filled),
+          icon: const Icon(FluentIcons.receipt_add_24_filled, size: 20),
           onPressed: () {
             navigator.push(CupertinoPageRoute(
               builder: (context) => AdminRoomsDetailInvoicesAddScreen(
@@ -120,7 +120,7 @@ class AdminRoomsDetailController extends BaseController {
         ),
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_invoice_list ?? "admin_manage_rooms_detail_invoice_list",
-          icon: const Icon(FluentIcons.checkbox_person_24_filled),
+          icon: const Icon(FluentIcons.checkbox_person_24_filled, size: 20),
           onPressed: () {
             navigator.push(CupertinoPageRoute(
               builder: (context) => AdminRoomsDetailInvoicesScreen(
@@ -138,12 +138,12 @@ class AdminRoomsDetailController extends BaseController {
   List<AppMenuGroupItem> get repairMenuItems => [
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_repair_list ?? "admin_manage_rooms_detail_repair_list",
-          icon: const Icon(FluentIcons.chat_help_24_filled),
+          icon: const Icon(FluentIcons.chat_help_24_filled, size: 20),
         ),
         AppMenuGroupItem(
           title:
               appLocalizations?.admin_manage_rooms_detail_repair_history ?? "admin_manage_rooms_detail_repair_history",
-          icon: const Icon(FluentIcons.checkbox_checked_24_filled),
+          icon: const Icon(FluentIcons.checkbox_checked_24_filled, size: 20),
         ),
       ];
 }

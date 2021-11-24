@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:provider/src/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:bvu_dormitory/repositories/student.repository.dart';
@@ -66,14 +68,22 @@ class AdminRoomsDetailStudentsController extends BaseController {
             label: appLocalizations!.admin_manage_rooms_detail_students_sms,
             labelStyle: TextStyle(
               color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
-                  ? Colors.black.withOpacity(0.25)
-                  : Colors.black.withOpacity(0.5),
+                  ? context.read<AppController>().appThemeMode == ThemeMode.light
+                      ? Colors.black.withOpacity(0.25)
+                      : Colors.white.withOpacity(0.25)
+                  : context.read<AppController>().appThemeMode == ThemeMode.light
+                      ? Colors.grey.shade800
+                      : Colors.grey.shade300,
             ),
             icon: Icon(
               FluentIcons.chat_24_regular,
               color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
-                  ? Colors.black.withOpacity(0.25)
-                  : Colors.black.withOpacity(0.55),
+                  ? context.read<AppController>().appThemeMode == ThemeMode.light
+                      ? Colors.black.withOpacity(0.25)
+                      : Colors.white.withOpacity(0.25)
+                  : context.read<AppController>().appThemeMode == ThemeMode.light
+                      ? Colors.grey
+                      : Colors.blue,
             ),
             onPressed: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
                 ? null
@@ -86,14 +96,22 @@ class AdminRoomsDetailStudentsController extends BaseController {
             label: appLocalizations!.admin_manage_rooms_detail_students_call,
             labelStyle: TextStyle(
               color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
-                  ? Colors.black.withOpacity(0.25)
-                  : Colors.black.withOpacity(0.5),
+                  ? context.read<AppController>().appThemeMode == ThemeMode.light
+                      ? Colors.black.withOpacity(0.25)
+                      : Colors.white.withOpacity(0.25)
+                  : context.read<AppController>().appThemeMode == ThemeMode.light
+                      ? Colors.grey.shade800
+                      : Colors.grey.shade300,
             ),
             icon: Icon(
               FluentIcons.call_24_regular,
               color: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
-                  ? Colors.black.withOpacity(0.25)
-                  : Colors.black.withOpacity(0.5),
+                  ? context.read<AppController>().appThemeMode == ThemeMode.light
+                      ? Colors.black.withOpacity(0.25)
+                      : Colors.white.withOpacity(0.25)
+                  : context.read<AppController>().appThemeMode == ThemeMode.light
+                      ? Colors.grey
+                      : Colors.blue,
             ),
             onPressed: (student.parentPhoneNumber == null || student.parentPhoneNumber!.isEmpty)
                 ? null
