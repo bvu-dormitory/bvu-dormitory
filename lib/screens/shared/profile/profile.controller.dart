@@ -79,6 +79,7 @@ class ProfileController extends BaseController {
 
     showCupertinoModalBottomSheet(
       context: context,
+      barrierColor: Colors.black.withOpacity(0.75),
       builder: (_) {
         return AppFormPicker(
           type: AppFormPickerFieldType.custom,
@@ -100,6 +101,7 @@ class ProfileController extends BaseController {
 
     showCupertinoModalBottomSheet(
       context: context,
+      barrierColor: Colors.black.withOpacity(0.75),
       builder: (_) {
         return AppFormPicker(
           type: AppFormPickerFieldType.custom,

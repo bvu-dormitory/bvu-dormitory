@@ -33,7 +33,7 @@ class AdminRoomsDetailRepairsController extends BaseController {
 
     showCupertinoModalBottomSheet(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.3),
+      barrierColor: Colors.black.withOpacity(0.75),
       backgroundColor: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
       builder: (context) {
         return SingleChildScrollView(

@@ -1,5 +1,6 @@
 import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
+import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
 import 'package:bvu_dormitory/repositories/user.repository.dart';
@@ -110,14 +111,22 @@ class ProfileScreen extends BaseScreen<ProfileController> {
         ),
       ),
       onPressed: () {
-        AuthRepository.signOut().then((value) {
-          Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => const LoginScreen(),
-            ),
-          );
-        });
+        final controller = context.read<ProfileController>();
+
+        controller.showConfirmDialog(
+          title: AppLocalizations.of(context)!.profile_confirm_signout,
+          confirmType: DialogConfirmType.submit,
+          onSubmit: () {
+            AuthRepository.signOut().then((value) {
+              Navigator.pushReplacement(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+              );
+            });
+          },
+        );
       },
     );
   }

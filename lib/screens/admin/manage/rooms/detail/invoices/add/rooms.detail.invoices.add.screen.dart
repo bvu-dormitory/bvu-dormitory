@@ -647,14 +647,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.blue,
-            Colors.lightBlue.shade200,
-          ],
-        ),
+        gradient: AppColor.mainAppBarGradientColor,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -696,14 +689,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(radius)),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.blue,
-            Colors.blue,
-          ],
-        ),
+        gradient: AppColor.mainAppBarGradientColor,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

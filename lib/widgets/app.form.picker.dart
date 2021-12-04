@@ -32,18 +32,19 @@ class AppFormPicker extends StatelessWidget {
     required this.type,
     required this.onSelectedItemChanged,
   }) : super(key: key) {
-    /// date picker
-    if (type == AppFormPickerFieldType.date) {
-      currentValue = initialValue;
+    currentValue = initialValue;
 
-      datePicker = CupertinoDatePicker(
-        initialDateTime: initialValue,
-        onDateTimeChanged: (value) {
-          currentValue = value;
-        },
-        mode: CupertinoDatePickerMode.date,
-      );
-    }
+    /// date picker
+    // if (type == AppFormPickerFieldType.date) {
+
+    //   datePicker = CupertinoDatePicker(
+    //     initialDateTime: initialValue,
+    //     onDateTimeChanged: (value) {
+    //       currentValue = value;
+    //     },
+    //     mode: CupertinoDatePickerMode.date,
+    //   );
+    // }
 
     /// custom picker
     // else {
@@ -116,6 +117,7 @@ class AppFormPicker extends StatelessWidget {
                       currentValue = value;
                     },
                     mode: CupertinoDatePickerMode.date,
+                    backgroundColor: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
                   )
                 : CupertinoPicker(
                     itemExtent: 32,

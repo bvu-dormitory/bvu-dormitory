@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class BaseProvider extends ChangeNotifier {}
 
 class AppController extends BaseController {
-  late ThemeMode _appThemeMode = ThemeMode.light;
+  late ThemeMode _appThemeMode = ThemeMode.dark;
   ThemeMode get appThemeMode => _appThemeMode;
 
   AppController({required BuildContext context}) : super(context: context, title: "") {
