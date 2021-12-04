@@ -55,7 +55,7 @@ class StudentMembersScreen extends BaseScreen<StudentMemnbersController> {
                           titleStyle: const TextStyle(
                             fontWeight: FontWeight.w500,
                           ),
-                          subTitle: Text(student.id!),
+                          subTitle: Text(student.phoneNumber),
                           trailing: CupertinoSwitch(
                             value: student.isActive,
                             onChanged: null,

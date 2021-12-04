@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/src/provider.dart';
 
 enum AppFormPickerFieldType {
   date,
@@ -43,16 +46,19 @@ class AppFormPicker extends StatelessWidget {
     }
 
     /// custom picker
-    else {
-      customPicker = CupertinoPicker(
-        itemExtent: 32,
-        scrollController: FixedExtentScrollController(initialItem: dataList!.indexOf(initialValue)),
-        onSelectedItemChanged: (value) {
-          currentValue = value;
-        },
-        children: dataList!.map((e) => Text(e.toString())).toList(),
-      );
-    }
+    // else {
+    //   customPicker = CupertinoPicker(
+    //     itemExtent: 32,
+    //     scrollController: FixedExtentScrollController(initialItem: dataList!.indexOf(initialValue)),
+    //     onSelectedItemChanged: (value) {
+    //       currentValue = value;
+    //     },
+    //     children: dataList!
+    //         .map((e) => Text(e.toString(),
+    //             style: TextStyle(color: AppColor.textColor(context.read<AppController>().appThemeMode))))
+    //         .toList(),
+    //   );
+    // }
   }
 
   @override
@@ -60,7 +66,7 @@ class AppFormPicker extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
       height: 300,
-      color: Colors.white,
+      color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -103,7 +109,29 @@ class AppFormPicker extends StatelessWidget {
           ),
           // const SizedBox(height: 20),
           Expanded(
-            child: type == AppFormPickerFieldType.date ? datePicker : customPicker,
+            child: type == AppFormPickerFieldType.date
+                ? CupertinoDatePicker(
+                    initialDateTime: initialValue,
+                    onDateTimeChanged: (value) {
+                      currentValue = value;
+                    },
+                    mode: CupertinoDatePickerMode.date,
+                  )
+                : CupertinoPicker(
+                    itemExtent: 32,
+                    scrollController: FixedExtentScrollController(initialItem: dataList!.indexOf(initialValue)),
+                    onSelectedItemChanged: (value) {
+                      currentValue = value;
+                    },
+                    children: dataList!
+                        .map(
+                          (e) => Text(e.toString(),
+                              style: TextStyle(
+                                color: AppColor.textColor(context.read<AppController>().appThemeMode),
+                              )),
+                        )
+                        .toList(),
+                  ),
           ),
         ],
       ),

@@ -9,7 +9,7 @@ class UserRepository {
 
   /// check whether the just logged-in user have data in the "users" collection
   static Future<bool> isUserWithPhoneNumerExists(User? authUser) async {
-    var user = await instance.where('phone_number', isEqualTo: authUser?.phoneNumber).get();
+    var user = await instance.where('phone_number', isEqualTo: authUser?.phoneNumber?.replaceFirst("+84", "0")).get();
     return user.size > 0;
   }
 
@@ -23,8 +23,11 @@ class UserRepository {
   }
 
   static Future<AppUser?> getCurrentFireStoreUser() async {
-    var user = await instance.doc(AuthRepository.instance.currentUser?.phoneNumber).get();
-    return AppUser.fromFireStoreDocument(user);
+    var user = await instance
+        .where('phone_number', isEqualTo: AuthRepository.instance.currentUser?.phoneNumber?.replaceFirst("+84", "0"))
+        .limit(1)
+        .get();
+    return AppUser.fromFireStoreDocument(user.docs.first);
   }
 
   static Stream<AppUser?> getCurrentFireStoreUserStream() {

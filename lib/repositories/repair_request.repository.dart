@@ -12,6 +12,7 @@ class RepairRequestRepository {
     return instance
         .collection(collectionPath)
         .where('room', isEqualTo: roomRef)
+        .orderBy('timestamp', descending: true)
         .snapshots()
         .map((event) => event.docs.map((e) => RepairRequest.fromFireStoreDocument(e)).toList());
   }

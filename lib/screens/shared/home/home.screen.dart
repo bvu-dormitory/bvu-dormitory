@@ -19,11 +19,7 @@ class HomeScreen extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(snapshot.error.toString()),
-              ),
-            );
+            log(snapshot.error.toString());
 
             return const Scaffold(
               body: Center(
@@ -31,9 +27,12 @@ class HomeScreen extends StatelessWidget {
               ),
             );
           }
-          return snapshot.data!.role == UserRole.admin
-              ? AdminHomeScreen(user: snapshot.data!)
-              : StudentHomeScreen(student: snapshot.data! as Student);
+
+          if (snapshot.hasData) {
+            return snapshot.data!.role == UserRole.admin
+                ? AdminHomeScreen(user: snapshot.data!)
+                : StudentHomeScreen(student: snapshot.data! as Student);
+          }
         }
 
         log('Checking user role...');

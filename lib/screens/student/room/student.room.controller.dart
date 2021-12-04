@@ -1,18 +1,22 @@
+import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/repairs/rooms.detail.repairs.screen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
+
 import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/screens/student/room/services/student.services.screen.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:provider/src/provider.dart';
 
 import 'invoices/student.invoices.screen.dart';
 import 'items/student.items.screen.dart';
 import 'members/student.members.screen.dart';
+import 'repairs/student.repairs.screen.dart';
 
 class StudentRoomController extends BaseController {
   StudentRoomController({
@@ -75,6 +79,22 @@ class StudentRoomController extends BaseController {
                         CupertinoPageRoute(
                           builder: (context) => StudentMembersScreen(
                             previousPageTitle: title,
+                            room: room!,
+                          ),
+                        ),
+                      );
+                    }
+                  : null,
+            ),
+            AppMenuGroupItem(
+              title: appLocalizations!.admin_manage_repair,
+              icon: Icon(FluentIcons.chat_help_24_filled, size: 20, color: iconColor),
+              onPressed: room != null
+                  ? () {
+                      navigator.push(
+                        CupertinoPageRoute(
+                          builder: (context) => AdminRoomsDetailRepairsScreen(
+                            previousPageTitle: appLocalizations!.admin_manage_room + " " + room!.name,
                             room: room!,
                           ),
                         ),

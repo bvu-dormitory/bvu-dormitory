@@ -144,17 +144,10 @@ class AdminRoomsDetailController extends BaseController {
             navigator.push(CupertinoPageRoute(
               builder: (context) => AdminRoomsDetailRepairsScreen(
                 previousPageTitle: title,
-                building: building,
-                floor: floor,
                 room: room,
               ),
             ));
           },
         ),
-        // AppMenuGroupItem(
-        //   title:
-        //       appLocalizations?.admin_manage_rooms_detail_repair_history ?? "admin_manage_rooms_detail_repair_history",
-        //   icon: const Icon(FluentIcons.checkbox_checked_24_filled, size: 20),
-        // ),
       ];
 }

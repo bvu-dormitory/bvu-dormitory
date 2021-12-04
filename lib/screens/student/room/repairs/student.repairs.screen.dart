@@ -1,24 +1,22 @@
 import 'dart:developer';
 
-import 'package:bvu_dormitory/helpers/extensions/datetime.extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/src/provider.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
+import 'package:bvu_dormitory/helpers/extensions/datetime.extensions.dart';
 import 'package:bvu_dormitory/models/repair_request.dart';
+import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/repositories/repair_request.repository.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
-import 'package:bvu_dormitory/models/building.dart';
-import 'package:bvu_dormitory/models/floor.dart';
-import 'package:bvu_dormitory/models/room.dart';
-import 'rooms.detail.repairs.controller.dart';
+import 'student.repairs.controller.dart';
 
-class AdminRoomsDetailRepairsScreen extends BaseScreen<AdminRoomsDetailRepairsController> {
-  AdminRoomsDetailRepairsScreen({
+class StudentRepairsScreen extends BaseScreen<StudentRepairsController> {
+  StudentRepairsScreen({
     Key? key,
     String? previousPageTitle,
     required this.room,
@@ -27,24 +25,12 @@ class AdminRoomsDetailRepairsScreen extends BaseScreen<AdminRoomsDetailRepairsCo
   final Room room;
 
   @override
-  AdminRoomsDetailRepairsController provideController(BuildContext context) {
-    return AdminRoomsDetailRepairsController(
-      context: context,
-      title: AppLocalizations.of(context)!.admin_manage_repair,
-      room: room,
-    );
+  StudentRepairsController provideController(BuildContext context) {
+    return StudentRepairsController(context: context, title: AppLocalizations.of(context)!.admin_manage_repair);
   }
 
   @override
-  Widget? navigationBarTrailing(BuildContext context) {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      child: const Icon(FluentIcons.bookmark_add_24_regular),
-      onPressed: () {
-        this.context.read<AdminRoomsDetailRepairsController>().showRequestEditBottomSheet();
-      },
-    );
-  }
+  Widget? navigationBarTrailing(BuildContext context) {}
 
   @override
   Widget body(BuildContext context) {
@@ -59,7 +45,7 @@ class AdminRoomsDetailRepairsScreen extends BaseScreen<AdminRoomsDetailRepairsCo
   }
 
   _requestsList() {
-    final controller = context.read<AdminRoomsDetailRepairsController>();
+    final controller = context.read<StudentRepairsController>();
 
     return StreamBuilder<List<RepairRequest>>(
       stream: RepairRequestRepository.syncAllInRoom(roomRef: room.reference!),
@@ -89,7 +75,7 @@ class AdminRoomsDetailRepairsScreen extends BaseScreen<AdminRoomsDetailRepairsCo
   }
 
   _buildRequestsList(List<RepairRequest> list) {
-    final controller = context.read<AdminRoomsDetailRepairsController>();
+    final controller = context.read<StudentRepairsController>();
 
     // final groupedItems = groupBy(list, (Object? o) {
     //   return (o as Item).reference!.parent.parent!;
@@ -119,7 +105,7 @@ class AdminRoomsDetailRepairsScreen extends BaseScreen<AdminRoomsDetailRepairsCo
                 ],
               ),
             ),
-            onPressed: () => controller.showRequestEditBottomSheet(request: theItem),
+            // onPressed: () => controller.showRequestEditBottomSheet(request: theItem),
           );
         }),
       ),

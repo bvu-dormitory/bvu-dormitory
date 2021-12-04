@@ -88,7 +88,7 @@ class StudentItemsScreen extends BaseScreen<StudentItemsController> {
     return Column(
       children: [
         Text(AppLocalizations.of(context)!.student_room_items_guide),
-        const SizedBox(height: 50),
+        const SizedBox(height: 30),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

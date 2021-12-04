@@ -10,6 +10,7 @@ class InvoiceRepository {
   static Stream<List<Invoice>> syncInvoices() {
     return instance
         .collectionGroup(collectionPath)
+        .orderBy('year', descending: true)
         .snapshots()
         .map((event) => event.docs.map((e) => Invoice.fromFireStoreDocument(e)).toList());
   }
@@ -18,8 +19,8 @@ class InvoiceRepository {
     return instance
         .collection('invoices')
         .where('room', isEqualTo: roomRef)
-        .orderBy('year')
-        .orderBy('month')
+        .orderBy('year', descending: true)
+        .orderBy('month', descending: true)
         .snapshots()
         .map((event) => event.docs.map((e) => Invoice.fromFireStoreDocument(e)).toList());
   }
