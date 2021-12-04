@@ -44,7 +44,10 @@ class AuthRepository {
   static updateUserFCMToken() async {
     try {
       var deviceToken = await AppNotifications.instance.getToken();
-      var theUser = await FirebaseFirestore.instance.collection('users').doc(AuthRepository.instance.currentUser?.phoneNumber).get();
+      var theUser = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(AuthRepository.instance.currentUser?.phoneNumber)
+          .get();
 
       await theUser.reference.update({
         'fcm_token': deviceToken,

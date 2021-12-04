@@ -467,79 +467,75 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
 
   submit() async {
     if (formKey.currentState!.validate()) {
-      // checking connectivity before process
-      if (await hasConnectivity()) {
-        _continueButtonEnabled = false;
-        _isFormEditing = false;
-        notifyListeners();
+      try {
+        if (await hasConnectivity()) {
+          _continueButtonEnabled = false;
+          _isFormEditing = false;
+          notifyListeners();
 
-        // adding new Student
-        if (student == null) {
-          addNewStudent();
-        } else {
-          updateStudentInfo();
+          if (await AuthRepository.isPhoneNumberRegistered(
+            phoneController.text,
+          )) {
+            showSnackbar(appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_exists,
+                const Duration(seconds: 3), () {
+              _continueButtonEnabled = true;
+              notifyListeners();
+            });
+            return;
+          }
+
+          // the phonenumber is not registered => allow adding or updating
+          showLoadingDialog();
+          if (student == null) {
+            addNewStudent();
+          } else {
+            updateStudentInfo();
+          }
         }
-      }
-    } else {
-      _continueButtonEnabled = false;
-      notifyListeners();
-
-      showSnackbar(
-        appLocalizations!.app_form_validation_error,
-        const Duration(seconds: 3),
-        () {
+      } catch (e) {
+        showSnackbar(e.toString(), const Duration(seconds: 3), () {
           _continueButtonEnabled = true;
           notifyListeners();
-        },
-      );
+        });
+      } finally {
+        _isFormEditing = true;
+        notifyListeners();
+      }
+
+      return;
     }
+
+    _continueButtonEnabled = false;
+    notifyListeners();
+
+    showSnackbar(
+      appLocalizations!.app_form_validation_error,
+      const Duration(seconds: 3),
+      () {
+        _continueButtonEnabled = true;
+        notifyListeners();
+      },
+    );
   }
 
   addNewStudent() {
-    // check whether the given phone number is already registered
-    AuthRepository.isPhoneNumberRegistered(
-      phoneController.text,
-    ).then((exists) {
-      // the phonenumber is already registered => disallow adding
-      if (exists) {
-        showSnackbar(
-            appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_exists, const Duration(seconds: 3),
-            () {
-          _continueButtonEnabled = true;
-          notifyListeners();
-        });
-      } else {
-        // the phonenumber is not registered => allow adding
-        // process adding new user
-        showLoadingDialog();
-
-        StudentRepository.addStudent(
-          getFormData()..room = room.reference,
-        ).catchError((onError) {
-          showSnackbar(onError.toString(), const Duration(seconds: 5), () {
-            _continueButtonEnabled = true;
-            notifyListeners();
-          });
-        }).then((value) {
-          showSnackbar(appLocalizations!.app_form_changes_saved, const Duration(seconds: 3), () {});
-          // adding new student to this room successfully => return to the student list screen
-          navigator.pop();
-        }).whenComplete(() {
-          _isFormEditing = true;
-          notifyListeners();
-
-          // when the future completed, hide the loading indicator
-          navigator.pop();
-        });
-      }
-    }).catchError((onError) {
-      showSnackbar(onError, const Duration(seconds: 3), () {
+    StudentRepository.addStudent(
+      getFormData()..room = room.reference,
+    ).catchError((onError) {
+      showSnackbar(onError.toString(), const Duration(seconds: 5), () {
         _continueButtonEnabled = true;
         notifyListeners();
       });
+    }).then((value) {
+      showSnackbar(appLocalizations!.app_form_changes_saved, const Duration(seconds: 3), () {});
+      // adding new student to this room successfully => return to the student list screen
+      navigator.pop();
     }).whenComplete(() {
       _isFormEditing = true;
       notifyListeners();
+
+      // when the future completed, hide the loading indicator
+      navigator.pop();
     });
   }
 
@@ -556,6 +552,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       _isFormEditing = true;
       _continueButtonEnabled = true;
       notifyListeners();
+      navigator.pop();
     });
   }
 

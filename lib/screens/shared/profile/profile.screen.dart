@@ -116,6 +116,7 @@ class ProfileScreen extends BaseScreen<ProfileController> {
         controller.showConfirmDialog(
           title: AppLocalizations.of(context)!.profile_confirm_signout,
           confirmType: DialogConfirmType.submit,
+          dismissible: true,
           onSubmit: () {
             AuthRepository.signOut().then((value) {
               Navigator.pushReplacement(

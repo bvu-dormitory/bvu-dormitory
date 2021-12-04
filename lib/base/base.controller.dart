@@ -112,6 +112,7 @@ abstract class BaseController extends ChangeNotifier {
     showDialog(
       context: context,
       barrierDismissible: dismissible,
+      barrierColor: Colors.black.withOpacity(0.75),
       builder: (_) => CupertinoAlertDialog(
         title: Text(title),
         content: body,
