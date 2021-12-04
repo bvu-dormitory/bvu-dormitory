@@ -117,7 +117,7 @@ class AppFormField extends StatelessWidget {
                 contentPadding: EdgeInsets.only(
                   top: maxLines > 1 ? 15 : 0,
                   bottom: 0,
-                  left: 0,
+                  left: prefixIcon != null ? 0 : 15,
                   right: 5,
                 ),
                 prefixIcon: prefixIcon,

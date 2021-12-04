@@ -14,6 +14,7 @@ import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 
 import 'invoices/add/rooms.detail.invoices.add.screen.dart';
 import 'invoices/rooms.detail.invoices.screen.dart';
+import 'repairs/rooms.detail.repairs.screen.dart';
 import 'services/rooms.detail.services.screen.dart';
 
 class AdminRoomsDetailController extends BaseController {
@@ -139,11 +140,21 @@ class AdminRoomsDetailController extends BaseController {
         AppMenuGroupItem(
           title: appLocalizations?.admin_manage_rooms_detail_repair_list ?? "admin_manage_rooms_detail_repair_list",
           icon: const Icon(FluentIcons.chat_help_24_filled, size: 20),
+          onPressed: () {
+            navigator.push(CupertinoPageRoute(
+              builder: (context) => AdminRoomsDetailRepairsScreen(
+                previousPageTitle: title,
+                building: building,
+                floor: floor,
+                room: room,
+              ),
+            ));
+          },
         ),
-        AppMenuGroupItem(
-          title:
-              appLocalizations?.admin_manage_rooms_detail_repair_history ?? "admin_manage_rooms_detail_repair_history",
-          icon: const Icon(FluentIcons.checkbox_checked_24_filled, size: 20),
-        ),
+        // AppMenuGroupItem(
+        //   title:
+        //       appLocalizations?.admin_manage_rooms_detail_repair_history ?? "admin_manage_rooms_detail_repair_history",
+        //   icon: const Icon(FluentIcons.checkbox_checked_24_filled, size: 20),
+        // ),
       ];
 }

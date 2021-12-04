@@ -62,24 +62,36 @@ class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
             ),
           ),
           // Positioned(
-          //   right: 20,
-          //   bottom: 20,
-          //   child: CupertinoButton(
-          //     padding: const EdgeInsets.all(0),
-          //     borderRadius: BorderRadius.circular(50),
-          //     child: Container(
-          //       child: const Icon(FluentIcons.folder_add_24_regular, color: Colors.blue),
-          //       padding: const EdgeInsets.all(15),
-          //       decoration: BoxDecoration(
-          //         color: Colors.white,
-          //         shape: BoxShape.circle,
-          //         border: Border.all(color: Colors.grey.withOpacity(0.15)),
-          //       ),
-          //     ),
+          //   right: 10,
+          //   bottom: 0,
+          //   child: ElevatedButton(
           //     onPressed: () {
-          //       context.read<AdminBuildingsController>().showCategoryEditBottomSheet();
+          //       context.read<AdminBuildingsController>().showBuildingEditBottomSheet();
           //     },
+          //     style: ElevatedButton.styleFrom(
+          //       shape: const CircleBorder(),
+          //       padding: const EdgeInsets.all(10),
+          //     ),
+          //     child: const Icon(FluentIcons.tab_add_24_regular),
           //   ),
+          //   // CupertinoButton(
+          //   //   padding: const EdgeInsets.all(0),
+          //   //   borderRadius: BorderRadius.circular(50),
+          //   //   child: Container(
+          //   //     child: const Icon(FluentIcons.folder_add_24_regular, color: Colors.blue),
+          //   //     padding: const EdgeInsets.all(15),
+          //   //     decoration: BoxDecoration(
+          //   //       color: Colors.white,
+          //   //       shape: BoxShape.circle,
+          //   //       border: Border.all(color: Colors.grey.withOpacity(0.15)),
+          //   //       boxShadow: [
+          //   //       ],
+          //   //     ),
+          //   //   ),
+          //   //   onPressed: () {
+          //   //     context.read<AdminBuildingsController>().showBuildingEditBottomSheet();
+          //   //   },
+          //   // ),
           // ),
         ],
       ),

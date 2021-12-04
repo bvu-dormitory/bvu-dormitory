@@ -49,15 +49,16 @@ class AppUser extends FireStoreModel {
   String? photoURL;
 
   // document id is also phone number
-  String? get phoneNumber => id;
+  String phoneNumber;
   String get fullName => "$lastName $firstName";
 
   AppUser({
     required this.firstName,
     required this.lastName,
     required this.role,
-    required String id,
+    required this.phoneNumber,
     this.photoURL,
+    String? id,
   }) : super(id: id);
 
   factory AppUser.fromFireStoreDocument(DocumentSnapshot snapshot) {
@@ -73,6 +74,7 @@ class AppUser extends FireStoreModel {
             id: snapshot.id,
             firstName: data['first_name'],
             lastName: data['last_name'],
+            phoneNumber: data['phone_number'],
             role: UserRole.values.firstWhere(
               (element) => describeEnum(element) == data['role'],
               orElse: () => UserRole.student,
@@ -88,6 +90,7 @@ class AppUser extends FireStoreModel {
         'last_name': lastName,
         'role': role.name,
         'photo_url': photoURL,
+        'phone_number': phoneNumber,
       };
 }
 
@@ -108,9 +111,10 @@ class Student extends AppUser {
   String? outDate;
 
   Student({
-    required String id,
+    String? id,
     required String firstName,
     required String lastName,
+    required String phoneNumber,
     required this.isActive,
     required this.gender,
     required this.hometown,
@@ -122,7 +126,7 @@ class Student extends AppUser {
     this.notes,
     this.studentIdNumber,
     this.parentPhoneNumber,
-  }) : super(id: id, firstName: firstName, lastName: lastName, role: UserRole.student);
+  }) : super(id: id, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, role: UserRole.student);
 
   static Student fromFireStoreDocument(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
@@ -145,6 +149,7 @@ class Student extends AppUser {
       studentIdNumber: data['student_id'],
       citizenIdNumber: data['citizen_id'],
       parentPhoneNumber: data['parent_phone'],
+      phoneNumber: data['phone_number'],
     );
 
     // log('parsing done...');
@@ -176,6 +181,7 @@ class Student extends AppUser {
         'hometown': hometown,
         'citizen_id': citizenIdNumber,
         'student_id': studentIdNumber,
+        'phone_number': phoneNumber,
         'parent_phone': parentPhoneNumber,
         'join_date': joinDate,
         'out_date': outDate,

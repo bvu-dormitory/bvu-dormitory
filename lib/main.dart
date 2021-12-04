@@ -8,11 +8,10 @@ import 'package:flutter/services.dart';
 import 'package:bvu_dormitory/app/app.dart';
 import 'package:bvu_dormitory/app/app.repository.dart';
 
-/// Don't implement codes here - prefer seperating into functions then invoking
-/// Keep this file as simple as possible
+/// Don't implement codes here - prefer seperating into functions then invoke them.
+/// Keep this file as simple as possible.
 void main() async {
   await prepare();
-
   runApp(const Application());
 }
 
@@ -39,19 +38,19 @@ prepareApprerance() async {
 }
 
 prepareData() async {
+  initFirebase() async {
+    await Firebase.initializeApp();
+
+    // AppNotifications.getDeviceToken();
+
+    log('Firebase init done');
+  }
+
+  initSharedPreferences() async {
+    await AppRepository.initSharedPreferences();
+    log('SharedPreferences init done');
+  }
+
   await initFirebase();
   await initSharedPreferences();
-}
-
-initFirebase() async {
-  await Firebase.initializeApp();
-
-  // AppNotifications.getDeviceToken();
-
-  log('Firebase init done');
-}
-
-initSharedPreferences() async {
-  await AppRepository.initSharedPreferences();
-  log('SharedPreferences init done');
 }

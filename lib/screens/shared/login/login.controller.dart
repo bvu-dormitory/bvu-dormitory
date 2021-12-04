@@ -161,7 +161,6 @@ class LoginController extends BaseController {
           userCredential.user?.delete().then(
             (value) {
               showErrorDialog(appLocalizations?.login_error_user_not_exists ?? "login_error_user_not_exists");
-
               logger.w('user deleted...');
             },
           ).catchError((onError) {
@@ -173,7 +172,11 @@ class LoginController extends BaseController {
         else {
           logger.w('on user exists');
           logger.i(AuthRepository.instance.currentUser);
+
+          // updating the FCM token for this device
           await AuthRepository.updateUserFCMToken();
+
+          // navigate to the home screen
           Navigator.pushReplacementNamed(context, AppRoutes.home.name);
         }
       },

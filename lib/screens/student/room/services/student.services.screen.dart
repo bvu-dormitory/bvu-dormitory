@@ -68,7 +68,7 @@ class StudentServicesScreen extends BaseScreen<StudentServicesController> {
                               hasTrailingArrow: false,
                               subTitle: Container(
                                 margin: const EdgeInsets.only(top: 10),
-                                child: Text("${NumberFormat('#,###').format(service.price)}/${service.unit}"),
+                                child: Text("${NumberFormat('#,###').format(service.price)}đ/${service.unit}"),
                               ),
                               trailing: _loadRoomServiceState(service),
                             );

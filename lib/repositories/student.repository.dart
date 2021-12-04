@@ -38,6 +38,10 @@ class StudentRepository {
     return students;
   }
 
+  static Future<void> addStudent(Student student) {
+    return instance.collection(collectionPath).add(student.json);
+  }
+
   static Future<void> setStudent(Student student) {
     return instance.collection(collectionPath).doc(student.id).set(student.json);
   }
@@ -52,7 +56,6 @@ class StudentRepository {
 
     return instance.runTransaction((transaction) async {
       final freshStudentRef = await transaction.get(studentRef);
-
       transaction.update(freshStudentRef.reference, {'active': isActive});
     });
   }

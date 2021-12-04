@@ -58,7 +58,7 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
                 height: 40,
               ),
               decoration: BoxDecoration(
-                color: AppColor.secondaryBackgroundColor(context.watch<AppController>().appThemeMode),
+                color: AppColor.navigationBackgroundColor(context.watch<AppController>().appThemeMode),
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(

@@ -31,6 +31,8 @@ class AppFormPicker extends StatelessWidget {
   }) : super(key: key) {
     /// date picker
     if (type == AppFormPickerFieldType.date) {
+      currentValue = initialValue;
+
       datePicker = CupertinoDatePicker(
         initialDateTime: initialValue,
         onDateTimeChanged: (value) {
@@ -43,7 +45,7 @@ class AppFormPicker extends StatelessWidget {
     /// custom picker
     else {
       customPicker = CupertinoPicker(
-        itemExtent: 40,
+        itemExtent: 32,
         scrollController: FixedExtentScrollController(initialItem: dataList!.indexOf(initialValue)),
         onSelectedItemChanged: (value) {
           currentValue = value;

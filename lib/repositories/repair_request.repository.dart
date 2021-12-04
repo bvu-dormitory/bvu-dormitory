@@ -1,0 +1,27 @@
+import 'dart:developer';
+
+import 'package:bvu_dormitory/models/repair_request.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class RepairRequestRepository {
+  static final instance = FirebaseFirestore.instance;
+  static const String collectionPath = "repair-requests";
+
+  /// syncing all repair requests in a particular room
+  static Stream<List<RepairRequest>> syncAllInRoom({required DocumentReference roomRef}) {
+    return instance
+        .collection(collectionPath)
+        .where('room', isEqualTo: roomRef)
+        .snapshots()
+        .map((event) => event.docs.map((e) => RepairRequest.fromFireStoreDocument(e)).toList());
+  }
+
+  static addRequest({required RepairRequest value}) {
+    return instance.collection(collectionPath).add(value.json);
+  }
+
+  static updateRequest({required RepairRequest value}) {
+    log('updating request...' + value.json.toString());
+    return instance.collection(collectionPath).doc(value.id).set(value.json);
+  }
+}

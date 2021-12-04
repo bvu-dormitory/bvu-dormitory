@@ -57,7 +57,7 @@ class RoomRepository {
             .collection('users')
             .where(
               'room',
-              isEqualTo: documentReference.path,
+              isEqualTo: documentReference,
             )
             .where('active', isEqualTo: true)
             .get())

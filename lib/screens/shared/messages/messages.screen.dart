@@ -28,12 +28,17 @@ class MessagesScreen extends BaseScreen<MessageController> {
 
   @override
   Widget body(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _navBar(context),
-        _body(context),
-      ],
+    return Scrollbar(
+      child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _navBar(context),
+            _body(context),
+          ],
+        ),
+      ),
     );
   }
 

@@ -1,65 +1,40 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
-import 'package:bvu_dormitory/base/base.screen.dart';
-import 'package:bvu_dormitory/models/building.dart';
-import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/invoice.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/repositories/invoice.repository.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
-import 'add/rooms.detail.invoices.add.screen.dart';
-import 'rooms.detail.invoices.controller.dart';
+import 'package:bvu_dormitory/base/base.screen.dart';
+import 'detail/student.invoices.detail.screen.dart';
+import 'student.invoices.controller.dart';
 
-class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoicesController> {
-  AdminRoomsDetailInvoicesScreen({
+class StudentInvoicesScreen extends BaseScreen<StudentInvoicesController> {
+  StudentInvoicesScreen({
     Key? key,
     String? previousPageTitle,
-    required this.building,
-    required this.floor,
     required this.room,
-  }) : super(key: key, previousPageTitle: previousPageTitle, haveNavigationBar: true);
+  }) : super(key: key, previousPageTitle: "$previousPageTitle ${room.name}", haveNavigationBar: true);
 
-  final Building building;
-  final Floor floor;
   final Room room;
 
   @override
-  AdminRoomsDetailInvoicesController provideController(BuildContext context) {
-    return AdminRoomsDetailInvoicesController(
+  StudentInvoicesController provideController(BuildContext context) {
+    return StudentInvoicesController(
       context: context,
-      title: AppLocalizations.of(context)!.admin_manage_invoice,
-      building: building,
-      floor: floor,
-      room: room,
+      title: AppLocalizations.of(context)!.admin_manage_invoice_list,
     );
   }
 
   @override
-  Widget? navigationBarTrailing(BuildContext context) {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      child: const Icon(FluentIcons.receipt_add_24_regular),
-      onPressed: () {
-        Navigator.of(context).push(CupertinoPageRoute(
-          builder: (_) => AdminRoomsDetailInvoicesAddScreen(
-            previousPageTitle: context.read<AdminRoomsDetailInvoicesController>().title,
-            building: building,
-            floor: floor,
-            room: room,
-          ),
-        ));
-      },
-    );
-  }
+  Widget? navigationBarTrailing(BuildContext context) {}
 
   @override
   Widget body(BuildContext context) {
@@ -74,7 +49,7 @@ class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoices
   }
 
   _invoicesList() {
-    final controller = context.read<AdminRoomsDetailInvoicesController>();
+    final controller = context.read<StudentInvoicesController>();
 
     return StreamBuilder<List<Invoice>>(
       stream: InvoiceRepository.syncInvoicesInRoom(roomRef: room.reference!),
@@ -104,7 +79,7 @@ class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoices
   }
 
   _buildInvoicesList(List<Invoice> list) {
-    final controller = context.read<AdminRoomsDetailInvoicesController>();
+    final controller = context.read<StudentInvoicesController>();
 
     final groupedByYear = groupBy(list, (Object? key) {
       return (key as Invoice).year;
@@ -132,8 +107,14 @@ class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoices
                     ],
                   ),
                 ),
-                onPressed: () => controller.onInvoiceItemPressed(invoice),
-                onLongPressed: () => controller.onInvoiceItemContextMenuOpen(invoice),
+                onPressed: () {
+                  Navigator.of(context).push(CupertinoPageRoute(
+                    builder: (context) => StudentInvoicesDetailScreen(
+                      invoice: invoice,
+                      previousPageTitle: controller.title,
+                    ),
+                  ));
+                },
               );
             }).toList(),
           ),

@@ -186,8 +186,10 @@
     "admin_manage_rooms_detail_contact_phone": "Số điện thoại",
     "admin_manage_rooms_detail_invoice_add": "Thêm Hóa đơn",
     "admin_manage_rooms_detail_invoice_list": "Danh sách Hóa đơn",
-    "admin_manage_rooms_detail_repair_list": "Đang yêu cầu",
-    "admin_manage_rooms_detail_repair_history": "Đã xử lí",
+    "admin_manage_rooms_detail_repair_list": "Các yêu cầu",
+    "admin_manage_rooms_detail_repair_reason": "Nội dung yêu cầu",
+    "admin_manage_rooms_detail_repair_notes": "Ghi chú",
+    "admin_manage_rooms_detail_repair_delete": "Xóa yêu cầu",
 
 
     "admin_manage_rooms_detail_students_toast_moved": "Đã chuyển tới Phòng {roomName}",
@@ -295,8 +297,15 @@
 
 
     "student_invoice_history": "Lịch sử thanh toán",
+    "student_invoice_more": "Chi tiết",
     "student_invoice_current": "Hóa đơn tháng trước",
+    "student_invoice_paid": "Đã thanh toán",
+    "student_invoice_difference": "Còn thiếu",
+    "student_invoice_pay": "Thêm Thanh toán",
+    "student_invoice_full": "Hóa đơn đã thanh toán đủ, không thể thêm",
+    "student_invoice_payments": "Thông tin Thanh toán",
     "student_active_members": "Các thành viên",
+    "student_room_info": "Thông tin phòng",
     "student_room_services_guide": "Liên hệ Quản trị viên/Người quản lý để được mở hoặc hủy dịch vụ.",
     "student_room_items_guide": "Liên hệ Quản trị viên/Người quản lý khi tài sản bị hư hỏng hoặc muốn lắp thêm tài sản.",
 
@@ -304,4 +313,5 @@
     "profile_app_settings": "Thiết lập",
     "profile_app_settings_theme": "Giao diện",
     "profile_app_settings_locale": "Ngôn ngữ"
+
 }

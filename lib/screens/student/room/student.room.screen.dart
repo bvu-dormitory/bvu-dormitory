@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:ui';
 
+import 'package:bvu_dormitory/screens/student/room/invoices/detail/student.invoices.detail.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:bvu_dormitory/app/app.controller.dart';
@@ -18,6 +21,7 @@ import 'package:bvu_dormitory/models/room.dart';
 import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
+import 'members/student.members.screen.dart';
 import 'student.room.controller.dart';
 
 class StudentRoomScreen extends BaseScreen<StudentRoomController> {
@@ -48,6 +52,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
     return SafeArea(
         top: false,
         child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -157,7 +162,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
           child: Container(
             width: double.infinity,
             alignment: Alignment.topLeft,
-            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, left: 20, right: 20, bottom: 105),
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, left: 20, right: 20, bottom: 125),
             decoration: BoxDecoration(
               gradient: AppColor.mainAppBarGradientColor,
               boxShadow: [
@@ -172,7 +177,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _appNameSection(),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 _nameSection(student),
               ],
             ),
@@ -183,7 +188,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
         Positioned(
           left: 0,
           right: 0,
-          bottom: -90,
+          bottom: -70,
           child: Container(
             padding: const EdgeInsets.all(20),
             child: _roomCurrentInvoice(student),
@@ -203,22 +208,22 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
           controller.room = snapshot.data!;
 
           return Container(
-            padding: const EdgeInsets.only(top: 100, left: 20, right: 20, bottom: 20),
+            padding: const EdgeInsets.only(top: 70, left: 20, right: 20, bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: _roomRepairCard(snapshot.data!),
-                    ),
-                    const SizedBox(width: 40),
-                    Flexible(
-                      child: _roomActiveMembers(snapshot.data!),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 50),
+                // Row(
+                //   children: [
+                //     Flexible(
+                //       child: _roomRepairCard(snapshot.data!),
+                //     ),
+                //     const SizedBox(width: 40),
+                //     Flexible(
+                //       child: _roomActiveMembers(snapshot.data!),
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 50),
                 _roomBodyMenuGroups(snapshot.data!),
               ],
             ),
@@ -251,67 +256,169 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
 
     return Container(
       height: 150,
-      width: double.infinity,
-      padding: const EdgeInsets.all(10),
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: AppColor.borderColor(context.read<AppController>().appThemeMode),
+          color: Colors.grey.withOpacity(0.75),
           width: 0.5,
         ),
         boxShadow: [
           if (context.read<AppController>().appThemeMode == ThemeMode.light) ...{
             BoxShadow(
-              color: Colors.grey.withOpacity(0.15),
+              color: Colors.grey.withOpacity(0.0),
               blurRadius: 24,
               offset: const Offset(0, 5),
             ),
           },
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          // load room
-          FutureBuilder<Room>(
-            future: RoomRepository.loadRoomFromRef(student.room!),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return FutureBuilder<Invoice?>(
-                  future: InvoiceRepository.getLastestInvoiceInRoom(snapshot.data!.reference!),
-                  builder: (context, snapshot) {
-                    // log(snapshot.toString());
+          Positioned(
+            bottom: -20,
+            right: -20,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.blue.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -120,
+            left: 0,
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                color: HexColor('#C996CC').withOpacity(0.75),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            clipBehavior: Clip.antiAlias,
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: 30.0,
+                sigmaY: 30.0,
+              ),
+              child: FutureBuilder<Room>(
+                future: RoomRepository.loadRoomFromRef(student.room!),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return StreamBuilder<Invoice?>(
+                      stream: InvoiceRepository.getLastestInvoiceInRoom(snapshot.data!.reference!),
+                      builder: (context, snapshot) {
+                        // log(snapshot.toString());
 
-                    if (snapshot.hasData) {
-                      return SelectableText(
-                        AppLocalizations.of(context)!.admin_manage_room + ' ' + snapshot.data!.createdDate + ".",
-                        style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 18,
-                        ),
-                      );
-                    }
+                        if (snapshot.hasData) {
+                          final theInvoice = snapshot.data!;
 
-                    if (snapshot.hasError) {
-                      log(snapshot.error.toString());
-                      controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
-                    }
+                          return CupertinoButton(
+                            onPressed: () {
+                              Navigator.of(context).push(CupertinoPageRoute(
+                                builder: (context) => StudentInvoicesDetailScreen(
+                                  invoice: snapshot.data!,
+                                  previousPageTitle: AppLocalizations.of(context)!.admin_manage_room,
+                                ),
+                              ));
+                            },
+                            padding: EdgeInsets.zero,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)!.student_invoice_current,
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.75),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 20),
+                                      SelectableText(
+                                        "${AppLocalizations.of(context)!.admin_manage_invoice_month(theInvoice.month)} - ${theInvoice.year}",
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          color: Colors.white.withOpacity(0.75),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Expanded(
+                                    child: Center(
+                                      child: SelectableText(
+                                        NumberFormat('#,###').format(theInvoice.total) + ' đ',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w900,
+                                          foreground: Paint()
+                                            ..shader = context.read<AppController>().appThemeMode == ThemeMode.light
+                                                ? AppColor.mainAppBarGradientColor
+                                                    .createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0))
+                                                : AppColor.secondaryAppBarGradientColor
+                                                    .createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
+                                          shadows: [
+                                            Shadow(
+                                              color: Colors.black.withOpacity(0.15),
+                                              blurRadius: 24,
+                                              offset: const Offset(0, 5),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  // CupertinoButton(
+                                  //   color: Colors.blue,
+                                  //   padding: EdgeInsets.zero,
+                                  //   child: Container(
+                                  //     padding: const EdgeInsets.only(top: 0, right: 15, bottom: 15, left: 15),
+                                  //     child: Text(AppLocalizations.of(context)!.student_invoice_more),
+                                  //   ),
+                                  //   onPressed: () {},
+                                  // ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
 
-                    return const CupertinoActivityIndicator(radius: 10);
-                  },
-                );
-              }
+                        if (snapshot.hasError) {
+                          log(snapshot.error.toString());
+                          controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
+                        }
 
-              return const CupertinoActivityIndicator(radius: 10);
-            },
+                        return const CupertinoActivityIndicator(radius: 10);
+                      },
+                    );
+                  }
+
+                  return const CupertinoActivityIndicator(radius: 10);
+                },
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
+  /// ignored
   _roomRepairCard(Room room) {
     final controller = context.read<StudentRoomController>();
 
@@ -369,7 +476,16 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
         ),
         const SizedBox(height: 10),
         CupertinoButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              CupertinoPageRoute(
+                builder: (context) => StudentMembersScreen(
+                  previousPageTitle: controller.title,
+                  room: room,
+                ),
+              ),
+            );
+          },
           padding: EdgeInsets.zero,
           child: Container(
             height: 50,
@@ -387,7 +503,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
               future: RoomRepository.getActiveStudentsQuantity(room.reference!),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  // log('active students in this room: ' + snapshot.data.toString());
+                  log('active students in this room: ' + snapshot.data.toString());
 
                   return Text(
                     snapshot.data.toString(),

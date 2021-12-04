@@ -10,19 +10,25 @@ class AppColor {
 
   // background color
   static get backgroundColorLight => const Color.fromRGBO(242, 242, 247, 1);
-  static get backgroundColorDark => Colors.grey.shade900;
+  static get backgroundColorDark => Colors.black;
   static Color backgroundColor(ThemeMode themeMode) =>
       themeMode == ThemeMode.light ? backgroundColorLight : backgroundColorDark;
 
+  // navigator background color (floating on the background color)
+  static get navigationBackgroundColorLight => Colors.white;
+  static get navigationBackgroundColorDark => Colors.grey.shade900;
+  static Color navigationBackgroundColor(ThemeMode themeMode) =>
+      themeMode == ThemeMode.light ? navigationBackgroundColorLight : navigationBackgroundColorDark;
+
   // secondary background color (floating on the background color)
   static get secondaryBackgroundColorLight => Colors.white;
-  static get secondaryBackgroundColorDark => Colors.grey.shade800;
+  static get secondaryBackgroundColorDark => Colors.black.withOpacity(0.5);
   static Color secondaryBackgroundColor(ThemeMode themeMode) =>
       themeMode == ThemeMode.light ? secondaryBackgroundColorLight : secondaryBackgroundColorDark;
 
-  // secondary background color (floating on the background color)
+  // border color (floating on the background color)
   static get borderColorLight => Colors.grey.withOpacity(0.3);
-  static get borderColorDark => Colors.grey.withOpacity(0.6);
+  static get borderColorDark => Colors.grey.withOpacity(0.9);
   static Color borderColor(ThemeMode themeMode) => themeMode == ThemeMode.light ? borderColorLight : borderColorDark;
 
   // text color
@@ -36,6 +42,15 @@ class AppColor {
         colors: [
           Colors.blue.shade900,
           Colors.purple.shade800,
+        ],
+      );
+
+  static LinearGradient get secondaryAppBarGradientColor => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Colors.green.shade400,
+          Colors.green.shade900,
         ],
       );
 }

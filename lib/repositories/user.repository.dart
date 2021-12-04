@@ -9,8 +9,8 @@ class UserRepository {
 
   /// check whether the just logged-in user have data in the "users" collection
   static Future<bool> isUserWithPhoneNumerExists(User? authUser) async {
-    var user = await instance.doc(authUser?.phoneNumber).get();
-    return user.exists;
+    var user = await instance.where('phone_number', isEqualTo: authUser?.phoneNumber).get();
+    return user.size > 0;
   }
 
   static Future<DocumentSnapshot> getFireStoreUser(DocumentReference reference) async {
@@ -18,8 +18,8 @@ class UserRepository {
   }
 
   static Future<bool> isFireStoreUserExists(String phoneNumber) async {
-    var user = await instance.doc(phoneNumber).get();
-    return user.exists;
+    var user = await instance.where('phone_number', isEqualTo: phoneNumber).get();
+    return user.size > 0;
   }
 
   static Future<AppUser?> getCurrentFireStoreUser() async {

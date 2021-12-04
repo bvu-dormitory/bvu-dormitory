@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +26,7 @@ class AdminBuildingsBody extends StatelessWidget {
         if (snapshot.hasData) {
           List<Building> buildings = snapshot.data!;
           context.read<AdminBuildingsController>().expansionStates = List.filled(buildings.length, true);
+          log('updated buildings...' + context.read<AdminBuildingsController>().expansionStates.length.toString());
 
           return Consumer<AdminBuildingsController>(
             builder: (context, controller, child) {
@@ -43,10 +46,12 @@ class AdminBuildingsBody extends StatelessWidget {
                     return ExpansionPanel(
                       isExpanded: controller.expansionStates[index],
                       canTapOnHeader: true,
+                      backgroundColor: AppColor.navigationBackgroundColor(context.read<AppController>().appThemeMode),
                       headerBuilder: (context, isExpanded) {
                         return GestureDetector(
                           onLongPress: () {
                             controller.showBottomSheetMenuModal('title', null, true, []);
+                            log('message');
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -55,7 +60,7 @@ class AdminBuildingsBody extends StatelessWidget {
                               children: [
                                 Text(
                                   AppLocalizations.of(context)!.admin_manage_building + ' ' + theBuilding.name,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
                                     // color: Colors.black.withOpacity(0.7),
@@ -64,7 +69,7 @@ class AdminBuildingsBody extends StatelessWidget {
                                 const SizedBox(height: 5),
                                 Text(
                                   theBuilding.descriptions,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       // color: Colors.black.withOpacity(0.5),
                                       ),
                                 )

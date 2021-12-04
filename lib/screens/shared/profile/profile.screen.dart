@@ -37,12 +37,17 @@ class ProfileScreen extends BaseScreen<ProfileController> {
 
   @override
   Widget body(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _navBar(context),
-        _body(context),
-      ],
+    return Scrollbar(
+      child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _navBar(context),
+            _body(context),
+          ],
+        ),
+      ),
     );
   }
 
@@ -126,7 +131,7 @@ class ProfileScreen extends BaseScreen<ProfileController> {
         mainAxisSize: MainAxisSize.min,
         children: [
           _profileHeader(user),
-          const SizedBox(height: 50),
+          const SizedBox(height: 30),
           Flexible(
             child: _profileMenu(user),
           ),
@@ -137,37 +142,35 @@ class ProfileScreen extends BaseScreen<ProfileController> {
 
   _profileHeader(AppUser user) {
     _avatar() {
-      return CircleAvatar(
-        radius: 35,
-        backgroundImage:
-            user.photoURL == null ? const AssetImage('lib/assets/icons/user.png') : Image.network(user.photoURL!).image,
-        child: CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: Container(
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: const [
-                  0.25,
-                  0.9,
-                ],
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.5),
-                ],
+      return Stack(
+        fit: StackFit.passthrough,
+        clipBehavior: Clip.none,
+        children: [
+          CircleAvatar(
+            radius: 75,
+            backgroundImage: user.photoURL == null
+                ? const AssetImage('lib/assets/icons/user.png')
+                : Image.network(user.photoURL!).image,
+          ),
+
+          // change avatar button
+          Positioned(
+            bottom: -5,
+            right: -20,
+            child: CupertinoButton(
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  shape: BoxShape.circle,
+                  border: Border.all(width: 1, color: AppColor.borderColor(context.read<AppController>().appThemeMode)),
+                ),
+                child: const Icon(FluentIcons.camera_28_filled),
               ),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.profile_avatar_edit,
-              style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.5)),
+              onPressed: () {},
             ),
           ),
-          onPressed: () {},
-        ),
+        ],
       );
     }
 
@@ -182,7 +185,7 @@ class ProfileScreen extends BaseScreen<ProfileController> {
             user.fullName,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 20,
             ),
           ),
           const SizedBox(height: 25),

@@ -41,7 +41,7 @@ abstract class BaseScreen<T extends BaseController> extends StatelessWidget {
   /// screen navbar
   ObstructingPreferredSizeWidget? navigationBar(BuildContext context) {
     return CupertinoNavigationBar(
-      backgroundColor: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
+      backgroundColor: AppColor.navigationBackgroundColor(context.read<AppController>().appThemeMode),
       transitionBetweenRoutes: true,
       previousPageTitle: previousPageTitle,
       middle: Text(

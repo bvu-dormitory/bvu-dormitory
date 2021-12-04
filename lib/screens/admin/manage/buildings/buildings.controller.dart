@@ -38,7 +38,7 @@ class AdminBuildingsController extends BaseController {
     ));
   }
 
-  showCategoryEditBottomSheet({Building? building}) {
+  showBuildingEditBottomSheet({Building? building}) {
     nameController.text = building?.name ?? "";
     descriptionsController.text = building?.descriptions ?? "";
 
@@ -53,6 +53,7 @@ class AdminBuildingsController extends BaseController {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Material(
+                color: Colors.transparent,
                 child: Form(
                   key: formKey,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -151,14 +152,14 @@ class AdminBuildingsController extends BaseController {
 
           if (isCategoryExists) {
             Future.delayed(const Duration(seconds: 0), () {
-              showErrorDialog(appLocalizations!.admin_manage_item_category_already_exists);
+              showErrorDialog(appLocalizations!.admin_manage_buildings_add_error_existed);
             });
           } else {
             // no same item name existing, let's add a new/update
             if (building == null) {
               await BuildingRepository.addBuilding(value: _getFormData());
             } else {
-              await BuildingRepository.updateBuilding(value: building);
+              await BuildingRepository.updateBuilding(value: _getFormData()..id = building.id);
               navigator.pop();
             }
             navigator.pop();
@@ -169,6 +170,8 @@ class AdminBuildingsController extends BaseController {
         } finally {
           // turn off the loading indicator
           navigator.pop();
+
+          notifyListeners();
         }
       }
     }

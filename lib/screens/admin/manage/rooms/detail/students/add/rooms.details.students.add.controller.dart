@@ -45,17 +45,18 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       dobController = TextEditingController(text: student!.birthDate);
       homeTownController = TextEditingController(text: student!.hometown);
       idController = TextEditingController(text: student!.citizenIdNumber);
-      phoneController = TextEditingController(text: student!.phoneNumber!.replaceFirst("+84", "0"));
+      phoneController = TextEditingController(text: student!.phoneNumber);
       parentPhoneController = TextEditingController(text: student!.parentPhoneNumber ?? "");
       mssvController = TextEditingController(text: student!.studentIdNumber ?? "");
       joinDateController = TextEditingController(text: student!.joinDate);
-      outDateController = TextEditingController(text: student!.outDate);
+      // outDateController = TextEditingController(text: student!.outDate);
       notesController = TextEditingController(text: student!.notes);
     } else {
       isViewing = false;
       isFormEditing = true;
 
       _dateOfBirth = DateTime(2000, 9, 1);
+      _joinDate = DateTime.now();
 
       genderController = TextEditingController(text: UserGender.male.name);
       lastNameController = TextEditingController(text: "Nguyễn");
@@ -66,9 +67,8 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       phoneController = TextEditingController(text: "0333326585");
       parentPhoneController = TextEditingController();
       mssvController = TextEditingController();
-      joinDateController =
-          TextEditingController(text: "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}");
-      outDateController = TextEditingController();
+      joinDateController = TextEditingController(text: getDateStringValue(DateTime.now()));
+      // outDateController = TextEditingController();
       notesController = TextEditingController();
     }
   }
@@ -112,7 +112,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         parentPhoneField,
         mssvField,
         joinDateField,
-        outDateField,
+        // outDateField,
         notesField,
       ];
 
@@ -128,7 +128,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         parentPhoneController,
         mssvController,
         joinDateController,
-        outDateController,
+        // outDateController,
         notesController,
       ];
 
@@ -306,7 +306,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
           label: appLocalizations!.admin_manage_student_menu_add_field_phone,
           controller: phoneController,
           required: true,
-          enabled: student == null,
+          enabled: isFormEditing,
           maxLength: 10,
           prefixIcon: const Icon(FluentIcons.call_24_regular),
           keyboardType: TextInputType.number,
@@ -374,6 +374,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
           prefixIcon: const Icon(FluentIcons.calendar_arrow_down_24_regular),
           picker: AppFormPicker(
             required: true,
+            initialValue: DateTime.now(),
             type: AppFormPickerFieldType.date,
             onSelectedItemChanged: onJoinDatePickerSelectedIndexChanged,
           ),
@@ -385,31 +386,31 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         ),
       );
 
-  SpannableGridCellData get outDateField => SpannableGridCellData(
+  // SpannableGridCellData get outDateField => SpannableGridCellData(
+  //       id: 12,
+  //       column: 1,
+  //       row: 11,
+  //       columnSpan: 4,
+  //       child: AppFormField(
+  //         type: AppFormFieldType.picker,
+  //         context: context,
+  //         label: appLocalizations!.admin_manage_student_menu_add_field_out_date,
+  //         controller: outDateController,
+  //         enabled: isFormEditing,
+  //         editable: false,
+  //         maxLength: 10,
+  //         prefixIcon: const Icon(FluentIcons.calendar_arrow_right_20_regular),
+  //         picker: AppFormPicker(
+  //           type: AppFormPickerFieldType.date,
+  //           onSelectedItemChanged: onOutDatePickerSelectedIndexChanged,
+  //         ),
+  //       ),
+  //     );
+
+  SpannableGridCellData get notesField => SpannableGridCellData(
         id: 12,
         column: 1,
         row: 11,
-        columnSpan: 4,
-        child: AppFormField(
-          type: AppFormFieldType.picker,
-          context: context,
-          label: appLocalizations!.admin_manage_student_menu_add_field_out_date,
-          controller: outDateController,
-          enabled: isFormEditing,
-          editable: false,
-          maxLength: 10,
-          prefixIcon: const Icon(FluentIcons.calendar_arrow_right_20_regular),
-          picker: AppFormPicker(
-            type: AppFormPickerFieldType.date,
-            onSelectedItemChanged: onOutDatePickerSelectedIndexChanged,
-          ),
-        ),
-      );
-
-  SpannableGridCellData get notesField => SpannableGridCellData(
-        id: 13,
-        column: 1,
-        row: 12,
         columnSpan: 4,
         child: AppFormField(
           context: context,
@@ -497,7 +498,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
   addNewStudent() {
     // check whether the given phone number is already registered
     AuthRepository.isPhoneNumberRegistered(
-      phoneController.text.replaceFirst("0", "+84"),
+      phoneController.text,
     ).then((exists) {
       // the phonenumber is already registered => disallow adding
       if (exists) {
@@ -512,7 +513,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
         // process adding new user
         showLoadingDialog();
 
-        StudentRepository.setStudent(
+        StudentRepository.addStudent(
           getFormData()..room = room.reference,
         ).catchError((onError) {
           showSnackbar(onError.toString(), const Duration(seconds: 5), () {
@@ -544,7 +545,10 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
 
   updateStudentInfo() {
     // process updating user info
-    StudentRepository.setStudent(getFormData()..room = room.reference).catchError((onError) {
+    StudentRepository.setStudent(getFormData()
+          ..room = room.reference
+          ..id = student!.id)
+        .catchError((onError) {
       showSnackbar(onError.toString(), const Duration(seconds: 5), () {});
     }).then((value) {
       showSnackbar(appLocalizations!.app_form_changes_saved, const Duration(seconds: 3), () {});
@@ -557,7 +561,6 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
 
   Student getFormData() {
     return Student(
-      id: phoneController.text.replaceFirst("0", "+84"),
       firstName: firstNameController.text,
       lastName: lastNameController.text,
       isActive: true,
@@ -565,6 +568,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
       hometown: homeTownController.text,
       birthDate: getDateStringValue(dateOfBirth!),
       joinDate: getDateStringValue(joinDate!),
+      phoneNumber: phoneController.text.replaceFirst("+84", "0"),
       parentPhoneNumber: parentPhoneController.text,
       studentIdNumber: mssvController.text,
       citizenIdNumber: idController.text,

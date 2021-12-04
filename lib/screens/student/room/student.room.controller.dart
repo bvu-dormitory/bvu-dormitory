@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/src/provider.dart';
 
+import 'invoices/student.invoices.screen.dart';
 import 'items/student.items.screen.dart';
 import 'members/student.members.screen.dart';
 
@@ -30,8 +31,7 @@ class StudentRoomController extends BaseController {
 
   List<AppMenuGroup> get menuGroups => [
         AppMenuGroup(
-          /// TODO: add to app_vi.arb
-          title: 'Thông tin phòng',
+          title: appLocalizations!.student_room_info,
           titleStyle: menuGroupTitleStyle,
           items: [
             AppMenuGroupItem(
@@ -91,6 +91,18 @@ class StudentRoomController extends BaseController {
             AppMenuGroupItem(
               title: appLocalizations!.admin_manage_invoice_list,
               icon: Icon(FluentIcons.receipt_24_filled, size: 20, color: iconColor),
+              onPressed: room != null
+                  ? () {
+                      navigator.push(
+                        CupertinoPageRoute(
+                          builder: (context) => StudentInvoicesScreen(
+                            previousPageTitle: title,
+                            room: room!,
+                          ),
+                        ),
+                      );
+                    }
+                  : null,
             ),
             AppMenuGroupItem(
               title: appLocalizations!.student_invoice_history,

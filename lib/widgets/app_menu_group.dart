@@ -95,7 +95,7 @@ class AppMenuGroup extends StatelessWidget {
         padding: const EdgeInsets.all(0),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            // color: Colors.white,
             border: Border.all(
               color: AppColor.borderColor(appProvider.appThemeMode),
               width: appProvider.appThemeMode == ThemeMode.light ? 0.5 : 0.3,

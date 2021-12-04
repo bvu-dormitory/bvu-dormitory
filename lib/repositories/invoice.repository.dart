@@ -25,24 +25,15 @@ class InvoiceRepository {
   }
 
   /// getting latest invoice of the room
-  static Future<Invoice?> getLastestInvoiceInRoom(DocumentReference roomRef) async {
-    final lastestInvoiceDoc = await instance
+  static Stream<Invoice?> getLastestInvoiceInRoom(DocumentReference roomRef) {
+    return instance
         .collection(collectionPath)
         .where('room', isEqualTo: roomRef)
         .orderBy('year', descending: true)
         .orderBy('month', descending: true)
         .limit(1)
-        .get();
-
-    // log('lastest invoices: ' + lastestInvoiceDoc.size.toString());
-
-    // there is no docs matching the above criterias
-    if (lastestInvoiceDoc.size == 0) {
-      return null;
-    }
-
-    // because we limit the above query to 1, so we can only get 1 document
-    return Invoice.fromFireStoreDocument(lastestInvoiceDoc.docs[0]);
+        .snapshots()
+        .map((event) => Invoice.fromFireStoreDocument(event.docs.first));
   }
 
   static Future addInvoice(Invoice invoice) {

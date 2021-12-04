@@ -20,7 +20,7 @@ class StudentProfileDetailController extends BaseController {
     dobController = TextEditingController(text: student.birthDate);
     homeTownController = TextEditingController(text: student.hometown);
     idController = TextEditingController(text: student.citizenIdNumber);
-    phoneController = TextEditingController(text: student.phoneNumber!.replaceFirst("+84", "0"));
+    phoneController = TextEditingController(text: student.phoneNumber.replaceFirst("+84", "0"));
     parentPhoneController = TextEditingController(text: student.parentPhoneNumber ?? "");
     mssvController = TextEditingController(text: student.studentIdNumber ?? "");
     joinDateController = TextEditingController(text: student.joinDate);
