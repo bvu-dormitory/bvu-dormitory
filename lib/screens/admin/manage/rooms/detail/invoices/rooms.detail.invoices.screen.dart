@@ -52,8 +52,6 @@ class AdminRoomsDetailInvoicesScreen extends BaseScreen<AdminRoomsDetailInvoices
         Navigator.of(context).push(CupertinoPageRoute(
           builder: (_) => AdminRoomsDetailInvoicesAddScreen(
             previousPageTitle: context.read<AdminRoomsDetailInvoicesController>().title,
-            building: building,
-            floor: floor,
             room: room,
           ),
         ));

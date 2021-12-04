@@ -29,8 +29,6 @@ class AdminRoomsDetailInvoicesController extends BaseController {
       CupertinoPageRoute(
         builder: (context) => AdminRoomsDetailInvoicesAddScreen(
           previousPageTitle: appLocalizations!.admin_manage_invoice,
-          building: building,
-          floor: floor,
           room: room,
           invoice: invoice,
         ),
@@ -40,7 +38,7 @@ class AdminRoomsDetailInvoicesController extends BaseController {
 
   onInvoiceItemContextMenuOpen(Invoice invoice) {
     showBottomSheetMenuModal(
-      appLocalizations!.admin_manage_invoice_detail(room.name, invoice.month, invoice.year),
+      appLocalizations!.admin_manage_invoice_title(room.name, invoice.month, invoice.year),
       null,
       true,
       [

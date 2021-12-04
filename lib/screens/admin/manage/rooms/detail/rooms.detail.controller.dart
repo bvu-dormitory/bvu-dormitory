@@ -111,9 +111,6 @@ class AdminRoomsDetailController extends BaseController {
           onPressed: () {
             navigator.push(CupertinoPageRoute(
               builder: (context) => AdminRoomsDetailInvoicesAddScreen(
-                previousPageTitle: title,
-                building: building,
-                floor: floor,
                 room: room,
               ),
             ));

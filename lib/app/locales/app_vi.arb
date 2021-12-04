@@ -140,7 +140,9 @@
     "admin_manage_service_chart": "Thống kê",
     "admin_manage_service_name": "Tên dịch vụ",
     "admin_manage_service_price": "Giá dịch vụ (trên 1 đơn vị tính)",
+    "admin_manage_service_price_compact": "Giá dịch vụ",
     "admin_manage_service_unit": "Đơn vị tính (vd: tháng, kg, m³ ...)",
+    "admin_manage_service_unit_compact": "Đơn vị tính",
     "admin_manage_service_type": "Kiểu dịch vụ",
     "admin_manage_service_service_added": "Đã thêm dịch vụ",
     "admin_manage_service_service_editted": "Đã cập nhật thông tin dịch vụ",
@@ -267,7 +269,7 @@
     "admin_manage_invoice_list": "Các Hóa đơn",
     "admin_manage_invoice_view": "Chi tiết Hóa đơn",
     "admin_manage_invoice_export": "Xuất phiếu",
-    "admin_manage_invoice_print": "In phiếu",
+    "admin_manage_invoice_print": "Trình in hóa đơn",
     "admin_manage_invoice_time": "Thời gian",
     "admin_manage_invoice_send": "Gửi tới phòng",
     "admin_manage_invoice_old_index": "Chỉ số cũ",
@@ -285,8 +287,9 @@
             }
         }
     },
-    "admin_manage_invoice_detail": "Phòng {room} - Tháng {month}/{year}",
-    "@admin_manage_invoice_detail": {
+    "admin_manage_invoice_detail": "Chi tiết",
+    "admin_manage_invoice_title": "Phòng {room} - Tháng {month}/{year}",
+    "@admin_manage_invoice_title": {
         "placeholders": {
             "room": {
                 "type": "String"
@@ -318,6 +321,14 @@
     "profile_app_settings": "Thiết lập",
     "profile_app_settings_theme": "Giao diện",
     "profile_app_settings_locale": "Ngôn ngữ",
-    "profile_confirm_signout": "Xác nhận đăng xuất ?"
+    "profile_confirm_signout": "Xác nhận đăng xuất ?",
 
+
+    "admin_reports_repairs_all": "Tất cả yêu cầu",
+    "admin_reports_repairs_waiting": "Đang chờ xử lý",
+    "admin_reports_item_all": "Tất cả tài sản",
+    "admin_reports_item_not_attached": "Tài sản chưa gán phòng",
+    "admin_reports_item_attached": "Tài sản đã gán phòng",
+    "admin_reports_invoice_all": "Tất cả hóa đơn",
+    "admin_reports_invoice_not_completed": "Chưa thanh toán đủ"
 }

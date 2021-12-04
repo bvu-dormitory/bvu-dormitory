@@ -29,7 +29,7 @@ class Service extends FireStoreModel {
   final ServiceType type;
 
   // these following fields only used for continous services
-  final int? oldIndex;
+  int? oldIndex;
   final int? newIndex;
   final int? discounts;
 
@@ -95,7 +95,7 @@ class Service extends FireStoreModel {
         'type': type.name,
       };
 
-  // this is for saving to the 'services' field in a specific invoice document
+  // this is for shadowing to the 'services' field in a specific invoice document
   Map<String, dynamic> get invoiceJson {
     final s = {
       'name': name,

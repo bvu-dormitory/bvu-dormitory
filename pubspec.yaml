@@ -101,9 +101,11 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+  # but, this can only works with a specific folder path, not including subfolders
   assets:
     - lib/assets/
     - lib/assets/icons/
+    - lib/assets/fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
