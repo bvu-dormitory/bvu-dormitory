@@ -28,6 +28,7 @@ class _AdminManageMenuState extends State<AdminManageMenu> {
   Widget build(BuildContext context) {
     return GridView.count(
       padding: const EdgeInsets.only(top: 15),
+      physics: const ClampingScrollPhysics(),
       crossAxisCount: 3,
       shrinkWrap: true,
       childAspectRatio: MediaQuery.of(context).size.width / 420,

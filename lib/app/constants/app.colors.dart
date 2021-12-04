@@ -22,7 +22,7 @@ class AppColor {
 
   // secondary background color (floating on the background color)
   static get secondaryBackgroundColorLight => Colors.white;
-  static get secondaryBackgroundColorDark => Colors.black.withOpacity(0.5);
+  static get secondaryBackgroundColorDark => Colors.grey.shade900;
   static Color secondaryBackgroundColor(ThemeMode themeMode) =>
       themeMode == ThemeMode.light ? secondaryBackgroundColorLight : secondaryBackgroundColorDark;
 

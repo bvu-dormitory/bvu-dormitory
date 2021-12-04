@@ -1,5 +1,11 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/helpers/extensions/datetime.extensions.dart';
+import 'package:bvu_dormitory/models/repair_request.dart';
+import 'package:bvu_dormitory/models/room.dart';
+import 'package:bvu_dormitory/repositories/repair_request.repository.dart';
+import 'package:bvu_dormitory/repositories/room.repository.dart';
+import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/repairs/rooms.detail.repairs.controller.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 import 'package:collection/collection.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -7,33 +13,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import 'package:bvu_dormitory/base/base.screen.dart';
-import 'package:bvu_dormitory/models/building.dart';
-import 'package:bvu_dormitory/models/floor.dart';
-import 'package:bvu_dormitory/models/item.dart';
-import 'package:bvu_dormitory/models/room.dart';
-import 'package:bvu_dormitory/repositories/item.repository.dart';
-import 'rooms.detail.items.controller.dart';
+import 'package:provider/src/provider.dart';
+import 'repairs.controller.dart';
 
-class AdminRoomsDetailItemsScreen extends BaseScreen<AdminRoomsDetailItemsController> {
-  AdminRoomsDetailItemsScreen({
-    Key? key,
-    String? previousPageTitle,
-    required this.building,
-    required this.floor,
-    required this.room,
-  }) : super(key: key, previousPageTitle: previousPageTitle, haveNavigationBar: true);
-
-  final Building building;
-  final Floor floor;
-  final Room room;
+class AdminRepairsScreen extends BaseScreen<AdminRepairsController> {
+  AdminRepairsScreen({Key? key, String? previousPageTitle})
+      : super(key: key, previousPageTitle: previousPageTitle, haveNavigationBar: true);
 
   @override
-  AdminRoomsDetailItemsController provideController(BuildContext context) {
-    return AdminRoomsDetailItemsController(context: context, title: AppLocalizations.of(context)!.admin_manage_item);
+  AdminRepairsController provideController(BuildContext context) {
+    return AdminRepairsController(context: context, title: AppLocalizations.of(context)!.admin_manage_repair);
   }
 
   @override
@@ -45,48 +36,37 @@ class AdminRoomsDetailItemsScreen extends BaseScreen<AdminRoomsDetailItemsContro
       child: Scrollbar(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
-          child: _itemsList(),
+          child: _requestsList(),
         ),
       ),
     );
   }
 
-  _itemsList() {
-    final controller = context.read<AdminRoomsDetailItemsController>();
+  _requestsList() {
+    final controller = context.read<AdminRepairsController>();
 
-    return StreamBuilder<List<Item>>(
-      stream: ItemRepository.syncItemsInRoom(roomRef: room.reference!),
+    return StreamBuilder<List<RepairRequest>>(
+      stream: RepairRequestRepository.syncAllNotYetDone(),
       builder: (context, snapshot) {
-        // log(snapshot.toString());
-
-        switch (snapshot.connectionState) {
-          case ConnectionState.active:
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              log(snapshot.error.toString());
-              controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
-              return const Text('Error');
-            }
-
-            if (snapshot.hasData) {
-              return _buildItemsList(snapshot.data!);
-            } else {
-              return Text(controller.appLocalizations!.admin_manage_service_empty);
-            }
-
-          default:
-            return const Center(child: CupertinoActivityIndicator(radius: 10));
+        if (snapshot.hasError) {
+          controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
         }
+
+        if (snapshot.hasData) {
+          return _buildRequestsList(snapshot.data!);
+        }
+
+        return const CupertinoActivityIndicator(radius: 10);
       },
     );
   }
 
-  _buildItemsList(List<Item> list) {
-    final controller = context.read<AdminRoomsDetailItemsController>();
+  _buildRequestsList(List<RepairRequest> list) {
+    final controller = context.read<AdminRepairsController>();
 
     final groupedItems = groupBy(list, (Object? o) {
-      // grouping by Item's group type
-      return (o as Item).reference!.parent.parent!;
+      // grouping by room
+      return (o as RepairRequest).room;
     });
 
     return ListView.builder(
@@ -97,8 +77,8 @@ class AdminRoomsDetailItemsScreen extends BaseScreen<AdminRoomsDetailItemsContro
         final items = groupedItems.values.toList()[index];
         final groupName = groupedItems.keys.toList()[index];
 
-        return FutureBuilder<ItemGroup>(
-          future: ItemRepository.syncParentGroupOfItem(itemRef: groupName),
+        return FutureBuilder<Room>(
+          future: RoomRepository.loadRoomFromRef(groupName),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.active:
@@ -112,26 +92,30 @@ class AdminRoomsDetailItemsScreen extends BaseScreen<AdminRoomsDetailItemsContro
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 30.0),
                     child: AppMenuGroup(
-                      title: snapshot.data!.name,
+                      title: AppLocalizations.of(context)!.admin_manage_room + " " + snapshot.data!.name,
                       items: List.generate(items.length, (index) {
                         final theItem = items[index];
 
                         return AppMenuGroupItem(
-                          title: theItem.code,
+                          title: theItem.reason,
                           titleStyle: const TextStyle(fontWeight: FontWeight.w500),
-                          icon: const Icon(FluentIcons.number_symbol_16_regular),
+                          icon: const Icon(FluentIcons.chat_help_24_regular),
                           hasTrailingArrow: false,
                           subTitle: Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: Row(
                               children: [
-                                Text(theItem.purchaseDate),
+                                Text(DateTime.fromMillisecondsSinceEpoch(theItem.timestamp.millisecondsSinceEpoch)
+                                    .getReadableDateString()),
                                 const SizedBox(width: 20),
-                                Text("${NumberFormat('#,###').format(int.parse(theItem.price))}đ"),
                               ],
                             ),
                           ),
-                          onPressed: () => controller.onItemPressed(theItem),
+                          onPressed: () {
+                            // reuse the controller from the AdminRoomsDetailRepairsController
+                            AdminRoomsDetailRepairsController(context: context, title: "", room: snapshot.data!)
+                                .showRequestEditBottomSheet(request: theItem);
+                          },
                         );
                       }),
                     ),

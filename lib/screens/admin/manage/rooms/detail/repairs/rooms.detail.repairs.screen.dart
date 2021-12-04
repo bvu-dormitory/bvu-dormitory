@@ -109,6 +109,7 @@ class AdminRoomsDetailRepairsScreen extends BaseScreen<AdminRoomsDetailRepairsCo
             title: theItem.reason,
             titleStyle: const TextStyle(fontWeight: FontWeight.w500),
             icon: const Icon(FluentIcons.chat_help_24_regular),
+            hasTrailingArrow: false,
             subTitle: Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Row(
@@ -116,7 +117,9 @@ class AdminRoomsDetailRepairsScreen extends BaseScreen<AdminRoomsDetailRepairsCo
                   Text(DateTime.fromMillisecondsSinceEpoch(theItem.timestamp.millisecondsSinceEpoch)
                       .getReadableDateString()),
                   const SizedBox(width: 20),
-                  // Text("${NumberFormat('#,###').format(int.parse(theItem.price))}đ"),
+                  Text(theItem.done
+                      ? AppLocalizations.of(context)!.admin_manage_rooms_detail_repair_done
+                      : AppLocalizations.of(context)!.admin_manage_rooms_detail_repair_waiting),
                 ],
               ),
             ),

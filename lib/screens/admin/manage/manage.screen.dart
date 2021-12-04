@@ -113,7 +113,7 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.w700,
                           fontSize: 20,
-                          color: Colors.white.withOpacity(0.75),
+                          color: Colors.white.withOpacity(0.95),
                         ),
                       ),
                     ),
@@ -133,7 +133,7 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
       child: Container(
         width: double.infinity,
         alignment: Alignment.topLeft,
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, left: 20, right: 20, bottom: 75),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, left: 20, right: 20, bottom: 45),
         decoration: BoxDecoration(
           gradient: AppColor.mainAppBarGradientColor,
           boxShadow: [

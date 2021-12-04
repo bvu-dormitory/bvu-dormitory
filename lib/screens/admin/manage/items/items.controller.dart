@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:provider/src/provider.dart';
 import 'package:spannable_grid/spannable_grid.dart';
 
 import 'package:bvu_dormitory/base/base.controller.dart';
@@ -28,6 +31,7 @@ class AdminItemsController extends BaseController {
     showCupertinoModalBottomSheet(
       context: context,
       barrierColor: Colors.black.withOpacity(0.75),
+      backgroundColor: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
       builder: (context) {
         return SingleChildScrollView(
           padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 30 + MediaQuery.of(context).viewInsets.bottom),

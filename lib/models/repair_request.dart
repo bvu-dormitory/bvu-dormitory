@@ -6,7 +6,7 @@ class RepairRequest extends FireStoreModel {
   final String reason;
   final String? notes;
   final DocumentReference room;
-  final bool done;
+  bool done;
 
   RepairRequest({
     required this.timestamp,

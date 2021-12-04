@@ -24,4 +24,16 @@ class RepairRequestRepository {
     log('updating request...' + value.json.toString());
     return instance.collection(collectionPath).doc(value.id).set(value.json);
   }
+
+  static deleteRequest(RepairRequest theItem) {
+    return instance.collection(collectionPath).doc(theItem.id).delete();
+  }
+
+  static syncAllNotYetDone() {
+    return instance
+        .collection(collectionPath)
+        .where('done', isEqualTo: false)
+        .snapshots()
+        .map((event) => event.docs.map((e) => RepairRequest.fromFireStoreDocument(e)).toList());
+  }
 }

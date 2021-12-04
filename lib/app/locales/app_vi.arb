@@ -112,6 +112,7 @@
     "admin_manage_student": "Sinh viên",
     "admin_manage_invoice": "Hóa đơn",
     "admin_manage_repair": "Yêu cầu sửa chữa",
+    "admin_manage_repair_compact": "Sửa chữa",
     "admin_manage_stat": "Thống kê",
 
 
@@ -186,10 +187,14 @@
     "admin_manage_rooms_detail_contact_phone": "Số điện thoại",
     "admin_manage_rooms_detail_invoice_add": "Thêm Hóa đơn",
     "admin_manage_rooms_detail_invoice_list": "Danh sách Hóa đơn",
+
     "admin_manage_rooms_detail_repair_list": "Các yêu cầu",
     "admin_manage_rooms_detail_repair_reason": "Nội dung yêu cầu",
     "admin_manage_rooms_detail_repair_notes": "Ghi chú",
     "admin_manage_rooms_detail_repair_delete": "Xóa yêu cầu",
+    "admin_manage_rooms_detail_repair_status": "Trạng thái",
+    "admin_manage_rooms_detail_repair_done": "Đã xử lý",
+    "admin_manage_rooms_detail_repair_waiting": "Đang chờ xử lý",
 
 
     "admin_manage_rooms_detail_students_toast_moved": "Đã chuyển tới Phòng {roomName}",

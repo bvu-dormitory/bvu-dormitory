@@ -1,3 +1,5 @@
+import 'package:bvu_dormitory/screens/admin/manage/repairs/repairs.screen.dart';
+import 'package:bvu_dormitory/screens/admin/manage/reports/reports.screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bvu_dormitory/app/constants/app.routes.dart';
@@ -43,34 +45,39 @@ class AdminManageController extends BaseController {
 
   List<ManageIconItem> get menuItems => [
         ManageIconItem(
-          title: appLocalizations?.admin_manage_student ?? "admin_manage_student",
+          title: appLocalizations!.admin_manage_student,
           iconPath: 'lib/assets/icons/profile.png',
           screen: AdminStudentsScreen(previousPageTitle: title),
         ),
         ManageIconItem(
-          title: appLocalizations?.admin_manage_room ?? "admin_manage_room",
+          title: appLocalizations!.admin_manage_room,
           iconPath: 'lib/assets/icons/room-key.png',
           screen: AdminBuildingsScreen(previousPageTitle: title),
         ),
         ManageIconItem(
-          title: appLocalizations?.admin_manage_service ?? "admin_manage_services",
-          iconPath: 'lib/assets/icons/water-drop.png',
-          screen: AdminServicesScreen(previousPageTitle: title),
-        ),
-        ManageIconItem(
-          title: appLocalizations?.admin_manage_item ?? "admin_manage_item",
-          iconPath: 'lib/assets/icons/idea.png',
-          screen: AdminItemsScreen(previousPageTitle: title),
-        ),
-        ManageIconItem(
-          title: appLocalizations?.admin_manage_invoice ?? "admin_manage_invoice",
+          title: appLocalizations!.admin_manage_invoice,
           iconPath: 'lib/assets/icons/bill.png',
           screen: AdminInvoicesScreen(previousPageTitle: title),
         ),
         ManageIconItem(
-          title: appLocalizations?.admin_manage_stat ?? "admin_manage_stat",
+          title: appLocalizations!.admin_manage_service,
+          iconPath: 'lib/assets/icons/water-drop.png',
+          screen: AdminServicesScreen(previousPageTitle: title),
+        ),
+        ManageIconItem(
+          title: appLocalizations!.admin_manage_item,
+          iconPath: 'lib/assets/icons/idea.png',
+          screen: AdminItemsScreen(previousPageTitle: title),
+        ),
+        ManageIconItem(
+          title: appLocalizations!.admin_manage_repair_compact,
+          iconPath: 'lib/assets/icons/service.png',
+          screen: AdminRepairsScreen(previousPageTitle: title),
+        ),
+        ManageIconItem(
+          title: appLocalizations!.admin_manage_stat,
           iconPath: 'lib/assets/icons/pie-chart-1.png',
-          screen: AppRoutes.notFound.screen,
+          screen: AdminReportsScreen(previousPageTitle: title),
         ),
       ];
 

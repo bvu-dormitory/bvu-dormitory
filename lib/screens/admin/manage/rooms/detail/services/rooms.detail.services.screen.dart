@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -72,7 +73,7 @@ class AdminRoomsDetailServicesScreen extends BaseScreen<AdminRoomsDetailServices
                           hasTrailingArrow: false,
                           subTitle: Container(
                             margin: const EdgeInsets.only(top: 10),
-                            child: Text("${service.price}/${service.unit}"),
+                            child: Text("${NumberFormat('#,###').format(service.price)}/${service.unit}"),
                           ),
                           trailing: _loadRoomServiceState(service),
                         );

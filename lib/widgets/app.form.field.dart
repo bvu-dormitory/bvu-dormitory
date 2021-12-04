@@ -76,9 +76,9 @@ class AppFormField extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(
-                color: Colors.blueGrey,
-                // fontWeight: FontWeight.w500,
+              style: TextStyle(
+                color: AppColor.textColor(appProvider.appThemeMode),
+                fontWeight: FontWeight.w500,
               ),
             ),
             if (required) ...{
