@@ -9,6 +9,7 @@ import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/screens/admin/manage/manage.screen.dart';
 import 'package:bvu_dormitory/screens/shared/messages/messages.screen.dart';
 import 'package:bvu_dormitory/screens/shared/newsfeed/newsfeed.screen.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class HomeBottomNavItem {
   String title;
@@ -67,8 +68,8 @@ class AdminHomeController extends BaseController {
         ),
         HomeBottomNavItem(
           title: appLocalizations!.home_screen_navbar_item_newsfeed,
-          icon: FluentIcons.news_24_regular,
-          activeIcon: FluentIcons.news_24_filled,
+          icon: Ionicons.notifications_outline,
+          activeIcon: Ionicons.notifications,
         ),
         HomeBottomNavItem(
           title: appLocalizations!.home_screen_navbar_item_chat,

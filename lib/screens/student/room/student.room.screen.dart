@@ -160,6 +160,13 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
     return Stack(
       clipBehavior: Clip.none,
       children: [
+        Image(
+          image: Image.asset('lib/assets/kytucxa-new.jpeg').image,
+          fit: BoxFit.cover,
+          height: 250,
+          width: double.infinity,
+          alignment: Alignment.topRight,
+        ),
         ClipPath(
           clipper: WaveClipperTwo(),
           child: Container(

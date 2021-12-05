@@ -50,6 +50,7 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
       elevation: 1,
       centerTitle: false,
       leading: null,
+      automaticallyImplyLeading: false,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

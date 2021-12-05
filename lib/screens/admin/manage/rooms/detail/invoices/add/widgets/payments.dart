@@ -80,7 +80,7 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
-                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                  fontFamily: GoogleFonts.openSans().fontFamily,
                 ),
               ),
               Text(
@@ -88,7 +88,7 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
-                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                  fontFamily: GoogleFonts.openSans().fontFamily,
                 ),
               ),
             ],
@@ -103,7 +103,7 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
-                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                  fontFamily: GoogleFonts.openSans().fontFamily,
                 ),
               ),
               Text(
@@ -111,7 +111,7 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
-                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                  fontFamily: GoogleFonts.openSans().fontFamily,
                 ),
               ),
             ],
@@ -126,7 +126,7 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
-                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                  fontFamily: GoogleFonts.openSans().fontFamily,
                 ),
               ),
               Text(
@@ -134,7 +134,7 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
-                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                  fontFamily: GoogleFonts.openSans().fontFamily,
                 ),
               ),
             ],

@@ -1,13 +1,15 @@
-import 'package:bvu_dormitory/models/user.dart';
-import 'package:bvu_dormitory/screens/shared/profile/profile.screen.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+
+import 'package:bvu_dormitory/models/user.dart';
+import 'package:bvu_dormitory/screens/shared/profile/profile.screen.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/screens/shared/messages/messages.screen.dart';
 import 'package:bvu_dormitory/screens/shared/newsfeed/newsfeed.screen.dart';
 import 'package:bvu_dormitory/screens/student/room/student.room.screen.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class HomeBottomNavItem {
   String title;
@@ -51,8 +53,8 @@ class StudentHomeController extends BaseController {
         ),
         HomeBottomNavItem(
           title: appLocalizations!.home_screen_navbar_item_newsfeed,
-          icon: FluentIcons.news_24_regular,
-          activeIcon: FluentIcons.news_24_filled,
+          icon: Ionicons.notifications_outline,
+          activeIcon: Ionicons.notifications,
           screen: NewsFeedScreen(user: student),
         ),
         HomeBottomNavItem(
