@@ -443,7 +443,8 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
 
       final formKey = GlobalKey<FormState>();
       final payerController = TextEditingController(text: payment?.studentName);
-      final amountController = TextEditingController(text: NumberFormat('#,###').format(payment?.amount));
+      final amountController =
+          TextEditingController(text: payment != null ? NumberFormat('#,###').format(payment.amount) : "");
       final notesController = TextEditingController(text: payment?.notes);
 
       return Container(

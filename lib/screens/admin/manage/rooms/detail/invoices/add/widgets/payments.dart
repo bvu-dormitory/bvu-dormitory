@@ -158,7 +158,7 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
           // gradient: AppColor.mainAppBarGradientColor,
         ),
         child: const Padding(
-          padding: EdgeInsets.only(top: 5, bottom: 5),
+          padding: EdgeInsets.only(top: 7, bottom: 5),
           child: Icon(FluentIcons.note_add_24_regular),
         ),
       ),
