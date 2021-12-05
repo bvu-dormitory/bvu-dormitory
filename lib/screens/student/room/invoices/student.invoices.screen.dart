@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/models/user.dart';
+import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/invoices/add/rooms.detail.invoices.add.screen.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +23,11 @@ class StudentInvoicesScreen extends BaseScreen<StudentInvoicesController> {
     Key? key,
     String? previousPageTitle,
     required this.room,
+    required this.student,
   }) : super(key: key, previousPageTitle: "$previousPageTitle ${room.name}", haveNavigationBar: true);
 
   final Room room;
+  final Student? student;
 
   @override
   StudentInvoicesController provideController(BuildContext context) {
@@ -109,10 +113,16 @@ class StudentInvoicesScreen extends BaseScreen<StudentInvoicesController> {
                 ),
                 onPressed: () {
                   Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (context) => StudentInvoicesDetailScreen(
+                    builder: (context) => AdminRoomsDetailInvoicesAddScreen(
+                      room: room,
                       invoice: invoice,
-                      previousPageTitle: controller.title,
+                      previousPageTitle: AppLocalizations.of(context)!.admin_manage_room + ' ' + room.name,
+                      student: student,
                     ),
+                    // StudentInvoicesDetailScreen(
+                    //   invoice: invoice,
+                    //   previousPageTitle: controller.title,
+                    // ),
                   ));
                 },
               );

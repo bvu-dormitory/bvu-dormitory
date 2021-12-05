@@ -1,3 +1,7 @@
+import 'package:bvu_dormitory/models/user.dart';
+import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/invoices/add/widgets/invoice.dart';
+import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/invoices/add/widgets/payments.dart';
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,8 +11,6 @@ import 'package:provider/provider.dart';
 
 import 'package:bvu_dormitory/models/invoice.dart';
 import 'package:bvu_dormitory/base/base.screen.dart';
-import 'package:bvu_dormitory/models/building.dart';
-import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
 import 'rooms.detail.invoices.add.controller.dart';
 
@@ -18,10 +20,12 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
     String? previousPageTitle,
     required this.room,
     this.invoice,
+    this.student,
   }) : super(key: key, previousPageTitle: previousPageTitle, haveNavigationBar: true);
 
   final Invoice? invoice;
   final Room room;
+  final Student? student;
 
   @override
   AdminRoomsDetailInvoicesAddController provideController(BuildContext context) {
@@ -32,6 +36,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
           : AppLocalizations.of(context)!.admin_manage_invoice_view,
       room: room,
       invoice: invoice,
+      student: student,
     );
   }
 
@@ -50,13 +55,15 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
           },
         ),
         if (invoice != null) ...{
-          CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: const Icon(FluentIcons.delete_16_regular, color: Colors.red),
-            onPressed: () {
-              controller.deleteInvoice(invoice!);
-            },
-          ),
+          if (student == null) ...{
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              child: const Icon(FluentIcons.delete_16_regular, color: Colors.red),
+              onPressed: () {
+                controller.deleteInvoice(invoice!);
+              },
+            ),
+          }
         } else ...{
           CupertinoButton(
             padding: EdgeInsets.zero,
@@ -70,7 +77,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
 
   @override
   Widget body(BuildContext context) {
-    // final controller = context.read<AdminRoomsDetailInvoicesAddController>();
+    final controller = context.read<AdminRoomsDetailInvoicesAddController>();
 
     return SafeArea(
       // bottom: false,
@@ -81,8 +88,16 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
         child: Column(
           children: [
             Expanded(
-              child: Consumer<AdminRoomsDetailInvoicesAddController>(
-                builder: (context, controller, child) => controller.currentSegmentWidget,
+              child: FlipCard(
+                controller: controller.flipController,
+                fill: Fill.fillBack, // Fill the back side of the card to make in the same size as the front.
+                direction: FlipDirection.HORIZONTAL, // default
+                front: AdminRoomsDetailInvoicesAddInvoice(invoice: invoice),
+                back: AdminRoomsDetailInvoicesAddPayments(),
+                flipOnTouch: false,
+                // onFlipDone: (value) {
+                //   controller.updateCurrentSegment((controller.currentSegmentKey - 1).abs());
+                // },
               ),
             ),
             if (invoice != null) ...{
@@ -96,12 +111,16 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
   }
 
   _slider() {
-    return CupertinoSlidingSegmentedControl(
-      children: context.read<AdminRoomsDetailInvoicesAddController>().segmentKeys,
-      groupValue: context.watch<AdminRoomsDetailInvoicesAddController>().currentSegmentKey,
-      onValueChanged: (value) {
-        context.read<AdminRoomsDetailInvoicesAddController>().updateCurrentSegment(value);
-      },
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: CupertinoSlidingSegmentedControl(
+        children: context.read<AdminRoomsDetailInvoicesAddController>().segmentKeys,
+        groupValue: context.watch<AdminRoomsDetailInvoicesAddController>().currentSegmentKey,
+        onValueChanged: (value) {
+          context.read<AdminRoomsDetailInvoicesAddController>().updateCurrentSegment(value);
+        },
+      ),
     );
   }
 }

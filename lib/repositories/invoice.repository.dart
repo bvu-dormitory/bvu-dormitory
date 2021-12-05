@@ -37,6 +37,17 @@ class InvoiceRepository {
         .map((event) => Invoice.fromFireStoreDocument(event.docs.first));
   }
 
+  static invoiceIsNotDuplicate({required DocumentReference roomRef, required int month, required int year}) async {
+    final theInvoice = await instance
+        .collection(collectionPath)
+        .where('room', isEqualTo: roomRef)
+        .where('year', isEqualTo: year)
+        .where('month', isEqualTo: month)
+        .get();
+
+    return theInvoice.size == 0;
+  }
+
   static Future addInvoice(Invoice invoice) {
     return instance.collection(collectionPath).add(invoice.json);
   }

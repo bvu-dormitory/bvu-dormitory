@@ -271,15 +271,20 @@
     "admin_manage_invoice_export": "Xuất phiếu",
     "admin_manage_invoice_print": "Trình in hóa đơn",
     "admin_manage_invoice_time": "Thời gian",
+    "admin_manage_invoice_payment_add": "Thêm thanh toán",
+    "admin_manage_invoice_payment_submit": "Xác nhận thanh toán",
     "admin_manage_invoice_send": "Gửi tới phòng",
     "admin_manage_invoice_old_index": "Chỉ số cũ",
     "admin_manage_invoice_new_index": "Chỉ số mới",
     "admin_manage_invoice_notes": "Ghi chú",
+    "admin_manage_invoice_payer": "Người nộp tiền",
+    "admin_manage_invoice_payer_amount": "Số tiền",
     "admin_manage_invoice_cost_room": "Tiền phòng",
     "admin_manage_invoice_cost_discount": "Giảm",
     "admin_manage_invoice_cost_services": "Các dịch vụ",
     "admin_manage_invoice_cost_total": "Tổng tiền",
     "admin_manage_invoice_cost_subtotal": "Thành tiền",
+    "admin_manage_invoice_duplicated_time": "Tháng hoặc Năm bị trùng, vui lòng kiểm tra lại",
     "@admin_manage_invoice_month": {
         "placeholders": {
             "month": {

@@ -102,14 +102,14 @@ extension InvoicePaymentTypeName on InvoicePaymentType {
 
 class InvoicePayment {
   final int amount;
-  final List<Student> students;
+  final Student? student;
   final InvoicePaymentType type;
   final String? notes;
 
   InvoicePayment({
     required this.amount,
-    required this.students,
     required this.type,
+    this.student,
     this.notes,
   });
 
@@ -118,13 +118,13 @@ class InvoicePayment {
         'type': type.name,
         'notes': notes,
         // TODO: when a student moved out, maybe the student's info will not available
-        'students': students.map((e) => e.reference),
+        'student': student?.reference,
       };
 
   static InvoicePayment fromMap(Map<String, dynamic> s) {
     return InvoicePayment(
       amount: s['amount'],
-      students: s['students'],
+      student: s['student'],
       type: InvoicePaymentType.values.firstWhere(
         (element) => describeEnum(element) == s['type'],
         orElse: () => InvoicePaymentType.cash,

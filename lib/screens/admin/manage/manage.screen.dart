@@ -40,16 +40,20 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
 
   @override
   Widget body(BuildContext context) {
-    return Column(
-      children: [
-        // _sliverAppBar(context),
-        _header(),
-        const Expanded(child: AdminManageMenu()),
-        // AdminManageCharts(),
-        // Expanded(
-        //   child: AdminManageCharts(),
-        // )
-      ],
+    return Scrollbar(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // _sliverAppBar(context),
+            _header(),
+            const AdminManageMenu(),
+            // AdminManageCharts(),
+            // Expanded(
+            //   child: AdminManageCharts(),
+            // )
+          ],
+        ),
+      ),
     );
   }
 
@@ -130,28 +134,42 @@ class AdminManageScreen extends BaseScreen<AdminManageController> {
 
     return ClipPath(
       clipper: WaveClipperTwo(),
-      child: Container(
-        width: double.infinity,
-        alignment: Alignment.topLeft,
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, left: 20, right: 20, bottom: 45),
-        decoration: BoxDecoration(
-          gradient: AppColor.mainAppBarGradientColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.01),
-              blurRadius: 20,
-              offset: const Offset(0, 1),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        clipBehavior: Clip.antiAlias,
+        children: [
+          Image(
+            image: Image.asset('lib/assets/kytucxa-new.jpeg').image,
+            fit: BoxFit.cover,
+            height: 200,
+            width: double.infinity,
+            alignment: Alignment.topRight,
+          ),
+          Container(
+            width: double.infinity,
+            alignment: Alignment.topLeft,
+            clipBehavior: Clip.antiAlias,
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, left: 20, right: 20, bottom: 55),
+            decoration: BoxDecoration(
+              gradient: AppColor.mainAppBarGradientColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.01),
+                  blurRadius: 20,
+                  offset: const Offset(0, 1),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _appNameSection(),
-            const SizedBox(height: 30),
-            _nameSection(),
-          ],
-        ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _appNameSection(),
+                const SizedBox(height: 30),
+                _nameSection(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

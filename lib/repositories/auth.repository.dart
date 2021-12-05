@@ -17,9 +17,9 @@ class AuthRepository {
     return Future(() => theUser != null);
   }
 
-  static Future<bool> isPhoneNumberRegistered(String phoneNumber) {
-    return UserRepository.isFireStoreUserExists(phoneNumber);
-  }
+  // static Future<bool> isPhoneNumberRegistered(String phoneNumber) {
+  //   return UserRepository.isFireStoreUserExists(phoneNumber);
+  // }
 
   /// signing out current logged-in user
   static Future<bool> signOut() async {

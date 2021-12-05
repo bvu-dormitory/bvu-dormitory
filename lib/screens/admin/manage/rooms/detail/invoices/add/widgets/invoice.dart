@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:bvu_dormitory/repositories/invoice.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tuple/tuple.dart';
 
+import 'package:bvu_dormitory/repositories/invoice.repository.dart';
 import 'package:bvu_dormitory/app/app.controller.dart';
 import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/models/invoice.dart';
@@ -333,6 +333,7 @@ class _AdminRoomsDetailInvoicesAddInvoiceState extends State<AdminRoomsDetailInv
         );
       }
 
+      // the following service param is included old index if exists
       _invoiceServiceItem({required Service service, required int index}) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

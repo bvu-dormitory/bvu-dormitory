@@ -1,4 +1,6 @@
+import 'package:bvu_dormitory/models/user.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/repairs/rooms.detail.repairs.screen.dart';
+import 'package:bvu_dormitory/screens/student/home/student.home.controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,9 +24,12 @@ class StudentRoomController extends BaseController {
   StudentRoomController({
     required BuildContext context,
     required String title,
-  }) : super(context: context, title: title);
+  }) : super(context: context, title: title) {
+    student = context.read<StudentHomeController>().student;
+  }
 
   late Room? room;
+  late Student student;
 
   TextStyle get menuGroupTitleStyle => TextStyle(
         fontWeight: FontWeight.w600,
@@ -118,6 +123,7 @@ class StudentRoomController extends BaseController {
                           builder: (context) => StudentInvoicesScreen(
                             previousPageTitle: title,
                             room: room!,
+                            student: student,
                           ),
                         ),
                       );

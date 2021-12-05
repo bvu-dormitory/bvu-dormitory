@@ -22,6 +22,11 @@ class UserRepository {
     return user.size > 0;
   }
 
+  static Future<bool> isFireStoreUserExistsExcept(String phoneNumber, String? except) async {
+    var user = await instance.where('phone_number', isEqualTo: phoneNumber, isNotEqualTo: except).get();
+    return user.size > 0;
+  }
+
   static Future<AppUser?> getCurrentFireStoreUser() async {
     var user = await instance
         .where('phone_number', isEqualTo: AuthRepository.instance.currentUser?.phoneNumber?.replaceFirst("+84", "0"))

@@ -1,14 +1,25 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
+import 'package:bvu_dormitory/models/user.dart';
+import 'package:bvu_dormitory/repositories/room.repository.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/invoices/add/widgets/invoice.dart';
+import 'package:bvu_dormitory/widgets/app.form.field.dart';
+import 'package:bvu_dormitory/widgets/app.form.picker.dart';
+import 'package:bvu_dormitory/widgets/app.thousand_seperator.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:printing/printing.dart';
+import 'package:provider/src/provider.dart';
+import 'package:spannable_grid/spannable_grid.dart';
 import 'package:tuple/tuple.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -27,10 +38,13 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
   late dynamic currentSegmentWidget;
   var currentSegmentKey = 0;
   late final segmentKeys;
-  late final _segmentWidgets;
+
+  var flipController = FlipCardController();
 
   void updateCurrentSegment(Object? value) {
-    currentSegmentWidget = _segmentWidgets[value];
+    // currentSegmentWidget = _segmentWidgets[value];
+    flipController.toggleCard();
+
     currentSegmentKey = value as int;
     notifyListeners();
   }
@@ -40,6 +54,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
     required String title,
     required this.room,
     this.invoice,
+    this.student,
   }) : super(context: context, title: title) {
     notesController = TextEditingController(text: invoice?.notes);
     dateController = TextEditingController(
@@ -50,10 +65,6 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
     segmentKeys = {
       0: Text(AppLocalizations.of(context)!.admin_manage_invoice_detail),
       1: Text(AppLocalizations.of(context)!.student_invoice_payments),
-    };
-    _segmentWidgets = {
-      0: AdminRoomsDetailInvoicesAddInvoice(invoice: invoice),
-      1: AdminRoomsDetailInvoicesAddPayments(),
     };
 
     Future.delayed(const Duration(seconds: 1), () {
@@ -69,6 +80,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
 
   final Invoice? invoice;
   final Room room;
+  final Student? student;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   int totalCost = 0;
@@ -102,7 +114,8 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
       subTotal = service.price - discounts;
     } else {
       final newIndex = int.tryParse(serviceControllers[index].item3!.text) ?? 0;
-      subTotal = service.price * newIndex - discounts;
+      final oldIndex = service.oldIndex ?? 0;
+      subTotal = (service.price * (newIndex - oldIndex)) - discounts;
     }
 
     return NumberFormat('#,###').format(subTotal) + ' đ';
@@ -125,7 +138,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
         final newIndex = int.tryParse(e.item3?.text ?? "") ?? 0;
 
         // old index of this invoice is new index of the lastest invoice
-        final oldIndex = e.item1.newIndex ?? 0;
+        final oldIndex = e.item1.oldIndex ?? 0;
 
         // service.price * (newIndex - oldIndex)
         sum = e.item1.price * (newIndex - oldIndex);
@@ -160,7 +173,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
           unit: e.item1.unit,
           type: e.item1.type,
           discounts: int.tryParse(e.item2.text.split(',').join('')),
-          oldIndex: e.item1.newIndex,
+          oldIndex: e.item1.oldIndex,
           newIndex: int.tryParse(e.item3?.text ?? ""),
         );
 
@@ -184,8 +197,15 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
         showLoadingDialog();
 
         try {
-          await InvoiceRepository.addInvoice(getFormValue());
-          navigator.pop();
+          final invoiceToAdd = getFormValue();
+
+          if (await InvoiceRepository.invoiceIsNotDuplicate(
+              roomRef: room.reference!, month: invoiceToAdd.month, year: invoiceToAdd.year)) {
+            await InvoiceRepository.addInvoice(invoiceToAdd);
+            navigator.pop();
+          } else {
+            showSnackbar(appLocalizations!.admin_manage_invoice_duplicated_time, const Duration(seconds: 5), () {});
+          }
         } catch (e) {
           showSnackbar(e.toString(), const Duration(seconds: 5), () {});
           log(e.toString());
@@ -293,7 +313,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
             children: [
               pw.Center(
                 child: pw.Text(
-                  "Hóa đơn tiền phòng",
+                  "Giấy báo tiền phòng",
                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 30, font: fontData),
                 ),
               ),
@@ -413,5 +433,156 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
     ); // Pa
 
     return pdf;
+  }
+
+  void showAddPaymentDialog() {
+    _body() {
+      _studentsPicker() {
+        final formKey = GlobalKey<FormState>();
+        // final
+
+        return StreamBuilder<List<Student>>(
+          stream: RoomRepository.syncStudentsInRoom(room),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
+            }
+
+            if (snapshot.hasData) {
+              return Form(
+                key: formKey,
+                child: SpannableGrid(
+                  editingOnLongPress: false,
+                  columns: 1,
+                  rows: 4,
+                  rowHeight: 100,
+                  cells: [
+                    SpannableGridCellData(
+                      id: 1,
+                      column: 1,
+                      row: 1,
+                      child: AppFormField(
+                        label: appLocalizations!.admin_manage_invoice_payer,
+                        maxLength: 100,
+                        context: context,
+                        required: true,
+                        editable: false,
+                        controller: TextEditingController(),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return appLocalizations!.app_form_field_required;
+                          }
+                        },
+                        type: AppFormFieldType.picker,
+                        picker: AppFormPicker(
+                          type: AppFormPickerFieldType.custom,
+                          dataList: snapshot.data!.map((e) => e.fullName).toList(),
+                          onSelectedItemChanged: (index) {},
+                        ),
+                      ),
+                    ),
+                    SpannableGridCellData(
+                      id: 2,
+                      column: 1,
+                      row: 2,
+                      child: AppFormField(
+                        label: appLocalizations!.admin_manage_invoice_payer_amount,
+                        maxLength: 100,
+                        required: true,
+                        keyboardType: TextInputType.number,
+                        context: context,
+                        controller: TextEditingController(),
+                        formatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          ThousandsSeparatorInputFormatter(),
+                        ],
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return appLocalizations!.app_form_field_required;
+                          }
+                        },
+                      ),
+                    ),
+                    SpannableGridCellData(
+                      id: 3,
+                      column: 1,
+                      row: 3,
+                      rowSpan: 2,
+                      child: AppFormField(
+                        label: appLocalizations!.admin_manage_invoice_notes,
+                        maxLength: 100,
+                        maxLines: 5,
+                        keyboardAction: TextInputAction.newline,
+                        keyboardType: TextInputType.multiline,
+                        context: context,
+                        controller: TextEditingController(),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return const CupertinoActivityIndicator(radius: 10);
+          },
+        );
+      }
+
+      return Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            _studentsPicker(),
+            CupertinoButton(
+              child: Text(appLocalizations!.admin_manage_invoice_payment_submit),
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  //
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    showCupertinoModalBottomSheet(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.75),
+      builder: (context) => Material(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // header
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(width: 1, color: AppColor.borderColor(context.read<AppController>().appThemeMode)),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    appLocalizations!.admin_manage_invoice_payment_add,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    child: const Icon(AntDesign.close),
+                    onPressed: () => navigator.pop(),
+                  ),
+                ],
+              ),
+            ),
+
+            _body(),
+          ],
+        ),
+      ),
+    );
   }
 }

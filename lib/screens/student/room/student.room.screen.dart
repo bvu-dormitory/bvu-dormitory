@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/invoices/add/rooms.detail.invoices.add.screen.dart';
 import 'package:bvu_dormitory/screens/student/room/invoices/detail/student.invoices.detail.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,8 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
   StudentRoomScreen({Key? key, String? previousPageTitle})
       : super(key: key, previousPageTitle: previousPageTitle, haveNavigationBar: false);
 
+  late final Student student;
+
   @override
   StudentRoomController provideController(BuildContext context) {
     return StudentRoomController(
@@ -41,13 +44,13 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
 
   @override
   Widget body(BuildContext context) {
+    student = context.read<StudentHomeController>().student;
+
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.dark,
       ),
     );
-
-    final student = context.read<StudentHomeController>().student;
 
     return SafeArea(
         top: false,
@@ -56,7 +59,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _roomHeader(student),
+              _roomHeader(),
               Flexible(
                 child: _roomBody(student),
               ),
@@ -65,7 +68,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
         ));
   }
 
-  _roomHeader(Student student) {
+  _roomHeader() {
     _appNameSection() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,7 +100,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
       );
     }
 
-    _nameSection(Student student) {
+    _nameSection() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -178,7 +181,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
               children: [
                 _appNameSection(),
                 const SizedBox(height: 20),
-                _nameSection(student),
+                _nameSection(),
               ],
             ),
           ),
@@ -191,7 +194,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
           bottom: -70,
           child: Container(
             padding: const EdgeInsets.all(20),
-            child: _roomCurrentInvoice(student),
+            child: _roomCurrentInvoice(),
           ),
         ),
       ],
@@ -251,7 +254,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
     );
   }
 
-  _roomCurrentInvoice(Student student) {
+  _roomCurrentInvoice() {
     final controller = context.read<StudentRoomController>();
 
     return Container(
@@ -311,6 +314,8 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
                 future: RoomRepository.loadRoomFromRef(student.room!),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    final theRoom = snapshot.data!;
+
                     return StreamBuilder<Invoice?>(
                       stream: InvoiceRepository.getLastestInvoiceInRoom(snapshot.data!.reference!),
                       builder: (context, snapshot) {
@@ -322,10 +327,17 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
                           return CupertinoButton(
                             onPressed: () {
                               Navigator.of(context).push(CupertinoPageRoute(
-                                builder: (context) => StudentInvoicesDetailScreen(
-                                  invoice: snapshot.data!,
-                                  previousPageTitle: AppLocalizations.of(context)!.admin_manage_room,
+                                builder: (context) => AdminRoomsDetailInvoicesAddScreen(
+                                  room: theRoom,
+                                  invoice: theInvoice,
+                                  previousPageTitle:
+                                      AppLocalizations.of(context)!.admin_manage_room + ' ' + theRoom.name,
+                                  student: student,
                                 ),
+                                // StudentInvoicesDetailScreen(
+                                //   invoice: snapshot.data!,
+                                //   previousPageTitle: AppLocalizations.of(context)!.admin_manage_room,
+                                // ),
                               ));
                             },
                             padding: EdgeInsets.zero,

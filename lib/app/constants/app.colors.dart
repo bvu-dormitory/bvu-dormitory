@@ -28,7 +28,7 @@ class AppColor {
 
   // border color (floating on the background color)
   static get borderColorLight => Colors.grey.withOpacity(0.3);
-  static get borderColorDark => Colors.grey.withOpacity(0.9);
+  static get borderColorDark => Colors.grey.withOpacity(0.5);
   static Color borderColor(ThemeMode themeMode) => themeMode == ThemeMode.light ? borderColorLight : borderColorDark;
 
   // text color
@@ -39,10 +39,7 @@ class AppColor {
   static LinearGradient get mainAppBarGradientColor => LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [
-          Colors.blue.shade900,
-          Colors.purple.shade800,
-        ],
+        colors: [Colors.blue.shade900.withOpacity(0.99), Colors.purple.shade800.withOpacity(0.8)],
       );
 
   static LinearGradient get secondaryAppBarGradientColor => LinearGradient(

@@ -1,7 +1,9 @@
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BaseProvider extends ChangeNotifier {}
 
@@ -11,6 +13,7 @@ class AppController extends BaseController {
 
   AppController({required BuildContext context}) : super(context: context, title: "") {
     checkConnectivity();
+    loadTheme();
   }
 
   void checkConnectivity() async {
@@ -41,6 +44,20 @@ class AppController extends BaseController {
 
   void changeTheme(ThemeMode mode) {
     _appThemeMode = mode;
+
+    SharedPreferences.getInstance().then((instance) {
+      instance.setString('theme_mode', describeEnum(mode));
+    });
+
     notifyListeners();
+  }
+
+  void loadTheme() {
+    SharedPreferences.getInstance().then((instance) {
+      changeTheme(
+        ThemeMode.values.firstWhere((element) => describeEnum(element) == instance.getString('theme_mode'),
+            orElse: () => ThemeMode.dark),
+      );
+    });
   }
 }
