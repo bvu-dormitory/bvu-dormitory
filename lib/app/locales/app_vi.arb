@@ -114,6 +114,8 @@
     "admin_manage_repair": "Yêu cầu sửa chữa",
     "admin_manage_repair_compact": "Sửa chữa",
     "admin_manage_stat": "Thống kê",
+    "admin_manage_report": "Báo cáo",
+    "admin_manage_export": "Xuất thông tin",
 
 
     "admin_manage_student_all": "Tổng số",
@@ -311,6 +313,11 @@
     },
 
 
+    "newsfeed_title": "Tiêu đề thông báo",
+    "newsfeed_content": "Nội dung thông báo",
+    "newsfeed_error_content_length": "Nội dung không đủ hoặc quá dài (tối đa 255 kí tự)",
+
+
     "student_invoice_history": "Lịch sử thanh toán",
     "student_invoice_more": "Chi tiết",
     "student_invoice_current": "Hóa đơn tháng trước",
@@ -333,6 +340,7 @@
 
     "admin_reports_repairs_all": "Tất cả yêu cầu",
     "admin_reports_repairs_waiting": "Đang chờ xử lý",
+    "admin_reports_repairs_done": "Đã xử lý",
     "admin_reports_item_all": "Tất cả tài sản",
     "admin_reports_item_not_attached": "Tài sản chưa gán phòng",
     "admin_reports_item_attached": "Tài sản đã gán phòng",

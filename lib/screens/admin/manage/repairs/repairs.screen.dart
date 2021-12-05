@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/app/app.controller.dart';
+import 'package:bvu_dormitory/app/constants/app.colors.dart';
 import 'package:bvu_dormitory/helpers/extensions/datetime.extensions.dart';
 import 'package:bvu_dormitory/models/repair_request.dart';
 import 'package:bvu_dormitory/models/room.dart';
@@ -16,6 +18,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:bvu_dormitory/base/base.screen.dart';
 import 'package:provider/src/provider.dart';
+import 'package:tuple/tuple.dart';
 import 'repairs.controller.dart';
 
 class AdminRepairsScreen extends BaseScreen<AdminRepairsController> {
@@ -36,7 +39,13 @@ class AdminRepairsScreen extends BaseScreen<AdminRepairsController> {
       child: Scrollbar(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
-          child: _requestsList(),
+          child: Column(
+            children: [
+              _stats(),
+              const SizedBox(height: 50),
+              _requestsList(),
+            ],
+          ),
         ),
       ),
     );
@@ -129,6 +138,104 @@ class AdminRepairsScreen extends BaseScreen<AdminRepairsController> {
             }
           },
         );
+      },
+    );
+  }
+
+  _stats() {
+    final controller = context.read<AdminRepairsController>();
+
+    // Tuple<all requests, waiting requests>
+    return StreamBuilder<List<RepairRequest>>(
+      stream: RepairRequestRepository.countAll(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          log(snapshot.error.toString());
+          controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
+        }
+
+        if (snapshot.hasData) {
+          final theList = snapshot.data!;
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
+                    // color: Colors.green.shade100,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 0.5,
+                      color: AppColor.borderColor(context.read<AppController>().appThemeMode),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        theList.where((element) => element.done).toList().length.toString(),
+                        style: const TextStyle(
+                          fontSize: 30,
+                          color: Colors.green,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        AppLocalizations.of(context)!.admin_reports_repairs_done,
+                        style: TextStyle(color: Colors.green.shade800),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(width: 20),
+              //
+              Flexible(
+                flex: 2,
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColor.secondaryBackgroundColor(context.read<AppController>().appThemeMode),
+                    // color: Colors.amber.shade100,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 0.5,
+                      color: AppColor.borderColor(context.read<AppController>().appThemeMode),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        theList.where((element) => !element.done).toList().length.toString(),
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.amber.shade900,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        AppLocalizations.of(context)!.admin_reports_repairs_waiting,
+                        style: TextStyle(color: Colors.amber.shade800),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
+
+        return const CupertinoActivityIndicator(radius: 10);
       },
     );
   }

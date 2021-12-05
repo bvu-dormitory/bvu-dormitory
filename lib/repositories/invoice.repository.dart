@@ -48,6 +48,10 @@ class InvoiceRepository {
     return theInvoice.size == 0;
   }
 
+  // static Stream<int> totalRevenue() {
+  //   final invoices =
+  // }
+
   static Future addInvoice(Invoice invoice) {
     return instance.collection(collectionPath).add(invoice.json);
   }

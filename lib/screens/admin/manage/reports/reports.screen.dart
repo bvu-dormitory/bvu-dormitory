@@ -14,7 +14,7 @@ class AdminReportsScreen extends BaseScreen<AdminReportsController> {
 
   @override
   AdminReportsController provideController(BuildContext context) {
-    return AdminReportsController(context: context, title: AppLocalizations.of(context)!.admin_manage_stat);
+    return AdminReportsController(context: context, title: AppLocalizations.of(context)!.admin_manage_export);
   }
 
   @override

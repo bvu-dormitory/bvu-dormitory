@@ -27,6 +27,7 @@ class AdminHomeScreen extends BaseScreen<AdminHomeController> {
 
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
+        currentIndex: controller.currentNavBarIndex,
         iconSize: 22,
         activeColor: AppColor.mainColor(context.watch<AppController>().appThemeMode),
         items: List.generate(

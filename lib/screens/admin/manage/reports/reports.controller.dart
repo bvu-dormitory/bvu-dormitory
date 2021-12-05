@@ -24,6 +24,11 @@ class AdminReportsController extends BaseController {
               icon: const Icon(AntDesign.Safety),
               onPressed: () {},
             ),
+            AppMenuGroupItem(
+              title: appLocalizations!.admin_manage_student_absent,
+              icon: const Icon(AntDesign.close),
+              onPressed: () {},
+            ),
           ],
         ),
         AppMenuGroup(
@@ -51,12 +56,12 @@ class AdminReportsController extends BaseController {
             ),
             AppMenuGroupItem(
               title: appLocalizations!.admin_reports_item_not_attached,
-              icon: const Icon(MaterialCommunityIcons.test_tube_empty),
+              icon: const Icon(AntDesign.logout),
               onPressed: () {},
             ),
             AppMenuGroupItem(
               title: appLocalizations!.admin_reports_item_attached,
-              icon: const Icon(FluentIcons.attach_24_regular),
+              icon: const Icon(AntDesign.login),
               onPressed: () {},
             ),
           ],

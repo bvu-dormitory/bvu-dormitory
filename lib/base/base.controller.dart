@@ -172,13 +172,15 @@ abstract class BaseController extends ChangeNotifier {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          title,
-                          style: titleStyle ??
-                              const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
+                        Flexible(
+                          child: Text(
+                            title,
+                            style: titleStyle ??
+                                const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
                         ),
                         CupertinoButton(
                             padding: EdgeInsets.zero,

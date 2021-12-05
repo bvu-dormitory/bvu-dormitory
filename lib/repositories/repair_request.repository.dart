@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bvu_dormitory/models/repair_request.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tuple/tuple.dart';
 
 class RepairRequestRepository {
   static final instance = FirebaseFirestore.instance;
@@ -34,6 +35,13 @@ class RepairRequestRepository {
     return instance
         .collection(collectionPath)
         .where('done', isEqualTo: false)
+        .snapshots()
+        .map((event) => event.docs.map((e) => RepairRequest.fromFireStoreDocument(e)).toList());
+  }
+
+  static Stream<List<RepairRequest>> countAll() {
+    return instance
+        .collection(collectionPath)
         .snapshots()
         .map((event) => event.docs.map((e) => RepairRequest.fromFireStoreDocument(e)).toList());
   }

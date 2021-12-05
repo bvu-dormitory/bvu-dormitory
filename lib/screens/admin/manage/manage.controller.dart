@@ -75,8 +75,8 @@ class AdminManageController extends BaseController {
           screen: AdminRepairsScreen(previousPageTitle: title),
         ),
         ManageIconItem(
-          title: appLocalizations!.admin_manage_stat,
-          iconPath: 'lib/assets/icons/pie-chart-1.png',
+          title: appLocalizations!.admin_manage_report,
+          iconPath: 'lib/assets/icons/excel.png',
           screen: AdminReportsScreen(previousPageTitle: title),
         ),
       ];
