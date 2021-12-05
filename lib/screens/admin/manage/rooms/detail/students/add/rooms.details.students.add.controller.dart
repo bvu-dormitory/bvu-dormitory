@@ -58,6 +58,7 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
 
       _dateOfBirth = DateTime(2000, 9, 1);
       _joinDate = DateTime.now();
+      _gender = UserGender.male.name;
 
       genderController = TextEditingController(text: UserGender.male.name);
       lastNameController = TextEditingController(text: "Nguyễn");

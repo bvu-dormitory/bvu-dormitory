@@ -163,7 +163,7 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
         Image(
           image: Image.asset('lib/assets/kytucxa-new.jpeg').image,
           fit: BoxFit.cover,
-          height: 250,
+          height: 230,
           width: double.infinity,
           alignment: Alignment.topRight,
         ),
@@ -390,8 +390,8 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
             clipBehavior: Clip.antiAlias,
             child: BackdropFilter(
               filter: ImageFilter.blur(
-                sigmaX: 30.0,
-                sigmaY: 30.0,
+                sigmaX: 25.0,
+                sigmaY: 25.0,
               ),
               child: FutureBuilder<Room>(
                 future: RoomRepository.loadRoomFromRef(student.room!),

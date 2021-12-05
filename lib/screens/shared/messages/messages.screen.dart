@@ -62,10 +62,12 @@ class MessagesScreen extends BaseScreen<MessageController> {
             ),
           ),
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _composeButton(context),
-              const SizedBox(width: 15),
-              _addGroupButton(context),
+              // _composeButton(context),
+              // const SizedBox(width: 15),
+              // _addGroupButton(context),
+              // _searchBox(),
             ],
           ),
         ],
@@ -134,4 +136,14 @@ class MessagesScreen extends BaseScreen<MessageController> {
       child: Text('data'),
     );
   }
+
+  // _searchBox() {
+  //   return Container(
+  //     // width: MediaQuery.of(context).size.width * 1.5,
+  //     decoration: BoxDecoration(
+  //       color: Colors.white.withOpacity(0.5),
+  //     ),
+  //     child: Text,
+  //   );
+  // }
 }

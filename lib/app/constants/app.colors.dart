@@ -39,7 +39,10 @@ class AppColor {
   static LinearGradient get mainAppBarGradientColor => LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Colors.blue.shade900.withOpacity(0.99), Colors.purple.shade800.withOpacity(0.8)],
+        colors: [
+          Colors.blue.shade900.withOpacity(0.99),
+          Colors.purple.shade800.withOpacity(0.8),
+        ],
       );
 
   static LinearGradient get secondaryAppBarGradientColor => LinearGradient(

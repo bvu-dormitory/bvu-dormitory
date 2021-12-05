@@ -87,9 +87,11 @@ class ProfileController extends BaseController {
           initialValue: describeEnum(appProvider.appThemeMode).toCapitalize(),
           dataList: ThemeMode.values.sublist(1).map((e) => describeEnum(e).toCapitalize()).toList(),
           onSelectedItemChanged: (value) {
-            appProvider.changeTheme(
-              ThemeMode.values.sublist(1)[value],
-            );
+            Future.delayed(const Duration(seconds: 1), () {
+              appProvider.changeTheme(
+                ThemeMode.values.sublist(1)[value],
+              );
+            });
           },
         );
       },

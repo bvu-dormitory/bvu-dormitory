@@ -47,14 +47,14 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CupertinoButton(
-          padding: EdgeInsets.zero,
-          child: const Icon(CupertinoIcons.printer, size: 20),
-          onPressed: () {
-            controller.print();
-          },
-        ),
         if (invoice != null) ...{
+          CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: const Icon(CupertinoIcons.printer, size: 20),
+            onPressed: () {
+              controller.print();
+            },
+          ),
           if (student == null) ...{
             CupertinoButton(
               padding: EdgeInsets.zero,
@@ -95,7 +95,7 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
                   fill: Fill.fillBack, // Fill the back side of the card to make in the same size as the front.
                   direction: FlipDirection.HORIZONTAL, // default
                   front: AdminRoomsDetailInvoicesAddInvoice(invoice: invoice),
-                  back: AdminRoomsDetailInvoicesAddPayments(),
+                  back: invoice != null ? AdminRoomsDetailInvoicesAddPayments() : Container(),
                   flipOnTouch: false,
                   // onFlipDone: (value) {
                   //   controller.updateCurrentSegment((controller.currentSegmentKey - 1).abs());

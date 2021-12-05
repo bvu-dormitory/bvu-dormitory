@@ -44,7 +44,7 @@ class Invoice extends FireStoreModel {
       return Service.fromMap(s as Map<String, dynamic>);
     }).toList();
 
-    log('converting payment:...' + snapshot['payments'].toString());
+    // log('converting payment:...' + snapshot['payments'].toString());
     final paymentsList = (snapshot['payments'] as List<dynamic>).map((s) {
       return InvoicePayment.fromMap(s as Map<String, dynamic>);
     }).toList();

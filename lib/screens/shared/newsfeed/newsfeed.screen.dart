@@ -62,15 +62,15 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
               fontWeight: FontWeight.w800,
             ),
           ),
-          Row(
-            children: [
-              if (user.role == UserRole.admin) ...{
-                _composeButton(context),
-              },
-              const SizedBox(width: 15),
-              _addGroupButton(context),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     if (user.role == UserRole.admin) ...{
+          //       _composeButton(context),
+          //     },
+          //     const SizedBox(width: 15),
+          //     _addGroupButton(context),
+          //   ],
+          // ),
         ],
       ),
       flexibleSpace: Container(
