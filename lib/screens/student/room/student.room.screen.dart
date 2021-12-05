@@ -257,6 +257,82 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
   _roomCurrentInvoice() {
     final controller = context.read<StudentRoomController>();
 
+    _invoiceCard(Room room, Invoice? invoice) {
+      return CupertinoButton(
+        onPressed: () {
+          if (invoice != null) {
+            Navigator.of(context).push(CupertinoPageRoute(
+              builder: (context) => AdminRoomsDetailInvoicesAddScreen(
+                room: room,
+                invoice: invoice,
+                previousPageTitle: AppLocalizations.of(context)!.admin_manage_room + ' ' + room.name,
+                student: student,
+              ),
+            ));
+          }
+        },
+        padding: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.student_invoice_current,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.75),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  if (invoice != null) ...{
+                    SelectableText(
+                      "${AppLocalizations.of(context)!.admin_manage_invoice_month(invoice.month)} - ${invoice.year}",
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: Colors.white.withOpacity(0.75),
+                      ),
+                    ),
+                  }
+                ],
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: Center(
+                  child: SelectableText(
+                    NumberFormat('#,###').format(invoice?.total ?? 0) + ' đ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                      foreground: Paint()
+                        ..shader = context.read<AppController>().appThemeMode == ThemeMode.light
+                            ? AppColor.mainAppBarGradientColor.createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0))
+                            : AppColor.secondaryAppBarGradientColor
+                                .createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withOpacity(0.15),
+                          blurRadius: 24,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Container(
       height: 150,
       clipBehavior: Clip.antiAlias,
@@ -323,95 +399,19 @@ class StudentRoomScreen extends BaseScreen<StudentRoomController> {
 
                         if (snapshot.hasData) {
                           final theInvoice = snapshot.data!;
-
-                          return CupertinoButton(
-                            onPressed: () {
-                              Navigator.of(context).push(CupertinoPageRoute(
-                                builder: (context) => AdminRoomsDetailInvoicesAddScreen(
-                                  room: theRoom,
-                                  invoice: theInvoice,
-                                  previousPageTitle:
-                                      AppLocalizations.of(context)!.admin_manage_room + ' ' + theRoom.name,
-                                  student: student,
-                                ),
-                                // StudentInvoicesDetailScreen(
-                                //   invoice: snapshot.data!,
-                                //   previousPageTitle: AppLocalizations.of(context)!.admin_manage_room,
-                                // ),
-                              ));
-                            },
-                            padding: EdgeInsets.zero,
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        AppLocalizations.of(context)!.student_invoice_current,
-                                        style: TextStyle(
-                                          color: Colors.white.withOpacity(0.75),
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                      SelectableText(
-                                        "${AppLocalizations.of(context)!.admin_manage_invoice_month(theInvoice.month)} - ${theInvoice.year}",
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          overflow: TextOverflow.ellipsis,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
-                                          color: Colors.white.withOpacity(0.75),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Expanded(
-                                    child: Center(
-                                      child: SelectableText(
-                                        NumberFormat('#,###').format(theInvoice.total) + ' đ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w900,
-                                          foreground: Paint()
-                                            ..shader = context.read<AppController>().appThemeMode == ThemeMode.light
-                                                ? AppColor.mainAppBarGradientColor
-                                                    .createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0))
-                                                : AppColor.secondaryAppBarGradientColor
-                                                    .createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
-                                          shadows: [
-                                            Shadow(
-                                              color: Colors.black.withOpacity(0.15),
-                                              blurRadius: 24,
-                                              offset: const Offset(0, 5),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  // CupertinoButton(
-                                  //   color: Colors.blue,
-                                  //   padding: EdgeInsets.zero,
-                                  //   child: Container(
-                                  //     padding: const EdgeInsets.only(top: 0, right: 15, bottom: 15, left: 15),
-                                  //     child: Text(AppLocalizations.of(context)!.student_invoice_more),
-                                  //   ),
-                                  //   onPressed: () {},
-                                  // ),
-                                ],
-                              ),
-                            ),
-                          );
+                          return _invoiceCard(theRoom, theInvoice);
                         }
 
                         if (snapshot.hasError) {
                           log(snapshot.error.toString());
+
+                          // no previous invoices
+                          if (snapshot.error.runtimeType == StateError) {
+                            if ((snapshot.error as StateError).message == "No element") {
+                              return _invoiceCard(theRoom, null);
+                            }
+                          }
+
                           controller.showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
                         }
 

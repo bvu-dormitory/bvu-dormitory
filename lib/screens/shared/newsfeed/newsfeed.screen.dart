@@ -49,6 +49,7 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
     return AppBar(
       elevation: 1,
       centerTitle: false,
+      leading: null,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

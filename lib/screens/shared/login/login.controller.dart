@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
 import 'package:bvu_dormitory/repositories/user.repository.dart';
+import 'package:bvu_dormitory/screens/shared/home/home.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -177,7 +178,11 @@ class LoginController extends BaseController {
           await AuthRepository.updateUserFCMToken();
 
           // navigate to the home screen
-          Navigator.pushReplacementNamed(context, AppRoutes.home.name);
+          Navigator.pushReplacement(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => const HomeScreen(),
+              ));
         }
       },
     ).catchError(

@@ -85,26 +85,29 @@ class AdminRoomsDetailInvoicesAddScreen extends BaseScreen<AdminRoomsDetailInvoi
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: Column(
-          children: [
-            Expanded(
-              child: FlipCard(
-                controller: controller.flipController,
-                fill: Fill.fillBack, // Fill the back side of the card to make in the same size as the front.
-                direction: FlipDirection.HORIZONTAL, // default
-                front: AdminRoomsDetailInvoicesAddInvoice(invoice: invoice),
-                back: AdminRoomsDetailInvoicesAddPayments(),
-                flipOnTouch: false,
-                // onFlipDone: (value) {
-                //   controller.updateCurrentSegment((controller.currentSegmentKey - 1).abs());
-                // },
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Column(
+            children: [
+              Expanded(
+                child: FlipCard(
+                  controller: controller.flipController,
+                  fill: Fill.fillBack, // Fill the back side of the card to make in the same size as the front.
+                  direction: FlipDirection.HORIZONTAL, // default
+                  front: AdminRoomsDetailInvoicesAddInvoice(invoice: invoice),
+                  back: AdminRoomsDetailInvoicesAddPayments(),
+                  flipOnTouch: false,
+                  // onFlipDone: (value) {
+                  //   controller.updateCurrentSegment((controller.currentSegmentKey - 1).abs());
+                  // },
+                ),
               ),
-            ),
-            if (invoice != null) ...{
-              const SizedBox(height: 10),
-              _slider(),
-            },
-          ],
+              if (invoice != null) ...{
+                const SizedBox(height: 10),
+                _slider(),
+              },
+            ],
+          ),
         ),
       ),
     );
