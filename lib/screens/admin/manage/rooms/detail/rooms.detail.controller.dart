@@ -1,14 +1,14 @@
-import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/items/rooms.detail.items.screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/models/building.dart';
 import 'package:bvu_dormitory/models/floor.dart';
 import 'package:bvu_dormitory/models/room.dart';
-import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/images/rooms.detail.images.screen.dart';
+import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/items/rooms.detail.items.screen.dart';
 import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/students/rooms.detail.students.screen.dart';
 import 'package:bvu_dormitory/widgets/app_menu_group.dart';
 
@@ -112,6 +112,7 @@ class AdminRoomsDetailController extends BaseController {
             navigator.push(CupertinoPageRoute(
               builder: (context) => AdminRoomsDetailInvoicesAddScreen(
                 room: room,
+                previousPageTitle: AppLocalizations.of(context)!.admin_manage_room + " " + room.name,
               ),
             ));
           },

@@ -63,4 +63,9 @@ class InvoiceRepository {
     invoice.payments.add(payment);
     return instance.collection(collectionPath).doc(invoice.id).set(invoice.json);
   }
+
+  static Future deletePayment({required int paymentIndex, required Invoice invoice}) {
+    invoice.payments.removeAt(paymentIndex);
+    return instance.collection(collectionPath).doc(invoice.id).set(invoice.json);
+  }
 }

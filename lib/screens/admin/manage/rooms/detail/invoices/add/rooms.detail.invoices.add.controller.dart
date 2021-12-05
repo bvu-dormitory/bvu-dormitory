@@ -437,12 +437,14 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
     return pdf;
   }
 
-  void showAddPaymentDialog() {
+  void showAddPaymentDialog({int? paymentIndex}) {
     _body() {
+      final payment = paymentIndex != null ? invoice!.payments[paymentIndex] : null;
+
       final formKey = GlobalKey<FormState>();
-      final payerController = TextEditingController();
-      final amountController = TextEditingController();
-      final notesController = TextEditingController();
+      final payerController = TextEditingController(text: payment?.studentName);
+      final amountController = TextEditingController(text: NumberFormat('#,###').format(payment?.amount));
+      final notesController = TextEditingController(text: payment?.notes);
 
       return Container(
         padding: const EdgeInsets.all(20),
@@ -484,7 +486,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
                                 return appLocalizations!.app_form_field_required;
                               }
                             },
-                            type: AppFormFieldType.picker,
+                            type: payment == null ? AppFormFieldType.picker : AppFormFieldType.normal,
                             picker: AppFormPicker(
                               type: AppFormPickerFieldType.custom,
                               dataList: snapshot.data!.map((e) => e.fullName).toList(),
@@ -506,6 +508,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
                             keyboardType: TextInputType.number,
                             context: context,
                             controller: amountController,
+                            editable: payment == null,
                             prefixIcon: const Icon(FluentIcons.number_symbol_24_regular, size: 20),
                             formatters: [
                               FilteringTextInputFormatter.digitsOnly,
@@ -527,6 +530,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
                             label: appLocalizations!.admin_manage_invoice_notes,
                             maxLength: 100,
                             maxLines: 5,
+                            editable: payment == null,
                             keyboardAction: TextInputAction.newline,
                             keyboardType: TextInputType.multiline,
                             context: context,
@@ -541,24 +545,36 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
                 return const CupertinoActivityIndicator(radius: 10);
               },
             ),
-            CupertinoButton(
-              child: Text(appLocalizations!.admin_manage_invoice_payment_submit),
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  // form validated, lets submit the payment
-                  log('submitting payment...');
-                  _submitPayment(
-                    InvoicePayment(
-                      amount: int.parse(amountController.text.replaceAll(',', '')),
-                      type: InvoicePaymentType.cash,
-                      notes: notesController.text.trim(),
-                      studentName: payerController.text.trim(),
-                      timestamp: Timestamp.fromDate(DateTime.now()),
-                    ),
-                  );
-                }
+            if (payment == null) ...{
+              CupertinoButton(
+                child: Text(appLocalizations!.admin_manage_invoice_payment_submit),
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    // form validated, lets submit the payment
+                    log('submitting payment...');
+                    _submitPayment(
+                      InvoicePayment(
+                        amount: int.parse(amountController.text.replaceAll(',', '')),
+                        type: InvoicePaymentType.cash,
+                        notes: notesController.text.trim(),
+                        studentName: payerController.text.trim(),
+                        timestamp: Timestamp.fromDate(DateTime.now()),
+                      ),
+                    );
+                  }
+                },
+              ),
+            } else ...{
+              if (student == null) ...{
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: const Icon(FluentIcons.delete_24_regular, color: Colors.red),
+                  onPressed: () {
+                    _deletePayment(paymentIndex!);
+                  },
+                ),
               },
-            ),
+            },
           ],
         ),
       );
@@ -583,7 +599,9 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    appLocalizations!.admin_manage_invoice_payment_add,
+                    paymentIndex == null
+                        ? appLocalizations!.admin_manage_invoice_payment_add
+                        : appLocalizations!.student_invoice_payments,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -614,5 +632,21 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
       navigator.pop();
       notifyListeners();
     }
+  }
+
+  void _deletePayment(int paymentIndex) async {
+    try {
+      await InvoiceRepository.deletePayment(paymentIndex: paymentIndex, invoice: invoice!);
+      showSnackbar(appLocalizations!.admin_manage_invoice_payment_deleted, const Duration(seconds: 3), () {});
+    } catch (e) {
+      showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+    } finally {
+      navigator.pop();
+      notifyListeners();
+    }
+  }
+
+  void onPaymentItemPressed(int index) {
+    showAddPaymentDialog(paymentIndex: index);
   }
 }
