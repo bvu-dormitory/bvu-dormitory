@@ -44,7 +44,9 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         _navBar(context),
-        _body(context),
+        Expanded(
+          child: _body(context),
+        ),
       ],
     );
   }
@@ -144,6 +146,7 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
         if (snapshot.hasData) {
           return ListView.builder(
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final inform = snapshot.data![index];
