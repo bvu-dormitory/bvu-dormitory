@@ -58,4 +58,9 @@ class InvoiceRepository {
       transaction.delete(freshInvoice.reference);
     });
   }
+
+  static Future addPayment({required InvoicePayment payment, required Invoice invoice}) {
+    invoice.payments.add(payment);
+    return instance.collection(collectionPath).doc(invoice.id).set(invoice.json);
+  }
 }

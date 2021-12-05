@@ -8,7 +8,9 @@ import 'package:bvu_dormitory/screens/admin/manage/rooms/detail/invoices/add/wid
 import 'package:bvu_dormitory/widgets/app.form.field.dart';
 import 'package:bvu_dormitory/widgets/app.form.picker.dart';
 import 'package:bvu_dormitory/widgets/app.thousand_seperator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flip_card/flip_card_controller.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -437,107 +439,123 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
 
   void showAddPaymentDialog() {
     _body() {
-      _studentsPicker() {
-        final formKey = GlobalKey<FormState>();
-        // final
-
-        return StreamBuilder<List<Student>>(
-          stream: RoomRepository.syncStudentsInRoom(room),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
-            }
-
-            if (snapshot.hasData) {
-              return Form(
-                key: formKey,
-                child: SpannableGrid(
-                  editingOnLongPress: false,
-                  columns: 1,
-                  rows: 4,
-                  rowHeight: 100,
-                  cells: [
-                    SpannableGridCellData(
-                      id: 1,
-                      column: 1,
-                      row: 1,
-                      child: AppFormField(
-                        label: appLocalizations!.admin_manage_invoice_payer,
-                        maxLength: 100,
-                        context: context,
-                        required: true,
-                        editable: false,
-                        controller: TextEditingController(),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return appLocalizations!.app_form_field_required;
-                          }
-                        },
-                        type: AppFormFieldType.picker,
-                        picker: AppFormPicker(
-                          type: AppFormPickerFieldType.custom,
-                          dataList: snapshot.data!.map((e) => e.fullName).toList(),
-                          onSelectedItemChanged: (index) {},
-                        ),
-                      ),
-                    ),
-                    SpannableGridCellData(
-                      id: 2,
-                      column: 1,
-                      row: 2,
-                      child: AppFormField(
-                        label: appLocalizations!.admin_manage_invoice_payer_amount,
-                        maxLength: 100,
-                        required: true,
-                        keyboardType: TextInputType.number,
-                        context: context,
-                        controller: TextEditingController(),
-                        formatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          ThousandsSeparatorInputFormatter(),
-                        ],
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return appLocalizations!.app_form_field_required;
-                          }
-                        },
-                      ),
-                    ),
-                    SpannableGridCellData(
-                      id: 3,
-                      column: 1,
-                      row: 3,
-                      rowSpan: 2,
-                      child: AppFormField(
-                        label: appLocalizations!.admin_manage_invoice_notes,
-                        maxLength: 100,
-                        maxLines: 5,
-                        keyboardAction: TextInputAction.newline,
-                        keyboardType: TextInputType.multiline,
-                        context: context,
-                        controller: TextEditingController(),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            return const CupertinoActivityIndicator(radius: 10);
-          },
-        );
-      }
+      final formKey = GlobalKey<FormState>();
+      final payerController = TextEditingController();
+      final amountController = TextEditingController();
+      final notesController = TextEditingController();
 
       return Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            _studentsPicker(),
+            StreamBuilder<List<Student>>(
+              stream: RoomRepository.syncStudentsInRoom(room),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  showSnackbar(snapshot.error.toString(), const Duration(seconds: 5), () {});
+                }
+
+                if (snapshot.hasData) {
+                  final studentsList = snapshot.data!;
+
+                  return Form(
+                    key: formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: SpannableGrid(
+                      editingOnLongPress: false,
+                      columns: 1,
+                      rows: 4,
+                      rowHeight: 100,
+                      cells: [
+                        SpannableGridCellData(
+                          id: 1,
+                          column: 1,
+                          row: 1,
+                          child: AppFormField(
+                            label: appLocalizations!.admin_manage_invoice_payer,
+                            maxLength: 50,
+                            context: context,
+                            required: true,
+                            editable: false,
+                            controller: payerController,
+                            prefixIcon: const Icon(FluentIcons.person_24_regular, size: 20),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return appLocalizations!.app_form_field_required;
+                              }
+                            },
+                            type: AppFormFieldType.picker,
+                            picker: AppFormPicker(
+                              type: AppFormPickerFieldType.custom,
+                              dataList: snapshot.data!.map((e) => e.fullName).toList(),
+                              required: true,
+                              onSelectedItemChanged: (index) {
+                                payerController.text = index == null ? "" : studentsList[index].fullName;
+                              },
+                            ),
+                          ),
+                        ),
+                        SpannableGridCellData(
+                          id: 2,
+                          column: 1,
+                          row: 2,
+                          child: AppFormField(
+                            label: appLocalizations!.admin_manage_invoice_payer_amount,
+                            maxLength: 10,
+                            required: true,
+                            keyboardType: TextInputType.number,
+                            context: context,
+                            controller: amountController,
+                            prefixIcon: const Icon(FluentIcons.number_symbol_24_regular, size: 20),
+                            formatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              ThousandsSeparatorInputFormatter(),
+                            ],
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return appLocalizations!.app_form_field_required;
+                              }
+                            },
+                          ),
+                        ),
+                        SpannableGridCellData(
+                          id: 3,
+                          column: 1,
+                          row: 3,
+                          rowSpan: 2,
+                          child: AppFormField(
+                            label: appLocalizations!.admin_manage_invoice_notes,
+                            maxLength: 100,
+                            maxLines: 5,
+                            keyboardAction: TextInputAction.newline,
+                            keyboardType: TextInputType.multiline,
+                            context: context,
+                            controller: notesController,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return const CupertinoActivityIndicator(radius: 10);
+              },
+            ),
             CupertinoButton(
               child: Text(appLocalizations!.admin_manage_invoice_payment_submit),
               onPressed: () {
                 if (formKey.currentState!.validate()) {
-                  //
+                  // form validated, lets submit the payment
+                  log('submitting payment...');
+                  _submitPayment(
+                    InvoicePayment(
+                      amount: int.parse(amountController.text.replaceAll(',', '')),
+                      type: InvoicePaymentType.cash,
+                      notes: notesController.text.trim(),
+                      studentName: payerController.text.trim(),
+                      timestamp: Timestamp.fromDate(DateTime.now()),
+                    ),
+                  );
                 }
               },
             ),
@@ -584,5 +602,17 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
         ),
       ),
     );
+  }
+
+  _submitPayment(InvoicePayment payment) async {
+    try {
+      await InvoiceRepository.addPayment(payment: payment, invoice: invoice!);
+      showSnackbar(appLocalizations!.admin_manage_invoice_payment_success, const Duration(seconds: 3), () {});
+    } catch (e) {
+      showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+    } finally {
+      navigator.pop();
+      notifyListeners();
+    }
   }
 }

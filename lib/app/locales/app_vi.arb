@@ -273,6 +273,7 @@
     "admin_manage_invoice_time": "Thời gian",
     "admin_manage_invoice_payment_add": "Thêm thanh toán",
     "admin_manage_invoice_payment_submit": "Xác nhận thanh toán",
+    "admin_manage_invoice_payment_success": "Thêm thanh toán thành công",
     "admin_manage_invoice_send": "Gửi tới phòng",
     "admin_manage_invoice_old_index": "Chỉ số cũ",
     "admin_manage_invoice_new_index": "Chỉ số mới",

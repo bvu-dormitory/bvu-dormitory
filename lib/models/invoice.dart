@@ -46,7 +46,6 @@ class Invoice extends FireStoreModel {
 
     log('converting payment:...' + snapshot['payments'].toString());
     final paymentsList = (snapshot['payments'] as List<dynamic>).map((s) {
-      log('a');
       return InvoicePayment.fromMap(s as Map<String, dynamic>);
     }).toList();
 
@@ -102,14 +101,16 @@ extension InvoicePaymentTypeName on InvoicePaymentType {
 
 class InvoicePayment {
   final int amount;
-  final Student? student;
+  final String studentName;
   final InvoicePaymentType type;
   final String? notes;
+  late final Timestamp timestamp;
 
   InvoicePayment({
     required this.amount,
     required this.type,
-    this.student,
+    required this.studentName,
+    required this.timestamp,
     this.notes,
   });
 
@@ -118,18 +119,20 @@ class InvoicePayment {
         'type': type.name,
         'notes': notes,
         // TODO: when a student moved out, maybe the student's info will not available
-        'student': student?.reference,
+        'student_name': studentName,
+        'timestamp': timestamp,
       };
 
   static InvoicePayment fromMap(Map<String, dynamic> s) {
     return InvoicePayment(
       amount: s['amount'],
-      student: s['student'],
+      studentName: s['student_name'],
       type: InvoicePaymentType.values.firstWhere(
         (element) => describeEnum(element) == s['type'],
         orElse: () => InvoicePaymentType.cash,
       ),
       notes: s['notes'],
+      timestamp: s['timestamp'],
     );
   }
 }

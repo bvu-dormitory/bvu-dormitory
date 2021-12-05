@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/models/invoice.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +27,7 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    controller = context.read<AdminRoomsDetailInvoicesAddController>();
+    controller = context.watch<AdminRoomsDetailInvoicesAddController>();
   }
 
   @override
@@ -45,7 +47,9 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
             child: _paymentsList(),
           ),
           if (controller.student == null) ...{
-            _addPaymentButton(),
+            if (controller.invoice!.total <= controller.invoice!.paid) ...{
+              _addPaymentButton(),
+            }
           },
         ],
       ),
@@ -65,24 +69,42 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.admin_manage_invoice_cost_total),
-              Text(NumberFormat('#,###').format(controller.totalCost) + ' đ'),
+              Text(
+                AppLocalizations.of(context)!.admin_manage_invoice_cost_total,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                NumberFormat('#,###').format(controller.invoice!.total) + ' đ',
+                style: const TextStyle(fontSize: 16),
+              ),
             ],
           ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.student_invoice_paid),
-              Text(NumberFormat('#,###').format(controller.invoice!.paid) + ' đ'),
+              Text(
+                AppLocalizations.of(context)!.student_invoice_paid,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                NumberFormat('#,###').format(controller.invoice!.paid) + ' đ',
+                style: const TextStyle(fontSize: 16),
+              ),
             ],
           ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.student_invoice_difference),
-              Text(NumberFormat('#,###').format(controller.invoice!.paid - controller.invoice!.total) + ' đ'),
+              Text(
+                AppLocalizations.of(context)!.student_invoice_difference,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                NumberFormat('#,###').format(controller.invoice!.total - controller.invoice!.paid) + ' đ',
+                style: const TextStyle(fontSize: 16),
+              ),
             ],
           ),
         ],
@@ -107,7 +129,30 @@ class _AdminRoomsDetailInvoicesAddPaymentsState extends State<AdminRoomsDetailIn
         itemBuilder: (context, index) {
           final thePayment = controller.invoice!.payments[index];
 
-          return ListTile(title: Text(thePayment.student?.fullName ?? "unknown"));
+          return Material(
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    thePayment.studentName,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    '+ ' + NumberFormat('#,###').format(thePayment.amount) + ' đ',
+                    style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+              // subtitle: DateTime.fromMillisecondsSinceEpoch(
+              //   thePayment.timestamp.millisecondsSinceEpoch,
+              // ).getReadableDateString(),
+              onTap: () {
+                log('payment item tapped');
+              },
+            ),
+          );
         },
       ),
     );

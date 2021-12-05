@@ -1,9 +1,11 @@
-import 'package:bvu_dormitory/base/base.controller.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity/connectivity.dart';
+
+import 'package:bvu_dormitory/base/base.controller.dart';
 
 class BaseProvider extends ChangeNotifier {}
 

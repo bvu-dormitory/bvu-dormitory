@@ -94,11 +94,12 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-  Image _backgroundImage() => Image.asset(
+  _backgroundImage() => Image.asset(
         'lib/assets/cs2.jpg',
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
         alignment: Alignment.center,
+        filterQuality: FilterQuality.high,
       );
 }
