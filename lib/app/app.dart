@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bvu_dormitory/services/notifications/notification.service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -28,17 +29,7 @@ class _ApplicationState extends State<Application> {
   void initState() {
     super.initState();
 
-    // allow receiving FCM messages if the app is in forground (visible to user)
-    FirebaseMessaging.onMessage.listen((event) {
-      logger.w('FCM foreground message coming');
-      logger.i(event);
-    });
-
-    // allow receiving FCM messages if the app is still alive (not terminated)
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      logger.w('FCM background message coming');
-      logger.i(event);
-    });
+    NotificationService.listen();
   }
 
   @override
@@ -57,9 +48,12 @@ class _ApplicationState extends State<Application> {
             future: AuthRepository.instance.userChanges().first,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                // log(snapshot.hasData.toString());
                 log('User logged in');
                 log(snapshot.data.toString());
+
+                // Fires when a new FCM token is generated.
+                // updating FCM token only if the user logged in
+                // FirebaseMessaging.instance.onTokenRefresh.listen(AuthRepository.updateUserFCMToken());
               }
 
               return MaterialApp(
@@ -72,6 +66,7 @@ class _ApplicationState extends State<Application> {
                     builder: (context) => AppRoutes.notFound.screen,
                   );
                 },
+                debugShowCheckedModeBanner: false,
                 onGenerateTitle: (context) {
                   return AppLocalizations.of(context)?.app_name ?? "app_name";
                 },

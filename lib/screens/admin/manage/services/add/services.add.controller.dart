@@ -182,7 +182,7 @@ class AdminServicesAddController extends BaseController {
       return;
     }
 
-    // forn data not yet valid
+    // form data not yet valid
     showSnackbar(
       appLocalizations!.app_form_validation_error,
       const Duration(seconds: 3),

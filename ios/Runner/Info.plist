@@ -15,15 +15,6 @@
 		<string>en_US</string>
 		<string>vi_VN</string>
 	</array>
-
-<key>LSApplicationQueriesSchemes</key>
-<array>
-  <string>https</string>
-  <string>http</string>
-	<string>sms</string>
-	<string>tel</string>
-</array>
-
 	<key>CFBundleName</key>
 	<string>BVU Dormitory</string>
 	<key>CFBundlePackageType</key>
@@ -57,6 +48,13 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
+		<string>http</string>
+		<string>sms</string>
+		<string>tel</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -67,6 +65,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

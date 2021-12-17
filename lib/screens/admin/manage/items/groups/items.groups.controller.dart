@@ -192,6 +192,22 @@ class AdminItemsGroupsController extends BaseController {
     }
   }
 
+  _deleteGroup(ItemGroup category) async {
+    if (await hasConnectivity()) {
+      showLoadingDialog();
+
+      try {
+        // checking category existing
+        await ItemRepository.deleteGroup(id: category.id!, parentCategoryId: parentCategory.id!);
+        navigator.pop();
+      } catch (e) {
+        showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+      } finally {
+        navigator.pop();
+      }
+    }
+  }
+
   // bottom sheet menu item
   onGroupItemContextMenuOpen(ItemGroup category) {
     showBottomSheetMenuModal(category.name, null, true, [
@@ -209,22 +225,6 @@ class AdminItemsGroupsController extends BaseController {
         ),
       ]),
     ]);
-  }
-
-  _deleteGroup(ItemGroup category) async {
-    if (await hasConnectivity()) {
-      showLoadingDialog();
-
-      try {
-        // checking category existing
-        await ItemRepository.deleteGroup(id: category.id!, parentCategoryId: parentCategory.id!);
-        navigator.pop();
-      } catch (e) {
-        showSnackbar(e.toString(), const Duration(seconds: 5), () {});
-      } finally {
-        navigator.pop();
-      }
-    }
   }
 
   // on item pressed => open detail page

@@ -140,6 +140,22 @@ class AdminItemsController extends BaseController {
     }
   }
 
+  _deleteCategory(ItemCategory category) async {
+    if (await hasConnectivity()) {
+      showLoadingDialog();
+
+      try {
+        // checking category existing
+        await ItemRepository.deleteCategory(id: category.id!);
+        navigator.pop();
+      } catch (e) {
+        showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+      } finally {
+        navigator.pop();
+      }
+    }
+  }
+
   // bottom sheet menu item
   onCategoryItemContextMenuOpen(ItemCategory category) {
     showBottomSheetMenuModal(category.name, null, true, [
@@ -157,22 +173,6 @@ class AdminItemsController extends BaseController {
         ),
       ]),
     ]);
-  }
-
-  _deleteCategory(ItemCategory category) async {
-    if (await hasConnectivity()) {
-      showLoadingDialog();
-
-      try {
-        // checking category existing
-        await ItemRepository.deleteCategory(id: category.id!);
-        navigator.pop();
-      } catch (e) {
-        showSnackbar(e.toString(), const Duration(seconds: 5), () {});
-      } finally {
-        navigator.pop();
-      }
-    }
   }
 
   // on item pressed => open detail page

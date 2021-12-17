@@ -1,15 +1,15 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
 import 'package:bvu_dormitory/repositories/user.repository.dart';
 import 'package:bvu_dormitory/screens/shared/home/home.screen.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/app/app.logger.dart';
-import 'package:bvu_dormitory/app/constants/app.routes.dart';
 
 class LoginController extends BaseController {
   LoginController({
@@ -154,17 +154,21 @@ class LoginController extends BaseController {
   void _signIn(PhoneAuthCredential credential) {
     AuthRepository.instance.signInWithCredential(credential).then(
       (userCredential) async {
-        logger.i('signin success...');
+        logger.i('signin success... re-checking if the user is existing in the Firestore database...');
         logger.i(userCredential);
 
+        // getting corresponding firestore user to the logged in user
+        final theFirestoreUser = await UserRepository.getUserWithPhoneNumer(userCredential.user);
+
         // if logged-in user with given phone number is not in the FireStore DB => delete the account
-        if (!await UserRepository.isUserWithPhoneNumerExists(userCredential.user)) {
+        if (theFirestoreUser != null) {
           userCredential.user?.delete().then(
             (value) {
-              showErrorDialog(appLocalizations?.login_error_user_not_exists ?? "login_error_user_not_exists");
+              showErrorDialog(appLocalizations!.login_error_user_not_exists);
               logger.w('user deleted...');
             },
           ).catchError((onError) {
+            /// TODO: need to be fixed
             logger.e('cannot delete the user...');
             logger.e(onError);
           });
@@ -192,19 +196,19 @@ class LoginController extends BaseController {
 
         switch (error.code) {
           case 'invalid-verification-code':
-            showErrorDialog(appLocalizations?.login_error_invalid_otp ?? "login_error_invalid_otp");
+            showErrorDialog(appLocalizations!.login_error_invalid_otp);
             break;
 
           case 'user-disabled':
-            showErrorDialog(appLocalizations?.login_error_account_disabled ?? "login_error_account_disabled");
+            showErrorDialog(appLocalizations!.login_error_account_disabled);
             break;
 
           case 'session-expired':
-            showErrorDialog(appLocalizations?.login_error_otp_timeout ?? "login_error_otp_timeout");
+            showErrorDialog(appLocalizations!.login_error_otp_timeout);
             break;
 
           case 'network-request-failed':
-            showErrorDialog(appLocalizations?.login_error_network_error ?? "login_error_network_error");
+            showErrorDialog(appLocalizations!.login_error_network_error);
             break;
 
           default:

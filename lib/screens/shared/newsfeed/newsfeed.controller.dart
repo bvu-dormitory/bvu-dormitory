@@ -170,6 +170,16 @@ class NewsFeedController extends BaseController {
     }
   }
 
+  void _deleteInform({required Inform inform}) async {
+    try {
+      await NewsFeedRepository.deleteInform(inform);
+    } catch (e) {
+      showSnackbar(e.toString(), const Duration(seconds: 5), () {});
+    } finally {
+      navigator.pop();
+    }
+  }
+
   onInformMenuButtonPressed(Inform inform) {
     showBottomSheetMenuModal(
       inform.title,
@@ -195,15 +205,5 @@ class NewsFeedController extends BaseController {
         ]),
       ],
     );
-  }
-
-  void _deleteInform({required Inform inform}) async {
-    try {
-      await NewsFeedRepository.deleteInform(inform);
-    } catch (e) {
-      showSnackbar(e.toString(), const Duration(seconds: 5), () {});
-    } finally {
-      navigator.pop();
-    }
   }
 }

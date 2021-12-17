@@ -146,6 +146,7 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
         if (snapshot.hasData) {
           return ListView.builder(
             shrinkWrap: true,
+            primary: false,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
@@ -172,6 +173,15 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
       width: 1,
       color: AppColor.borderColor(context.read<AppController>().appThemeMode),
     );
+
+    _informDateTime() {
+      var dateString =
+          DateTime.fromMillisecondsSinceEpoch(inform.timestamp.millisecondsSinceEpoch).getReadableDateString();
+
+      var time = DateTime.fromMillisecondsSinceEpoch(inform.timestamp.millisecondsSinceEpoch);
+
+      return "$dateString, ${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
+    }
 
     return Container(
       margin: const EdgeInsets.only(bottom: 30),
@@ -212,8 +222,7 @@ class NewsFeedScreen extends BaseScreen<NewsFeedController> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        DateTime.fromMillisecondsSinceEpoch(inform.timestamp.millisecondsSinceEpoch)
-                            .getReadableDateString(),
+                        _informDateTime(),
                         style: const TextStyle(fontWeight: FontWeight.w300, fontSize: 13),
                       ),
                     ],

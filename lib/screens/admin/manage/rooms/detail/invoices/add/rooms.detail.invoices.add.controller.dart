@@ -245,15 +245,6 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
     try {
       final pdf = await getInvoicePDF();
 
-      // getting the internal storage path
-      // Directory internalDirectory = await getApplicationDocumentsDirectory();
-      // String tempPath = internalDirectory.path;
-      // String filePath = '$tempPath/invoice';
-
-      // await Printing.layoutPdf(onLayout: (PdfPageFormat format) async {
-      //   log('saving to printer...');
-      //   return pdf.save();
-      // });
       showCupertinoModalBottomSheet(
         context: context,
         builder: (context) => Material(

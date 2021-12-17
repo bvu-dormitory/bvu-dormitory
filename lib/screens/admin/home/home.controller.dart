@@ -45,7 +45,7 @@ class AdminHomeController extends BaseController {
 
   // late final CupertinoTabController tabController;
 
-  int _currentNavBarIndex = 1;
+  int _currentNavBarIndex = 0;
   int get currentNavBarIndex => _currentNavBarIndex;
   set currentNavBarIndex(int index) {
     _currentNavBarIndex = index;
