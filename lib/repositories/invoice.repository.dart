@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bvu_dormitory/models/invoice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tuple/tuple.dart';
 
 class InvoiceRepository {
   static final instance = FirebaseFirestore.instance;
@@ -46,6 +47,38 @@ class InvoiceRepository {
         .get();
 
     return theInvoice.size == 0;
+  }
+
+  /// getting all revenue; remaining rooms
+  static Future<Tuple3<int, List<Invoice>, int>> allRevenue() async {
+    final allInvoices =
+        (await instance.collection(collectionPath).get()).docs.map((e) => Invoice.fromFireStoreDocument(e));
+
+    final revenue = allInvoices
+        .map((e) => e.payments.isEmpty
+            ? 0
+            : e.payments.map((e) => e.amount).reduce((value, element) => value + element)) // subtotal on each Invoice
+        .reduce((value, element) => value + element); // summing invoices
+
+    final remainingInvoices = allInvoices
+        .where((e) =>
+            e.payments.isEmpty || e.total > e.payments.map((e) => e.amount).reduce((value, element) => value + element))
+        .toList(); // subtotal on each Payment
+
+    final remainingCash = remainingInvoices
+        .map((e) => e.payments.isEmpty
+            ? e.total
+            : e.total -
+                e.payments.map((e) => e.amount).reduce((value, element) => value + element)) // subtotal on each Invoice
+        .reduce((value, element) => value + element);
+
+    // log(revenue.toString() + "-" + remainingCash.toString() + "-" + remainingInvoices.length.toString());
+
+    return Tuple3(
+      revenue,
+      remainingInvoices,
+      remainingCash,
+    );
   }
 
   // static Stream<int> totalRevenue() {

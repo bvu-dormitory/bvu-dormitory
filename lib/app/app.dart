@@ -70,7 +70,7 @@ class _ApplicationState extends State<Application> {
 
                 // Fires when a new FCM token is generated.
                 // updating FCM token only if the user logged in
-                FirebaseMessaging.instance.onTokenRefresh.listen(AuthRepository.updateUserFCMToken());
+                // FirebaseMessaging.instance.onTokenRefresh.listen(AuthRepository.updateUserFCMToken());
               }
 
               return MaterialApp(

@@ -274,6 +274,7 @@
     "admin_manage_student_menu_add_validation_failed_phone_invalid": "Số điện thoại không hợp lệ",
 
 
+    "admin_manage_invoice_revenue_all": "Tổng thu",
     "admin_manage_invoice_month": "Tháng {month}",
     "admin_manage_invoice_add": "Thêm Hóa đơn",
     "admin_manage_invoice_list": "Các Hóa đơn",

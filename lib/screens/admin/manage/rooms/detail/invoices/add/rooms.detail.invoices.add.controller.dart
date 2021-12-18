@@ -238,6 +238,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
         });
   }
 
+  ///
   /// generating a PDF file and open print dialog
   void print() async {
     // showLoadingDialog();
@@ -334,7 +335,8 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
               pw.SizedBox(height: 50),
               pw.Table(
                 children: [
-                  // table header rows
+                  ////////////////////////////////////////////////////////////////////////
+                  /// table header rows
                   pw.TableRow(
                     decoration: pw.BoxDecoration(
                       border: pw.Border.all(width: 0.5),
@@ -351,6 +353,19 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
                       ),
+
+                      // continous services
+                      pw.Text(
+                        appLocalizations!.admin_manage_invoice_old_index,
+                        textAlign: pw.TextAlign.left,
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
+                      ),
+                      pw.Text(
+                        appLocalizations!.admin_manage_invoice_new_index,
+                        textAlign: pw.TextAlign.left,
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
+                      ),
+
                       pw.Text(
                         appLocalizations!.admin_manage_service_price_compact,
                         textAlign: pw.TextAlign.right,
@@ -369,6 +384,7 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
                     ],
                   ),
 
+                  /////////////////////////////////
                   // services rows
                   ...List.generate(serviceControllers.length, (index) {
                     final theService = serviceControllers[index];
@@ -378,24 +394,50 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
                       ),
                       children: [
                         // pw.Padding(),
-                        pw.Text(theService.item1.name,
-                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14, font: fontData)),
-                        pw.Text(theService.item1.unit,
-                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14, font: fontData)),
+                        pw.Text(
+                          theService.item1.name,
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
+                        ),
+                        pw.Text(
+                          theService.item1.unit,
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
+                        ),
+
+                        // continous servicess
+                        if (theService.item1.type == ServiceType.continous) ...{
+                          pw.Text(
+                            (theService.item1.oldIndex ?? 0).toString(),
+                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
+                          ),
+                          pw.Text(
+                            (theService.item1.newIndex ?? 0).toString(),
+                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
+                          ),
+                        } else ...{
+                          pw.Text(
+                            "",
+                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
+                          ),
+                          pw.Text(
+                            "",
+                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
+                          ),
+                        },
+
                         pw.Text(
                           NumberFormat('#,###').format(theService.item1.price) + ' đ',
                           textAlign: pw.TextAlign.right,
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14, font: fontData),
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
                         ),
                         pw.Text(
                           NumberFormat('#,###').format(int.parse(theService.item2.text.replaceAll(',', ""))) + ' đ',
                           textAlign: pw.TextAlign.right,
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14, font: fontData),
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
                         ),
                         pw.Text(
                           getServiceSubtotal(theService.item1, index),
                           textAlign: pw.TextAlign.right,
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14, font: fontData),
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold, font: fontData),
                         ),
                       ],
                     );
@@ -430,6 +472,8 @@ class AdminRoomsDetailInvoicesAddController extends BaseController {
     return pdf;
   }
 
+  ///
+  /// payments
   void showAddPaymentDialog({int? paymentIndex}) {
     final payment = paymentIndex != null ? invoice!.payments[paymentIndex] : null;
 

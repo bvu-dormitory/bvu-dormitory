@@ -102,6 +102,8 @@ extension InvoicePaymentTypeName on InvoicePaymentType {
 class InvoicePayment {
   final int amount;
   final String studentName;
+  // final String studentCitizenId;
+  // final String studentPhoneNumber;
   final InvoicePaymentType type;
   final String? notes;
   late final Timestamp timestamp;
@@ -111,6 +113,8 @@ class InvoicePayment {
     required this.type,
     required this.studentName,
     required this.timestamp,
+    // required this.studentCitizenId,
+    // required this.studentPhoneNumber,
     this.notes,
   });
 
@@ -119,7 +123,10 @@ class InvoicePayment {
         'type': type.name,
         'notes': notes,
         // TODO: when a student moved out, maybe the student's info will not available
+        // so we have to duplicate the student info
         'student_name': studentName,
+        // 'student_citizen_id': studentCitizenId,
+        // 'student_phone_number': studentPhoneNumber,
         'timestamp': timestamp,
       };
 
@@ -127,6 +134,8 @@ class InvoicePayment {
     return InvoicePayment(
       amount: s['amount'],
       studentName: s['student_name'],
+      // studentCitizenId: s['student_citizen_id'],
+      // studentPhoneNumber: s['student_phone_number'],
       type: InvoicePaymentType.values.firstWhere(
         (element) => describeEnum(element) == s['type'],
         orElse: () => InvoicePaymentType.cash,

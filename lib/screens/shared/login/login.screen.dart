@@ -78,10 +78,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       LoginPhoneField(),
                       Positioned(
                         child: LoginButton(),
-                        top: 0,
-                        right: 0,
-                        // top: 2,
-                        // right: 2.5,
+                        // top: 0,
+                        // right: 0,
+                        top: 1.9,
+                        right: 2.0,
                       ),
                     ],
                   )

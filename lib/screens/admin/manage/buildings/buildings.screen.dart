@@ -32,21 +32,21 @@ class AdminBuildingsScreen extends BaseScreen<AdminBuildingsController> {
 
   @override
   Widget? navigationBarTrailing(BuildContext context) {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      minSize: 20,
-      borderRadius: BorderRadius.circular(20),
-      child: const Icon(FluentIcons.search_24_regular),
-      onPressed: () {
-        Navigator.of(context).push(
-          CupertinoPageRoute(
-            builder: (_) => AdminBuildingsSearchScreen(
-              previousPageTitle: Provider.of<AdminBuildingsController>(context).title,
-            ),
-          ),
-        );
-      },
-    );
+    // return CupertinoButton(
+    //   padding: EdgeInsets.zero,
+    //   minSize: 20,
+    //   borderRadius: BorderRadius.circular(20),
+    //   child: const Icon(FluentIcons.search_24_regular),
+    //   onPressed: () {
+    //     Navigator.of(context).push(
+    //       CupertinoPageRoute(
+    //         builder: (_) => AdminBuildingsSearchScreen(
+    //           previousPageTitle: Provider.of<AdminBuildingsController>(context).title,
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
   @override

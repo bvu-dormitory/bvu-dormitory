@@ -31,15 +31,17 @@ class _LoginButtonState extends State<LoginButton> {
           ? const CupertinoActivityIndicator(
               radius: 10,
             )
-          : Text(AppLocalizations.of(context)?.login_button_title ?? "login_button_title",
+          : Text(
+              AppLocalizations.of(context)?.login_button_title ?? "login_button_title",
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.blue.shade800,
                 fontWeight: FontWeight.bold,
-              )),
+              ),
+            ),
       padding: EdgeInsets.symmetric(
-        horizontal: controller.loginInProcess ? 15 : 20,
-        vertical: controller.loginInProcess ? 15 : 15,
+        horizontal: controller.loginInProcess ? 10 : 20,
+        vertical: controller.loginInProcess ? 10 : 10,
       ),
       color: Colors.yellowAccent.shade700,
       // disabledColor: Colors.yellowAccent.shade700,

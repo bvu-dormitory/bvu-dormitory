@@ -121,12 +121,12 @@ class ProfileScreen extends BaseScreen<ProfileController> {
           dismissible: true,
           onSubmit: () {
             AuthRepository.signOut().then((value) {
-              Navigator.pushReplacement(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => const LoginScreen(),
-                ),
-              );
+              // Navigator.pushReplacement(
+              //   context,
+              //   CupertinoPageRoute(
+              //     builder: (context) => const LoginScreen(),
+              //   ),
+              // );
             });
           },
         );
@@ -160,7 +160,7 @@ class ProfileScreen extends BaseScreen<ProfileController> {
         children: [
           CircleAvatar(
             radius: 75,
-            backgroundImage: user.photoURL == null
+            backgroundImage: user.photoURL == null || user.photoURL!.isEmpty
                 ? const AssetImage('lib/assets/icons/user.png')
                 : Image.network(user.photoURL!).image,
           ),
