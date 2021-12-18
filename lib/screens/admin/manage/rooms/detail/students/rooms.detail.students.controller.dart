@@ -242,7 +242,7 @@ class AdminRoomsDetailStudentsController extends BaseController {
         // showSnackbar(appLocalizations!.admin_manage_rooms_detail_students_toast_active_state_changed,
         //     const Duration(seconds: 3), () {});
       }).catchError((onError) {
-        showSnackbar(onError, const Duration(seconds: 3), () {});
+        showSnackbar(onError.toString(), const Duration(seconds: 3), () {});
       }).whenComplete(() {
         navigator.pop();
       });

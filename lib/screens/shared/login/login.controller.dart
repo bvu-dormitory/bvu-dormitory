@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:bvu_dormitory/repositories/auth.repository.dart';
-import 'package:bvu_dormitory/repositories/user.repository.dart';
-import 'package:bvu_dormitory/screens/shared/home/home.screen.dart';
 import 'package:bvu_dormitory/base/base.controller.dart';
 import 'package:bvu_dormitory/app/app.logger.dart';
 
@@ -18,7 +17,7 @@ class LoginController extends BaseController {
   }) : super(context: context, title: title);
 
   // native firebase auth params
-  Duration otpTimeout = const Duration(seconds: 30);
+  static const Duration OTP_TIMEOUT = Duration(seconds: 10);
   String? verificationId;
   String? otpCode;
 
@@ -47,6 +46,15 @@ class LoginController extends BaseController {
   bool _isOtpPassed = false;
   bool get isOtpPassed => _isOtpPassed;
 
+  int _timeout = OTP_TIMEOUT.inSeconds;
+  int get timeOut => _timeout;
+
+  Key _screenKey = UniqueKey();
+  Key get screenKey => _screenKey;
+
+  late Timer _timeoutConter;
+  Timer get timerConter => _timeoutConter;
+
   void showOTPBottomSheet() {
     _isOtpCodeSent = true;
     notifyListeners();
@@ -57,6 +65,9 @@ class LoginController extends BaseController {
     _loginButtonEnabled = true;
     _loginInProcess = false;
 
+    if (_timeoutConter.isActive) {
+      _timeoutConter.cancel();
+    }
     notifyListeners();
   }
 
@@ -75,7 +86,7 @@ class LoginController extends BaseController {
   Future<void> verifyPhoneNumber() async {
     AuthRepository.instance.verifyPhoneNumber(
       phoneNumber: phoneInputController.text.replaceFirst('0', '+84'),
-      timeout: otpTimeout,
+      timeout: OTP_TIMEOUT,
       verificationCompleted: (phoneAuthCredential) {
         _loginInProcess = false;
         _loginButtonEnabled = true;
@@ -130,6 +141,41 @@ class LoginController extends BaseController {
         logger.i('code sent...');
 
         _isOtpCodeSent = true;
+
+        // begin counting timeout
+        _timeout = OTP_TIMEOUT.inSeconds;
+        _timeoutConter = Timer.periodic(const Duration(seconds: 1), (timer) {
+          _timeout -= 1;
+
+          // timed out
+          if (_timeout == 0) {
+            log('timeout');
+            showConfirmDialog(
+              title: appLocalizations!.app_dialog_title_warning,
+              body: Text(appLocalizations!.login_error_otp_timeout),
+              confirmType: DialogConfirmType.submit,
+              onSubmit: () {
+                navigator.pop();
+                _isOtpCodeSent = false;
+                _loginInProcess = false;
+                _loginButtonEnabled = true;
+                notifyListeners();
+              },
+            );
+            timer.cancel();
+          }
+
+          notifyListeners();
+        });
+        // Stream.periodic(const Duration(seconds: 1), (value) {
+        //   _timeout -= 1;
+        //   if (_timeout == 0) {
+        //     log('timeout');
+        //   }
+        //   log('timeout tick...');
+        //   notifyListeners();
+        // }).take(OTP_TIMEOUT.inSeconds);
+
         notifyListeners();
       },
       codeAutoRetrievalTimeout: (verificationId) {},
@@ -154,40 +200,19 @@ class LoginController extends BaseController {
   void _signIn(PhoneAuthCredential credential) {
     AuthRepository.instance.signInWithCredential(credential).then(
       (userCredential) async {
-        logger.i('signin success... re-checking if the user is existing in the Firestore database...');
+        logger.i('signin success....');
         logger.i(userCredential);
+        logger.i(AuthRepository.instance.currentUser);
 
-        // getting corresponding firestore user to the logged in user
-        final theFirestoreUser = await UserRepository.getUserWithPhoneNumer(userCredential.user);
+        // updating the FCM token for this device
+        await AuthRepository.updateUserFCMToken();
 
-        // if logged-in user with given phone number is not in the FireStore DB => delete the account
-        if (theFirestoreUser != null) {
-          userCredential.user?.delete().then(
-            (value) {
-              showErrorDialog(appLocalizations!.login_error_user_not_exists);
-              logger.w('user deleted...');
-            },
-          ).catchError((onError) {
-            /// TODO: need to be fixed
-            logger.e('cannot delete the user...');
-            logger.e(onError);
-          });
-        }
-        // the user is exists
-        else {
-          logger.w('on user exists');
-          logger.i(AuthRepository.instance.currentUser);
-
-          // updating the FCM token for this device
-          await AuthRepository.updateUserFCMToken();
-
-          // navigate to the home screen
-          Navigator.pushReplacement(
-              context,
-              CupertinoPageRoute(
-                builder: (context) => const HomeScreen(),
-              ));
-        }
+        // navigate to the home screen
+        // Navigator.pushReplacement(
+        //     context,
+        //     CupertinoPageRoute(
+        //       builder: (context) => const HomeScreen(),
+        //     ));
       },
     ).catchError(
       (error) {

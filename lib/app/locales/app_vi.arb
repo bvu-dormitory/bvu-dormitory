@@ -55,6 +55,14 @@
     "login_title" : "Kí túc xá BVU",
     "login_phone_field_hint": "Nhập số điện thoại",
     "login_button_title": "Đăng nhập",
+    "login_otp_remaining": "Hiệu lực trong {seconds} s",
+    "@login_otp_remaining": {
+        "placeholders": {
+            "seconds": {
+                "type": "int"
+            }
+        }
+    },
 
     "login_error_phone_invalid_format": "Vui lòng nhập đúng định dạng số điện thoại",
     "login_error_too_many_requests": "Bạn đã thực hiện đăng nhập quá nhiều lần, vui lòng thử lại sau một khoảng thời gian",

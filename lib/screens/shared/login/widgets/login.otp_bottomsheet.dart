@@ -47,7 +47,7 @@ class _LoginOTPBottomSheetState extends State<LoginOTPBottomSheet> {
               blurRadius: 30,
             ),
           ],
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),
@@ -83,18 +83,14 @@ class _LoginOTPBottomSheetState extends State<LoginOTPBottomSheet> {
                 fontSize: 16,
               ),
             ),
-            // StreamBuilder(
-            //   initialData: '05:00',
-            //   stream: controller.remainingTime.stream,
-            //   builder: (context, snapshot) {
-            //     return Text(
-            //       snapshot.data.toString(),
-            //       style: const TextStyle(
-            //         color: Colors.red,
-            //       ),
-            //     );
-            //   },
-            // )
+            Consumer<LoginController>(
+              builder: (context, controller, child) => Text(
+                AppLocalizations.of(context)!.login_otp_remaining(controller.timeOut),
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 25),

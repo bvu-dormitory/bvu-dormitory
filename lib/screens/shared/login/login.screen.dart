@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:bvu_dormitory/screens/shared/login/login.controller.dart';
@@ -40,46 +41,57 @@ class _LoginScreenState extends State<LoginScreen> {
         child: _body(),
       ),
     );
+    // return Scaffold(
+    //   key: key,
+    //   body: ChangeNotifierProvider<LoginController>(
+    //     create: (_) => LoginController(context: context, title: ""),
+    //     child: _body(),
+    //   ),
+    // );
   }
 
   _body() {
-    return GestureDetector(
-      // hide soft keyboard on tap background
-      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-      child: Stack(
-        children: [
-          // background image
-          _backgroundImage(),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 20,
+    return Selector<LoginController, Key>(
+      selector: (p0, p1) => p1.screenKey,
+      builder: (_, value, __) => GestureDetector(
+        key: value,
+        // hide soft keyboard on tap background
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: Stack(
+          children: [
+            // background image
+            _backgroundImage(),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 20,
+              ),
+              // Gradient overlay
+              decoration: _gradientOverlay(),
+              child: SafeArea(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const LoginTitle(),
+                  Stack(
+                    children: const [
+                      LoginPhoneField(),
+                      Positioned(
+                        child: LoginButton(),
+                        top: 0,
+                        right: 0,
+                        // top: 2,
+                        // right: 2.5,
+                      ),
+                    ],
+                  )
+                ],
+              )),
             ),
-            // Gradient overlay
-            decoration: _gradientOverlay(),
-            child: SafeArea(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const LoginTitle(),
-                Stack(
-                  children: const [
-                    LoginPhoneField(),
-                    Positioned(
-                      child: LoginButton(),
-                      top: 0,
-                      right: 0,
-                      // top: 2,
-                      // right: 2.5,
-                    ),
-                  ],
-                )
-              ],
-            )),
-          ),
 
-          const LoginOTPBottomSheet(),
-        ],
+            const LoginOTPBottomSheet(),
+          ],
+        ),
       ),
     );
   }
@@ -88,8 +100,8 @@ class _LoginScreenState extends State<LoginScreen> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           colors: [
-            Colors.blue.withOpacity(0.05),
-            Colors.blueAccent.shade400.withOpacity(0.9),
+            Colors.blue.withOpacity(0.5),
+            Colors.deepPurple.shade900.withOpacity(0.79),
           ],
         ),
       );

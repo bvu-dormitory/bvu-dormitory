@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bvu_dormitory/helpers/extensions/string.extensions.dart';
+import 'package:bvu_dormitory/repositories/user.repository.dart';
 import 'package:bvu_dormitory/screens/shared/login/login.controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -48,17 +49,32 @@ class _LoginButtonState extends State<LoginButton> {
     );
   }
 
-  handleLoginClick() {
+  handleLoginClick() async {
+    // checking if the phone number is valid
     if (!controller.phoneInputController.text.isValidPhoneNumber) {
-      controller.showErrorDialog(controller.appLocalizations?.login_error_phone_invalid_format ?? "login_error_phone_invalid_format");
+      controller.showErrorDialog(
+          controller.appLocalizations?.login_error_phone_invalid_format ?? "login_error_phone_invalid_format");
       return;
     }
 
-    controller.beforeVerifyPhoneNumber();
-    Future.delayed(const Duration(seconds: 0), () {
-      controller.verifyPhoneNumber().then((value) {}).catchError((onError) {
-        log('error from button...');
-      });
+    // checking if the phone number is exists in the DB
+    UserRepository.isFireStoreUserWithPhoneNumberExists(controller.phoneInputController.text).then((exists) {
+      if (!exists) {
+        controller.showSnackbar(
+          AppLocalizations.of(context)!.login_error_user_not_exists,
+          const Duration(seconds: 5),
+          () {},
+        );
+      } else {
+        controller.beforeVerifyPhoneNumber();
+        Future.delayed(const Duration(seconds: 0), () {
+          controller.verifyPhoneNumber().then((value) {}).catchError((onError) {
+            log('error from button...');
+          });
+        });
+      }
+    }).catchError((err) {
+      controller.showSnackbar(err.toString(), const Duration(seconds: 5), () {});
     });
   } // handleLoginClick
 }

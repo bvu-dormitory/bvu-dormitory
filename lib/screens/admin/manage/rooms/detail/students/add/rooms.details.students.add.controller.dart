@@ -475,7 +475,8 @@ class AdminRoomsDetailStudentsAddController extends BaseController {
           _isFormEditing = false;
           notifyListeners();
 
-          if (await UserRepository.isFireStoreUserExistsExcept(phoneController.text, student?.phoneNumber)) {
+          if (await UserRepository.isFireStoreUserWithPhoneNumberExistsExcept(
+              phoneController.text, student?.phoneNumber)) {
             showSnackbar(appLocalizations!.admin_manage_student_menu_add_validation_failed_phone_exists,
                 const Duration(seconds: 3), () {
               _continueButtonEnabled = true;

@@ -7,36 +7,24 @@ import 'package:bvu_dormitory/repositories/auth.repository.dart';
 class UserRepository {
   static final instance = FirebaseFirestore.instance.collection('users');
 
-  static Future<AppUser?> getUserWithPhoneNumer(User? authUser) async {
-    var user = await instance.where('phone_number', isEqualTo: authUser?.phoneNumber?.replaceFirst("+84", "0")).get();
-    return user.size < 0 ? null : AppUser.fromFireStoreDocument(user.docs.first);
+  static Future<bool> isFirestoreUserExists(User? theUser) async {
+    var user = await instance.doc(theUser?.uid).get();
+    return user.exists;
   }
 
-  /// check whether the just logged-in user have data in the "users" collection
-  static Future<bool> isUserWithPhoneNumerExists(User? authUser) async {
-    var user = await instance.where('phone_number', isEqualTo: authUser?.phoneNumber?.replaceFirst("+84", "0")).get();
-    return user.size > 0;
-  }
-
-  static Future<DocumentSnapshot> getFireStoreUser(DocumentReference reference) async {
-    return reference.get();
-  }
-
-  static Future<bool> isFireStoreUserExists(String phoneNumber) async {
+  static Future<bool> isFireStoreUserWithPhoneNumberExists(String phoneNumber) async {
     var user = await instance.where('phone_number', isEqualTo: phoneNumber).get();
     return user.size > 0;
   }
 
-  static Future<bool> isFireStoreUserExistsExcept(String phoneNumber, String? except) async {
+  static Future<bool> isFireStoreUserWithPhoneNumberExistsExcept(String phoneNumber, String? except) async {
     var user = await instance.where('phone_number', isEqualTo: phoneNumber, isNotEqualTo: except).get();
     return user.size > 0;
   }
 
+  /// only called when the user is logged in
   static Future<AppUser?> getCurrentFireStoreUser() async {
-    var user = await instance
-        .where('phone_number', isEqualTo: AuthRepository.instance.currentUser?.phoneNumber?.replaceFirst("+84", "0"))
-        .limit(1)
-        .get();
-    return AppUser.fromFireStoreDocument(user.docs.first);
+    var user = await instance.doc(AuthRepository.instance.currentUser?.uid).get();
+    return AppUser.fromFireStoreDocument(user);
   }
 }

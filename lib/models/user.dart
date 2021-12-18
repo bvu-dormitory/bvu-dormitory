@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bvu_dormitory/base/base.firestore.model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -62,24 +64,22 @@ class AppUser extends FireStoreModel {
   }) : super(id: id);
 
   factory AppUser.fromFireStoreDocument(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-
     final theRole = UserRole.values.firstWhere(
-      (element) => describeEnum(element) == data['role'],
+      (element) => describeEnum(element) == snapshot['role'],
       orElse: () => UserRole.student,
     );
 
     return theRole == UserRole.admin
         ? AppUser(
             id: snapshot.id,
-            firstName: data['first_name'],
-            lastName: data['last_name'],
-            phoneNumber: data['phone_number'],
+            firstName: snapshot['first_name'],
+            lastName: snapshot['last_name'],
+            phoneNumber: snapshot['phone_number'],
             role: UserRole.values.firstWhere(
-              (element) => describeEnum(element) == data['role'],
+              (element) => describeEnum(element) == snapshot['role'],
               orElse: () => UserRole.student,
             ),
-            photoURL: data['photo_url'],
+            photoURL: (snapshot.data() as Map)['photo_url'] ?? "",
           )
         : Student.fromFireStoreDocument(snapshot);
   }
@@ -126,7 +126,8 @@ class Student extends AppUser {
     this.notes,
     this.studentIdNumber,
     this.parentPhoneNumber,
-  }) : super(id: id, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, role: UserRole.student);
+    String? photoURL,
+  }) : super(id: id, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, role: UserRole.student, photoURL: photoURL,);
 
   static Student fromFireStoreDocument(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
@@ -150,6 +151,7 @@ class Student extends AppUser {
       citizenIdNumber: data['citizen_id'],
       parentPhoneNumber: data['parent_phone'],
       phoneNumber: data['phone_number'],
+      photoURL: data['photo_url'],
     );
 
     // log('parsing done...');
